@@ -16,7 +16,10 @@
 
 class messagesCtrl extends jController {
 
+    // message et liste
     protected $dao_message = 'common~message';
+    protected $dao_subscriber_list = 'common~subscriber_list';
+    protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
 
     protected function _dataTables(&$rep)
     {
@@ -114,7 +117,16 @@ class messagesCtrl extends jController {
         // récupérer le message 
         $message = jDao::get($this->dao_message);
         $message_infos = $message->get($this->param('idmessage'));
-        $tpl->assign('message', $message); 
+        $tpl->assign('message', $message_infos); 
+        $tpl->assign('idmessage', $this->param('idmessage')); 
+
+        // récupérer les listes associées
+        $subscriber_list = jDao::get($this->dao_subscriber_list);
+        $message_subscriber_list = $subscriber_list->getByMessage($this->param('idmessage'));
+        $tpl->assign('message_subscriber_list', $message_subscriber_list); 
+
+        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
+        $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
 
         $rep->body->assign('MAIN', $tpl->fetch('messages_preview')); 
 

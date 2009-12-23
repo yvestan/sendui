@@ -11,19 +11,19 @@
 </div>
 
 <div class="ui-tabs ui-widget ui-widget-content ui-corner-all sendui-float-bloc">
-    <h3 class="ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <h3 class="ui-widget-header ui-corner-all">
     <span class="current">Message(s) en cours d'envoi</span></h3>
     <p class="no-result">Vous n'avez pas de message en cours d'envoi actuellement. Souhaitez-vous <a href="{jurl 'sendui~settings:index'}">envoyer un message</a> ?</p>
 </div>
 
 <div class="ui-tabs ui-widget ui-widget-content ui-corner-all sendui-float-bloc">
-    <h3 class="ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <h3 class="ui-widget-header ui-corner-all">
     <span class="schedule">Message(s) programmé(s)</span></h3>
     <p class="no-result">Vous n'avez pas programmé d'envoi de message. Souhaitez-vous <a href="{jurl 'sendui~settings:index'}">programmer un envoi</a> ?</p>
 </div>
 
 <div class="ui-tabs ui-widget ui-widget-content ui-corner-all sendui-float-bloc">
-    <h3 class="ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <h3 class="ui-widget-header ui-corner-all">
     <span class="credits">Crédit(s) disponible(s)</span></h3>
     {if !empty($credits)}
         <div class="content-bloc">

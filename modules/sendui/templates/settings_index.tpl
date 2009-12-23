@@ -37,7 +37,7 @@
 <div class="sendui-standard-content">
 
 <div class="settings">
-{form $message_settings, 'sendui~settings:save', array('idmessage' => $idmessage)}
+{form $message_settings, 'sendui~settings:save', array('idmessage' => $idmessage, 'from_page' => $from_page)}
 
 <div class="bloc-form ui-corner-all">
     <div>{ctrl_label 'name'}</div>

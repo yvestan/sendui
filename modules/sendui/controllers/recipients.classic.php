@@ -18,6 +18,8 @@ class recipientsCtrl extends jController {
 
     // dao des listes et du message
     protected $dao_subscriber_list = 'common~subscriber_list';
+    protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
+    protected $dao_message_subscriber_list = 'common~message_subscriber_list';
     protected $dao_message = 'common~message';
 
 
@@ -57,11 +59,19 @@ class recipientsCtrl extends jController {
         $tpl->assign('message', $message_infos); 
         $tpl->assign('idmessage', $this->param('idmessage')); 
 
+        // provenance
+        $tpl->assign('from_page', $this->param('from_page')); 
+
         // récupérer les listes du client
         $subscriber_list = jDao::get($this->dao_subscriber_list);
         $list_subscribers_lists = $subscriber_list->getByCustomer($session->idcustomer);
         $tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
-        $tpl->assign('dao_subscriber_list', $subscriber_list); 
+        
+        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
+        $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
+
+        $message_subscriber_list = jDao::get($this->dao_message_subscriber_list);
+        $tpl->assign('message_subscriber_list', $message_subscriber_list); 
 
         $rep->body->assign('MAIN', $tpl->fetch('recipients_index')); 
 
@@ -74,7 +84,7 @@ class recipientsCtrl extends jController {
     // {{{ save()
 
     /**
-     * Sauvegarder la liste choisie avant de passer à la preview
+     * Sauvegarder la/les liste(s) choisie avant de passer à la preview
      * 
      * @return      redirect
      */
@@ -83,22 +93,41 @@ class recipientsCtrl extends jController {
 
         $rep = $this->getResponse('redirect');
 
-        // message
-        $message = jDao::get($this->dao_message);
-        $record =   $message->get($this->param('idmessage'));
+        // tableau passé en paramètres
+        $idsubscriber_list = $this->param('idsubscriber_list');
+
+        // message <> liste
+        $message_subscriber_list = jDao::get($this->dao_message_subscriber_list);
+
+        // supprimer toutes les liaisons avant de réenregistrer
+        $message_subscriber_list->deleteByMessage($this->param('idmessage'));
 
         // vérifier que c'est une liste du client TODO
         /*if($subscriber_list->getList($this->param('idsubscriber_list'),$session->idcustomer) {
             
         }*/
+        if(!empty($idsubscriber_list)) {
 
-        // la liste choisie
-        $record->idsubscriber_list = $this->param('idsubscriber_list');
-        $message->update($record);
+            $record = jDao::createRecord($this->dao_message_subscriber_list);
+            $record->idmessage = $this->param('idmessage');
+
+            // la/les listes choisies
+            foreach($idsubscriber_list as $k=>$v) {
+                $record->idsubscriber_list = $v;
+                $message_subscriber_list->insert($record);
+            }
+
+        }
 
         // redirige sur message preview
-        $rep->action = 'sendui~message:preview';
         $rep->params = array('idmessage' => $this->param('idmessage'));
+
+        // rediriger vers la page suivante
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');
+        } else {
+            $rep->action = 'sendui~messages:preview';
+        }
 
         return $rep;
 

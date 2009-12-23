@@ -35,11 +35,14 @@ class settingsCtrl extends jController {
         // formulaire
         $message_settings = jForms::create($this->form_message_settings, $this->param('idmessage'));
 
+
         // initialiser un message
         if($this->param('idmessage')!='') {
             $message_settings->initFromDao($this->dao_message);
             $rep->params = array('idmessage' => $this->param('idmessage'));
         }
+
+        $rep->params['from_page'] = $this->param('from_page');
 
         // redirection vers index
         $rep->action = 'sendui~settings:index';
@@ -73,13 +76,17 @@ class settingsCtrl extends jController {
         // le créer si il n'existe pas
         if ($message_settings === null) {
             $rep = $this->getResponse('redirect');
-            $rep->params = array('idmessage' => $this->param('idmessage'));
+            $rep->params = array(
+                'idmessage' => $this->param('idmessage'),
+                'from_page' => $this->param('from_page'),
+            );
             $rep->action = 'sendui~settings:prepare';
             return $rep;
         }
 
         $tpl->assign('message_settings', $message_settings);
         $tpl->assign('idmessage', $this->param('idmessage'));
+        $tpl->assign('from_page', $this->param('from_page'));
 
         $rep->body->assign('MAIN', $tpl->fetch('settings_index')); 
 
@@ -110,6 +117,10 @@ class settingsCtrl extends jController {
         
         // redirection si erreur
         if (!$message_settings->check()) {
+            $rep->params = array(
+                'idmessage' => $this->param('idmessage'),
+                'from_page' => $this->param('from_page'),
+            );
             $rep->action = 'sendui~settings:index';
             return $rep;
         }
@@ -142,9 +153,15 @@ class settingsCtrl extends jController {
                 jForms::destroy($this->form_message_settings);
             }
 
-            // rediriger vers la page suivante
             $rep->params = array('idmessage' => $idmessage);
-            $rep->action = 'sendui~compose:index';
+
+            // rediriger vers la page suivante
+            if($this->param('from_page')!='') {
+                $rep->action = $this->param('from_page');
+            } else {
+                $rep->action = 'sendui~compose:index';
+            }
+
             return $rep;
 
         }

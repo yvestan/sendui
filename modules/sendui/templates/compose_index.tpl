@@ -19,7 +19,7 @@
         </ul>
 
         <div id="message-html">
-            {form $message_compose, 'sendui~compose:save', array('idmessage' => $idmessage)}
+            {form $message_compose, 'sendui~compose:save', array('idmessage' => $idmessage,'from_page' => $from_page)}
 
                 <div>{ctrl_label 'html_message'}</div>
                 <p>{ctrl_control 'html_message'}</p>

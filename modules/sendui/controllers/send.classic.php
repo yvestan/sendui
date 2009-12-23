@@ -14,14 +14,14 @@
  * @version      0.1.0
  */
 
-class controlCtrl extends jController {
+class sendCtrl extends jController {
 
     // {{{ index()
 
     /**
-     * page de selection des destinataires parmis les listes
+     * Demander la confirmation d'envoi du message
      *
-     * @template    settings_index
+     * @template    send_index
      * @return      html
      */
     public function index()
@@ -29,32 +29,14 @@ class controlCtrl extends jController {
 
         $rep = $this->getResponse('html');
 
-        $rep->title = 'Choix des destinataires';
+        $rep->title = 'Confirmer l\'envoi du message';
 
         $tpl = new jTpl();
 
-        $rep->body->assign('MAIN', $tpl->fetch('recipients_index')); 
+        $rep->body->assign('MAIN', $tpl->fetch('send_index')); 
 
         return $rep;
         
-    }
-
-    // }}}
-
-    // {{{ save()
-
-    /**
-     * Sauvegarder le message et passer à la page suivante
-     * 
-     * @return      redirect
-     */
-    public function save()
-    {
-
-        $rep = $this->getResponse('html');
-
-        return $rep;
-
     }
 
     // }}}

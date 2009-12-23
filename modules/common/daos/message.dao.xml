@@ -19,7 +19,7 @@
         <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
     </record>
     <factory>
-        <method name="getDrafts" type="select" distinct="idmessage">                                                                                                                              
+        <method name="getDrafts" type="select" distinct="idmessage">                                                                                                                            
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>

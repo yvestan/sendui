@@ -29,7 +29,7 @@
         <tbody>
             {foreach $list_drafts as $message}
             <tr class="highlight">
-                <td class="edit"><a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}">{$message->name}</a></td>
+                <td class="edit"><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}">{$message->name}</a></td>
                 <td>{$message->subject}</td>
                 <td>{$message->from_name} {$message->from_email}</td>
                 <td>{$message->date_update|jdatetime:'db_datetime','lang_datetime'}</td>

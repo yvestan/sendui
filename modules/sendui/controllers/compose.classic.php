@@ -39,6 +39,8 @@ class composeCtrl extends jController {
             $rep->params = array('idmessage' => $this->param('idmessage'));
         }
 
+        $rep->params['from_page'] = $this->param('from_page');
+
         // redirection vers index
         $rep->action = 'sendui~compose:index';
 
@@ -68,16 +70,20 @@ class composeCtrl extends jController {
         // récuperer l'instance de formulaire
         $message_compose = jForms::get($this->form_message_compose, $this->param('idmessage'));
 
+        // provenance
+        $rep->params['from_page'] = $this->param('from_page');
+
         // le créer si il n'existe pas
         if ($message_compose=== null) {
             $rep = $this->getResponse('redirect');
             $rep->action = 'sendui~compose:prepare';
-            $rep->params = array('idmessage' => $this->param('idmessage'));
+            $rep->params['idmessage'] = $this->param('idmessage');
             return $rep;
         }
 
         $tpl->assign('message_compose', $message_compose);
         $tpl->assign('idmessage', $this->param('idmessage'));
+        $tpl->assign('from_page', $this->param('from_page'));
 
         // galerie de templates
 
@@ -116,11 +122,17 @@ class composeCtrl extends jController {
             // si ok, on redirige sur  la page suivante
             jForms::destroy($this->form_message_compose);
 
-            $rep->action = 'sendui~messages:preview';
+            if($this->param('from_page')!='') {
+                $rep->action = $this->param('from_page');
+            } else {
+                $rep->action = 'sendui~messages:preview';
+            }
+
             return $rep;
             
         }
 
+        // si rien
         $rep->action = 'sendui~compose:index';
         return $rep;
        

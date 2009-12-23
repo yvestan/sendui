@@ -9,4 +9,12 @@
         <property name="status" fieldname="status" datatype="int" required="true"/>
         <property name="sent" fieldname="sent" datatype="int" required="true"/>
     </record>
+    <factory>
+        <method name="countSubscriberByList" type="count" distinct="idsubscriber">
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+        </method>
+    </factory>
 </dao>
