@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+    <input ref="username" required="true" maxlength="50">
+        <label>Username</label>
+    </input>
+
+    <input ref="email" required="true" maxlength="150">
+        <label>Email</label>
+    </input>
+
+    <input ref="password" required="true" maxlength="150">
+        <label>Password</label>
+    </input>
+
+    <input ref="lastname" maxlength="100">
+        <label>Lastname</label>
+    </input>
+
+    <input ref="firtsname" maxlength="100">
+        <label>Firtsname</label>
+    </input>
+
+    <input ref="company" maxlength="100">
+        <label>Company</label>
+    </input>
+
+    <input ref="address" maxlength="150">
+        <label>Address</label>
+    </input>
+
+    <input ref="zip" maxlength="20">
+        <label>Zip</label>
+    </input>
+
+    <input ref="city" maxlength="150">
+        <label>City</label>
+    </input>
+
+    <input ref="country">
+        <label>Country</label>
+    </input>
+
+    <input ref="active" required="true" defaultvalue="0" type="integer">
+        <label>Active</label>
+    </input>
+
+    <input ref="credit" required="true" defaultvalue="0" type="integer">
+        <label>Credit</label>
+    </input>
+
+    <input ref="date_insert" type="datetime">
+        <label>Date Insert</label>
+    </input>
+
+    <input ref="date_update" type="datetime">
+        <label>Date Update</label>
+    </input>
+
+<submit ref="_submit">
+	<label>ok</label>
+</submit>
+</form>

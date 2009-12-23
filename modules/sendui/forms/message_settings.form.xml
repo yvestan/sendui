@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+    <input ref="name" required="true" maxlength="150">
+        <label>Nom de ce message</label>
+        <help>Indiquez votre date de naissance, en respectant le format aaaa-mm-jj</help>
+    </input>
+
+    <input ref="subject" required="true" maxlength="150">
+        <label>Sujet du message</label>
+    </input>
+
+    <input ref="from_name" required="true" maxlength="150">
+        <label>Nom de l'expéditeur</label>
+    </input>
+
+    <input ref="from_email" required="true" maxlength="150">
+        <label>Email de l'expéditeur</label>
+    </input>
+
+    <input ref="reply_to" required="true" maxlength="150">
+        <label>Adresse de réponse</label>
+    </input>
+
+    <input ref="return_path" maxlength="150">
+        <label>Adresse de retour</label>
+    </input>
+
+    <htmleditor ref="html_message">
+        <label>Message au format HTML</label>
+    </htmleditor>
+
+    <textarea ref="text_message">
+        <label>Message au format texte</label>
+    </textarea>
+
+    <input ref="date_insert" type="datetime">
+        <label>Date de création</label>
+    </input>
+
+    <input ref="date_update" type="datetime">
+        <label>Date de mise à jour</label>
+    </input>
+
+    <submit ref="_submit">
+        <label>Enregistrer</label>
+    </submit>
+
+</form>

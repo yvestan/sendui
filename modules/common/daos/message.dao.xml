@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="message" realname="message" primarykey="idmessage" />
+    </datasources>
+    <record>
+        <property name="idmessage" fieldname="idmessage" datatype="autoincrement"/>
+        <property name="idcustomer" fieldname="idcustomer" datatype="int" required="true"/>
+        <property name="name" fieldname="name" datatype="string" required="true" maxlength="150"/>
+        <property name="subject" fieldname="subject" datatype="string" required="true" maxlength="150"/>
+        <property name="from_name" fieldname="from_name" datatype="string" required="true" maxlength="150"/>
+        <property name="from_email" fieldname="from_email" datatype="string" required="true" maxlength="150"/>
+        <property name="reply_to" fieldname="reply_to" datatype="string" required="true" maxlength="150"/>
+        <property name="return_path" fieldname="return_path" datatype="string" default="" maxlength="150"/>
+        <property name="html_message" fieldname="html_message" datatype="text" default=""/>
+        <property name="text_message" fieldname="text_message" datatype="text" default=""/>
+        <property name="sent" fieldname="sent" datatype="datetime" default=""/>
+        <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
+    </record>
+    <factory>
+        <method name="getDrafts" type="select" distinct="idmessage">                                                                                                                              
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnull property="sent"/>
+            </conditions>
+            <order>
+                <orderitem property="date_update" way="asc" />
+            </order>
+        </method>
+        <method name="getSent" type="select" distinct="idmessage">                                                                                                                              
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull property="sent"/>
+            </conditions>
+            <order>
+                <orderitem property="sent" way="asc" />
+            </order>
+        </method>
+        <method name="getLast" type="select" distinct="idmessage">                                                                                                                              
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull property="sent"/>
+            </conditions>
+            <order>
+                <orderitem property="sent" way="asc" />
+            </order>
+        </method>
+        <method name="getNext" type="select" distinct="idmessage">                                                                                                                              
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull property="sent"/>
+            </conditions>
+            <order>
+                <orderitem property="sent" way="asc" />
+            </order>
+        </method>
+        <method name="getCurrent" type="select" distinct="idmessage">                                                                                                                              
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull property="sent"/>
+            </conditions>
+            <order>
+                <orderitem property="sent" way="asc" />
+            </order>
+        </method>
+    </factory>
+</dao>

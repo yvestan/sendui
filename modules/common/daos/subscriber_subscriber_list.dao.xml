@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="subscriber_subscriber_list" realname="subscriber_subscriber_list" primarykey="idsubscriber,idsubscriber_list" />
+    </datasources>
+    <record>
+        <property name="idsubscriber" fieldname="idsubscriber" datatype="int" required="true"/>
+        <property name="idsubscriber_list" fieldname="idsubscriber_list" datatype="int" required="true"/>
+        <property name="status" fieldname="status" datatype="int" required="true"/>
+        <property name="sent" fieldname="sent" datatype="int" required="true"/>
+    </record>
+</dao>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+
+<input ref="idcustomer" required="true" type="integer">
+	<label>Idcustomer</label>
+</input>
+
+<input ref="name" maxlength="50">
+	<label>Name</label>
+</input>
+
+<textarea ref="description">
+	<label>Description</label>
+</textarea>
+
+<input ref="status" required="true" type="integer">
+	<label>Status</label>
+</input>
+
+<input ref="date_insert" type="datetime">
+	<label>Date Insert</label>
+</input>
+
+<input ref="date_update" type="datetime">
+	<label>Date Update</label>
+</input>
+
+<submit ref="_submit">
+	<label>ok</label>
+</submit>
+</form>
