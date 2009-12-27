@@ -39,7 +39,7 @@
                 <orderitem property="sent" way="asc" />
             </order>
         </method>
-        <method name="getLast" type="select" distinct="idmessage">                                                                                                                              
+        <method name="getLast" type="selectfirst">
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>
@@ -49,7 +49,7 @@
                 <orderitem property="sent" way="asc" />
             </order>
         </method>
-        <method name="getNext" type="select" distinct="idmessage">                                                                                                                              
+        <method name="getNext" type="select" distinct="idmessage"> 
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>
@@ -59,7 +59,7 @@
                 <orderitem property="sent" way="asc" />
             </order>
         </method>
-        <method name="getCurrent" type="select" distinct="idmessage">                                                                                                                              
+        <method name="getCurrent" type="select" distinct="idmessage">                                                                                                                  
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>

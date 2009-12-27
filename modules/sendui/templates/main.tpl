@@ -3,7 +3,7 @@
     <div id="header" class="ui-widget ui-widget-content ui-corner-all">
 
         <h1 id="logo">
-            <a href="#">grafactory.net</a>
+            <a href="{jurl 'sendui~default:index'}">grafactory.net</a>
         </h1>
 
         <div id="account_menu" class="ui-widget-header ui-corner-bl sendui-menu-simple">

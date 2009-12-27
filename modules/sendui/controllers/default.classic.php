@@ -42,6 +42,7 @@ class defaultCtrl extends jController {
 
         // dernier message envoyé
         $last_message = $message->getLast($session->idcustomer);
+        $tpl->assign('last_message', $last_message); 
 
         // message(s) programmé(s)
         $next_message = $message->getNext($session->idcustomer);

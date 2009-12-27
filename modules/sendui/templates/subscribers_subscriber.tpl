@@ -3,7 +3,7 @@
 <div class="sendui-standard-content">
 
 <div class="settings">
-{form $form_subscriber, 'sendui~subscribers:subscribersave', array('idsubscriber' => $idsubscriber, 'idsubscriber_list' => $idsubscriber_list)}
+{form $form_subscriber, 'sendui~subscribers:subscribersave', array('idsubscriber' => $idsubscriber, 'idsubscriber_list' => $idsubscriber_list, 'from_page' => $from_page)}
 
 <div class="bloc-form ui-corner-all">
     <div>{ctrl_label 'email'}</div>

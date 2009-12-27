@@ -19,8 +19,8 @@
                 {$message->reply_to}</li>
         </ul>
 
-        <div class="sendui-left sendui-padding-simple">
-            <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview')}">modifier ces informations</a>
+        <div class="sendui-right sendui-padding-simple">
+            <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview')}" class="table-edit sendui-link-view">modifier ces informations</a>
         </div>
 
     </div>
@@ -31,19 +31,19 @@
 
         <ul class="tabstyle">
             {if !empty($message->html_message)}
-                <li>Vous avez créé un message au format HTML</li>
+                <li class="page-white-code sendui-icon">Vous avez créé un message au format HTML</li>
             {else}
-                <li>Vous n'avez pas créé de message au format HTML</li>
+                <li class="page-white-error sendui-icon">Vous n'avez pas créé de message au format HTML</li>
             {/if}
             {if !empty($message->text_message)}
-                <li class="last">Vous avez créé un message au format texte</li>
+                <li class="page-white last sendui-icon">Vous avez créé un message au format texte</li>
             {else}
-                <li class="last">Vous n'avez pas créé de message au format texte</li>
+                <li class="page-white-error last sendui-icon">Vous n'avez pas créé de message au format texte</li>
             {/if}
         </ul>
 
-        <div class="sendui-left sendui-padding-simple">
-            <a href="{jurl 'sendui~compose:prepare', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview')}">modifier le message</a>
+        <div class="sendui-right sendui-padding-simple">
+            <a href="{jurl 'sendui~compose:prepare', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview')}" class="layout-edit sendui-link-view">modifier le message</a>
         </div>
 
     </div>
@@ -58,8 +58,8 @@
             {/foreach}
         </ul>
 
-        <div class="sendui-left sendui-padding-simple">
-            <a href="{jurl 'sendui~recipients:index', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview')}">changer les destinataires</a>
+        <div class="sendui-right sendui-padding-simple">
+            <a href="{jurl 'sendui~recipients:index', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview')}" class="book-edit sendui-link-view">changer les destinataires</a>
         </div>
 
     </div>

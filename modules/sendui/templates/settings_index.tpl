@@ -1,38 +1,39 @@
 <div id="steps">
-    <div class="step step-on">
-        <div class="step-num">1</div>
+    <div class="sendui-float-step">
+        <div><span class="ui-widget-header ui-state-active ui-corner-all sendui-padding-simple">1</span></div>
         <div class="step-title">
             Réglages
         </div>
     </div>
-    <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-title">
+    <div class="sendui-float-step">
+        <div><span class="ui-widget-header ui-state-disabled ui-corner-all sendui-padding-simple">2</span></div>
+        <div class="step-title ui-state-disabled">
             Composition
         </div>
     </div>
-    <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-title">
+    <div class="sendui-float-step">
+        <div><span class="ui-widget-header ui-state-disabled ui-corner-all sendui-padding-simple">2</span></div>
+        <div class="step-title ui-state-disabled">
             Destinataires
         </div>
     </div>
-    <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-title">
+    <div class="sendui-float-step">
+        <div><span class="ui-widget-header ui-state-disabled ui-corner-all sendui-padding-simple">2</span></div>
+        <div class="step-title ui-state-disabled">
             Vérification
         </div>
     </div>
-    <div class="step">
-    <div class="step-num">5</div>
-        <div class="step-title">
+    <div class="sendui-float-step">
+        <div><span class="ui-widget-header ui-state-disabled ui-corner-all sendui-padding-simple">2</span></div>
+        <div class="step-title ui-state-disabled">
             Envoi
         </div>
     </div>
+    <div class="spacer"></div>
 </div>
 
 
-<h2 class="main">Définition de l'expéditeur et du sujet</h2>
+<h2 class="mainpage newmessage">Définition de l'expéditeur et du sujet</h2>
 
 <div class="sendui-standard-content">
 

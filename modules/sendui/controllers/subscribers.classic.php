@@ -60,7 +60,9 @@ class subscribersCtrl extends jController {
         $subscriber_list = jDao::get($this->dao_subscriber_list);
         $list_subscribers_lists = $subscriber_list->getByCustomer($session->idcustomer);
         $tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
-        $tpl->assign('dao_subscriber_list', $subscriber_list); 
+
+        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
+        $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
 
         $rep->body->assign('MAIN', $tpl->fetch('subscribers_index')); 
 
@@ -91,6 +93,8 @@ class subscribersCtrl extends jController {
             $form_subscriber_list->initFromDao($this->dao_subscriber_list);
             $rep->params = array('idsubscriber_list' => $this->param('idsubscriber_list'));
         }
+
+        $rep->params['from_page'] = $this->param('from_page');
 
         // redirection vers index
         $rep->action = 'sendui~subscribers:listview';
@@ -126,13 +130,17 @@ class subscribersCtrl extends jController {
         // le créer si il n'existe pas
         if ($form_subscriber_list === null) {
             $rep = $this->getResponse('redirect');
-            $rep->params = array('idsubscriber_list' => $this->param('idsubscriber_list'));
+            $rep->params = array(
+                'idsubscriber_list' => $this->param('idsubscriber_list'),
+                'from_page' => $this->param('from_page'),
+            );
             $rep->action = 'sendui~subscribers:preparelistview';
             return $rep;
         }
 
         $tpl->assign('form_subscriber_list', $form_subscriber_list);
         $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list'));
+        $tpl->assign('from_page', $this->param('from_page'));
 
         $rep->body->assign('MAIN', $tpl->fetch('subscribers_listview')); 
 
@@ -163,6 +171,10 @@ class subscribersCtrl extends jController {
         
         // redirection si erreur
         if (!$form_subscriber_list->check()) {
+            $rep->params = array(
+                'idsubscriber_list' => $this->param('subscriber_list'),
+                'from_page' => $this->param('from_page'),
+            );
             $rep->action = 'sendui~subscribers:listview';
             return $rep;
         }
@@ -191,9 +203,15 @@ class subscribersCtrl extends jController {
             // détruire le formulaire
             jForms::destroy($this->form_subscriber_list);
 
-            // rediriger vers la page suivante
             $rep->params = array('idsubscriber_list' => $idsubscriber_list);
-            $rep->action = 'sendui~subscribers:listview';
+
+            // rediriger vers la page suivante
+            if($this->param('from_page')!='') {
+                $rep->action = $this->param('from_page');
+            } else {
+                $rep->action = 'sendui~subscribers:listview';
+            }
+
             return $rep;
 
         }
@@ -267,7 +285,8 @@ class subscribersCtrl extends jController {
 
         $rep->params = array(
             'idsubscriber' => $this->param('idsubscriber'),
-            'idsubscriber_list' => $this->param('idsubscriber_list')
+            'idsubscriber_list' => $this->param('idsubscriber_list'),
+            'from_page' => $this->param('from_page')
         );
 
 
@@ -307,7 +326,8 @@ class subscribersCtrl extends jController {
             $rep = $this->getResponse('redirect');
             $rep->params = array(
                 'idsubscriber' => $this->param('idsubscriber'),
-                'idsubscriber_list' => $this->param('idsubscriber_list')
+                'idsubscriber_list' => $this->param('idsubscriber_list'),
+                'from_page' => $this->param('from_page')
             );
             $rep->action = 'sendui~subscribers:preparesubscriber';
             return $rep;
@@ -316,6 +336,7 @@ class subscribersCtrl extends jController {
         $tpl->assign('form_subscriber', $form_subscriber);
         $tpl->assign('idsubscriber', $this->param('idsubscriber'));
         $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list'));
+        $tpl->assign('from_page', $this->param('from_page'));
 
         $rep->body->assign('MAIN', $tpl->fetch('subscribers_subscriber')); 
 
@@ -349,7 +370,8 @@ class subscribersCtrl extends jController {
         if (!$form_subscriber->check()) {
             $rep->params = array(
                 'idsubscriber' => $this->param('idsubscriber'),
-                'idsubscriber_list' => $this->param('idsubscriber_list')
+                'idsubscriber_list' => $this->param('idsubscriber_list'),
+                'from_page' => $this->param('from_page')
             );
             $rep->action = 'sendui~subscribers:subscriber';
             return $rep;
@@ -384,7 +406,7 @@ class subscribersCtrl extends jController {
             }
 
             // si on a idsubscriber_list, enregistrer dans la bonne liste
-            if($this->param('idsubscriber_list')!='') {
+            if($this->param('idsubscriber_list')!='' && empty($update)) {
 
                 $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
                 $record = jDao::createRecord($this->dao_subscriber_subscriber_list);
@@ -402,12 +424,18 @@ class subscribersCtrl extends jController {
             // détruire le formulaire
             jForms::destroy($this->form_subscriber);
 
-            // rediriger vers la page suivante
             $rep->params = array(
                 'idsubscriber' => $idsubscriber,
                 'idsubscriber_list' => $this->param('idsubscriber_list'),
             );
-            $rep->action = 'sendui~subscribers:subscriber';
+
+            // rediriger vers la page suivante
+            if($this->param('from_page')!='') {
+                $rep->action = $this->param('from_page');
+            } else {
+                $rep->action = 'sendui~subscribers:subscriber';
+            }
+
             return $rep;
 
         }

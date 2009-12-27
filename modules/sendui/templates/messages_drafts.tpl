@@ -5,6 +5,7 @@
     $(document).ready(function() {
         $('#tab_drafts').dataTable({
             "bJQueryUI": true,
+            "bAutoWidth": false,
             "sPaginationType": "full_numbers",
             "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
         });
@@ -29,11 +30,14 @@
         <tbody>
             {foreach $list_drafts as $message}
             <tr class="highlight">
-                <td class="edit"><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}">{$message->name}</a></td>
+                <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}">{$message->name}</a></td>
                 <td>{$message->subject}</td>
                 <td>{$message->from_name} {$message->from_email}</td>
                 <td>{$message->date_update|jdatetime:'db_datetime','lang_datetime'}</td>
-                <td class="center"><a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}">modifier &amp; envoyer</a></td>
+                <td>
+                    <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}" class="newmessage">envoyer</a>
+                    <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}" class="table-delete">supprimer</a>
+                </td>
             </tr>
             {/foreach}
         </tbody>
