@@ -68,7 +68,7 @@
     {if empty($message->html_message) && empty($message->text_message)}
 
         <div class="ui-state-highlight ui-corner-all sendui-padding-simple"> 
-            <p><span class="ui-icon ui-icon-info"></span>Votre message est vide ! Vous devez créer une version HTML et/ou une version texte pour pouvoir l'envoyer.</p>
+            <p><span class="ui-icon ui-icon-info sendui-icon-float"></span>Votre message est vide ! Vous devez créer une version HTML et/ou une version texte pour pouvoir l'envoyer.</p>
         </div>
 
         <div class="sendui-margin-top">

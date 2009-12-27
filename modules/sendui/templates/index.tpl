@@ -35,7 +35,7 @@
     <div class="ui-tabs ui-widget ui-widget-content ui-corner-all sendui-float-bloc">
         <h3 class="ui-widget-header ui-corner-all">
         <span class="schedule">Message(s) programmé(s)</span></h3>
-        <p class="no-result">Vous n'avez pas programmé d'envoi de message. Souhaitez-vous <a href="{jurl 'sendui~settings:index'}" class="addschedule">programmer un envoi</a> ?</p>
+        <p class="no-result">Vous n'avez pas programmé d'envoi de message. Souhaitez-vous <a href="{jurl 'sendui~settings:index'}" class="time-add">programmer un envoi</a> ?</p>
     </div>
 
     <div class="ui-tabs ui-widget ui-widget-content ui-corner-all sendui-float-bloc">
@@ -48,7 +48,7 @@
                 <div class="sendui-margin-top-simple"><a href="{jurl 'sendui~account:preparecredit'}" class="basket-add">obtenir d'autres crédits</a></div>
             </div>
         {else}
-        <p class="no-result">Vos n'avez aucun crédit actuellement sur votre compte. Souhaitez-vous <a href="{jurl 'sendui~account:credits'}">créditer votre compte</a> ?</p>
+            <p class="no-result">Vos n'avez aucun crédit actuellement sur votre compte. Souhaitez-vous <a href="{jurl 'sendui~account:credits'}" class="basket-add">créditer votre compte</a> ?</p>
         {/if}
     </div>
 

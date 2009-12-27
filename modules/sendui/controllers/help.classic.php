@@ -19,7 +19,7 @@ class helpCtrl extends jController {
     // {{{ index()
 
     /**
-     * page principale
+     * page principale d'aide
      *
      * @template    help_index
      * @return      html
@@ -41,6 +41,31 @@ class helpCtrl extends jController {
 
     // }}}
 
+    // {{{ copyright()
+
+    /**
+     * page de copyright
+     *
+     * @template    help_copyright
+     * @return      html
+     */
+    public function copyright()
+    {
+
+        $rep = $this->getResponse('html');
+
+        $rep->title = 'Crédits et Copyright';
+
+        $tpl = new jTpl();
+
+        $rep->body->assign('MAIN', $tpl->fetch('help_copyright')); 
+
+        return $rep;
+
+    }
+
+    // }}}
+
     // {{{ contact()
 
     /**
@@ -49,14 +74,14 @@ class helpCtrl extends jController {
      * @template    help_contact
      * @return      html
      */
-    public function save()
+    public function contact()
     {
 
         $rep = $this->getResponse('html');
 
         $tpl = new jTpl();
 
-        $rep->body->assign('MAIN', $tpl->fetch('account_credits')); 
+        $rep->body->assign('MAIN', $tpl->fetch('help_contact')); 
 
         return $rep;
 

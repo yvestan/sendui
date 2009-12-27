@@ -1,4 +1,8 @@
-<h2 class="mainpage subscribers">Gérer la liste</h2>
+{if empty($idsubscriber_list)}
+    <h2 class="mainpage subscribers">Créer une liste</h2>
+{else}
+    <h2 class="mainpage subscribers">Gérer la liste</h2>
+{/if}
 
 <div class="sendui-standard-content">
 
@@ -15,7 +19,9 @@
     <p>{ctrl_control 'description'}</p>
 </div>
 
-<p><input name="_submit" id="jforms_sendui_form_subscriber_list_submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Enregistrer" type="submit"></p>
+<p>
+    <input name="_submit" id="jforms_sendui_form_subscriber_list_submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Enregistrer" type="submit">
+</p>
 
 {/form}
 </div>

@@ -125,7 +125,7 @@ class composeCtrl extends jController {
             if($this->param('from_page')!='') {
                 $rep->action = $this->param('from_page');
             } else {
-                $rep->action = 'sendui~messages:preview';
+                $rep->action = 'sendui~recipients:index';
             }
 
             return $rep;

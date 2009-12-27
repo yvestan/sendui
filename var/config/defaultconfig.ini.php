@@ -54,8 +54,6 @@ strict       = ECHO
 ; for exceptions, there is always an implicit EXIT by default
 exception    = ECHO
 
-
-
 [compilation]
 checkCacheFiletime  = on
 force  = off
@@ -93,8 +91,8 @@ defaultEntrypoint= index
 entrypointExtension= .php
 
 ; leave empty to have jelix error messages
-notfoundAct =
-;notfoundAct = "jelix~error:notfound"
+;notfoundAct =
+notfoundAct = "jelix~error:notfound"
 
 ; list of actions which require https protocol for the simple url engine
 ; syntax of the list is the same as explained in the simple_urlengine_entrypoints
@@ -152,8 +150,6 @@ smtpUsername =
 smtpPassword =
 ; SMTP server timeout in seconds
 smtpTimeout = 10
-
-
 
 [acl2]
 ; example of driver: "db"

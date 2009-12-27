@@ -35,7 +35,6 @@ class settingsCtrl extends jController {
         // formulaire
         $message_settings = jForms::create($this->form_message_settings, $this->param('idmessage'));
 
-
         // initialiser un message
         if($this->param('idmessage')!='') {
             $message_settings->initFromDao($this->dao_message);
@@ -133,7 +132,8 @@ class settingsCtrl extends jController {
         $result['daorec']->idcustomer = $session->idcustomer;
 
         if($result['toInsert']) {
-            $idmessage = $result['dao']->insert($result['daorec']);
+            $result['dao']->insert($result['daorec']);
+            $idmessage = $result['daorec']->idmessage;
         } else {
             $update = $result['dao']->update($result['daorec']);
         }

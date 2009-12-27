@@ -7,6 +7,7 @@
             "bJQueryUI": true,
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
+            "aaSorting": [[3,'desc']],
             "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
         });
     });
@@ -22,8 +23,8 @@
                 <th>Nom</th>
                 <th>Sujet</th>
                 <th>Expéditeur</th>
-                <th>Modifié le</th>
-                <th>Modifier &amp; envoyer</th>
+                <th style="width:150px;">Modifié le</th>
+                <th style="width:190px;">Modifier &amp; envoyer</th>
             </tr>
 
         </thead>
