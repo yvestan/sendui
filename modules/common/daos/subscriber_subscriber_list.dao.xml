@@ -16,5 +16,15 @@
                 <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
             </conditions>
         </method>
+        <method name="getLastSubscriberSent" type="selectfirst">
+            <parameter name="idsubscriber"/>
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber" expr="$idsubscriber"/>
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+                <isnotnull property="sent"/>
+            </conditions>
+        </method>
+
     </factory>
 </dao>

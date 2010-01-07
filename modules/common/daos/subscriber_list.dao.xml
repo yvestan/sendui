@@ -2,17 +2,16 @@
 <dao xmlns="http://jelix.org/ns/dao/1.0">
     <datasources>
         <primarytable name="subscriber_list" realname="subscriber_list" primarykey="idsubscriber_list" />
-        <optionalforeigntable name="message_subscriber_list" realname="message_subscriber_list" primarykey="idsubscriber_list" onforeignkey="idsubscriber_list" />
     </datasources>
     <record>
         <property name="idsubscriber_list" fieldname="idsubscriber_list" datatype="autoincrement"/>
+        <property name="token" fieldname="token" datatype="string" maxlength="50"/>
         <property name="idcustomer" fieldname="idcustomer" datatype="int" required="true"/>
         <property name="name" fieldname="name" datatype="string" default="" maxlength="50"/>
         <property name="description" fieldname="description" datatype="text" default=""/>
         <property name="status" fieldname="status" datatype="int" required="true"/>
         <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
         <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
-        <property name="idmessage" fieldname="idmessage" table="message_subscriber_list" datatype="int"/>
     </record>
     <factory>
         <method name="count" type="count" distinct="idsubscriber_list">
@@ -27,17 +26,6 @@
                 <orderitem property="date_update" way="asc" />
             </order>
         </method>
-        <method name="getByMessage" type="select" distinct="idsubscriber_list">  
-            <parameter name="idmessage"/>
-            <conditions logic="AND">
-                <eq property="idmessage" expr="$idmessage"/>
-                <isnotnull property="idmessage"/>
-            </conditions>
-            <order>
-                <orderitem property="date_update" way="asc" />
-            </order>
-        </method>
-
         <method name="getLast" type="selectfirst">  
             <parameter name="idcustomer"/>
             <conditions logic="AND">

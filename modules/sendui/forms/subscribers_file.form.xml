@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1" allowAnyOrigin="true">
+
+    <upload ref="file_subscribers" mimetype="text/csv;txt/csv,text/plain" maxsize="20000" readonly="false">
+        <label>Fichier au format CSV</label>
+    </upload>
+
+    <submit ref="_submit">
+        <label>Envoyer le fichier</label>
+    </submit>
+
+</form>
