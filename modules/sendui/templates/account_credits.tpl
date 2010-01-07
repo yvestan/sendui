@@ -2,6 +2,7 @@
 
 <div class="sendui-standard-content">
 
+    Vous disposez actuellement de {$credits} crédit(s)
 
     <div class="col-simple">
 

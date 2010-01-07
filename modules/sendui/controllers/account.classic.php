@@ -145,17 +145,18 @@ class accountCtrl extends jController {
 
         $rep = $this->getResponse('html');
 
+        $session = jAuth::getUserSession();
+
         // récupérer le nb de crédits actuels du client
         $customer = jDao::get($this->dao_customer);
-        $credits = $customer->getCredits($session->idcustomer);
 
         // récupérer la grille de tarifs
-        $price = jDao::get($this->dao_price);
-        $prices_tab = $price->getPrice($idcustomer);
-
-        // formulaire de
+        /*$price = jDao::get($this->dao_price);
+        $prices_tab = $price->getPrice($session->idcustomer);*/
 
         $tpl = new jTpl();
+
+        $tpl->assign('credits', $session->credit);
 
         $rep->body->assign('MAIN', $tpl->fetch('account_credits')); 
 

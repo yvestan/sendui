@@ -6,6 +6,7 @@
     <record>
         <property name="idcustomer" fieldname="idcustomer" datatype="autoincrement"/>
         <property name="login" fieldname="login" datatype="string" required="true" maxlength="50"/>
+        <property name="public_token" fieldname="public_token" datatype="string" maxlength="50"/>
         <property name="email" fieldname="email" datatype="string" required="true" maxlength="150"/>
         <property name="password" fieldname="password" datatype="string" required="true" maxlength="150"/>
         <property name="lastname" fieldname="lastname" datatype="string" default="" maxlength="100"/>

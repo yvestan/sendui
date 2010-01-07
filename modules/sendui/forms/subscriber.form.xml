@@ -2,59 +2,69 @@
 <form xmlns="http://jelix.org/ns/forms/1.1" allowAnyOrigin="true">
 
     <input ref="email" required="true" maxlength="150">
-        <label>Email</label>
+        <label>Adresse email</label>
     </input>
 
     <input ref="fullname" maxlength="50">
-        <label>Fullname</label>
+        <label>Nom complet</label>
     </input>
 
     <input ref="firstname" maxlength="50">
-        <label>Firstname</label>
+        <label>Prénom</label>
     </input>
 
     <input ref="lastname" maxlength="50">
-        <label>Lastname</label>
+        <label>Nom</label>
+    </input>
+
+    <input ref="phone" maxlength="50">
+        <label>Téléphone fixe</label>
+    </input>
+
+    <input ref="mobile" maxlength="50">
+        <label>Téléphone mobile</label>
     </input>
 
     <input ref="address" maxlength="250">
-        <label>Address</label>
+        <label>Adresse postale</label>
     </input>
 
     <input ref="zip" maxlength="15">
-        <label>Zip</label>
+        <label>Code postal</label>
     </input>
 
     <input ref="country">
-        <label>Country</label>
+        <label>Pays</label>
     </input>
 
-    <input ref="status" type="integer">
+    <menulist ref="status">
         <label>Status</label>
-    </input>
+        <item value="1">Actif</item>
+        <item value="0">Inactif (suspendu)</item>
+        <item value="2">A supprimer (rebond)</item>
+        <item value="3">Supprimé</item>
+    </menulist>
 
-    <input ref="confirmed" type="datetime">
-        <label>Confirmed</label>
-    </input>
+    <date ref="confirmed">
+        <label>Inscription confirmée le</label>
+    </date>
 
-    <input ref="html_format" type="integer">
-        <label>Html Format</label>
-    </input>
+    <radiobuttons ref="html_format">
+        <label>Format HTML</label>
+        <item value="1">oui</item>
+        <item value="0">non</item>
+    </radiobuttons>
 
-    <input ref="text_format" type="integer">
-        <label>Text Format</label>
-    </input>
+    <radiobuttons ref="text_format">
+        <label>Format Texte</label>
+        <item value="1">oui</item>
+        <item value="0">non</item>
+    </radiobuttons>
 
-    <input ref="subscribe_from" maxlength="50">
-        <label>Subscribe From</label>
-    </input>
-
-    <input ref="date_update" type="datetime">
-        <label>Date Update</label>
-    </input>
-
-    <input ref="date_insert" type="datetime">
-        <label>Date Insert</label>
-    </input>
+    <menulist ref="subscribe_from">
+        <label>Provenance l'abonnement</label>
+        <item value="interne">Interne</item>
+        <item value="externe">Externe</item>
+    </menulist>
 
 </form>

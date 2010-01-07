@@ -69,5 +69,17 @@
                 <orderitem property="sent" way="asc" />
             </order>
         </method>
+        <method type="php" name="getLists">
+            <parameter name="idmessage" />
+            <body><![CDATA[
+                $sql = 'SELECT * FROM subscriber_list sl, message_subscriber_list msl
+                        WHERE sl.idsubscriber_list=msl.idsubscriber_list
+                        AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
+         
+                $rs = $this->_conn->query($sql);
+                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                return $rs;
+            ]]></body> 
+          </method>
     </factory>
 </dao>

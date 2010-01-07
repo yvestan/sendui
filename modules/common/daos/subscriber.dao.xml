@@ -12,8 +12,11 @@
         <property name="fullname" fieldname="fullname" datatype="string" default="" maxlength="50"/>
         <property name="firstname" fieldname="firstname" datatype="string" default="" maxlength="50"/>
         <property name="lastname" fieldname="lastname" datatype="string" default="" maxlength="50"/>
+        <property name="phone" fieldname="phone" datatype="string" default="" maxlength="50"/>
+        <property name="mobile" fieldname="mobile" datatype="string" default="" maxlength="50"/>
         <property name="address" fieldname="address" datatype="string" default="" maxlength="250"/>
         <property name="zip" fieldname="zip" datatype="string" default="" maxlength="15"/>
+        <property name="city" fieldname="city" datatype="string" default="" maxlength="100"/>
         <property name="country" fieldname="country" datatype="string" default=""/>
         <property name="status" fieldname="status" datatype="int" required="true"/>
         <property name="confirmed" fieldname="confirmed" datatype="datetime" default=""/>

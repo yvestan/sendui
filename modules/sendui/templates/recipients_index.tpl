@@ -5,6 +5,7 @@
     $(document).ready(function() {
         $('#tab_subscribers_lists').dataTable({
             "bJQueryUI": true,
+            "bAutoWidth": false,
             "sPaginationType": "full_numbers",
             "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
         });
@@ -14,9 +15,10 @@
 
 <div class="sendui-standard-content">
 
-    <p>Cochez les listes de destinataire pour l'envoi du message</p>
+    <p class="sendui-content">Cochez les listes de destinataires pour l'envoi du message</p>
 
     <form method="post" action="{jurl 'sendui~recipients:save', array('idmessage' => $idmessage, 'from_page' => $from_page)}" id="form_recipients">
+
 
     <table class="tabl display" id="tab_subscribers_lists">
         <thead>
@@ -29,11 +31,8 @@
         </thead>
         <tbody>
             {foreach $list_subscribers_lists as $subscriber_list}
-            <tr>
-                <td><input type="checkbox" name="idsubscriber_list[]" value="{$subscriber_list->idsubscriber_list}" 
-                    {if $message_subscriber_list->isMessageList($subscriber_list->idsubscriber_list)>0 }
-                        checked="checked"
-                    {/if} /></td>
+            <tr class="highlight">
+                <td><input type="checkbox" name="idsubscriber_list[]" value="{$subscriber_list->idsubscriber_list}" {if $message_subscriber_list->isMessageList($subscriber_list->idsubscriber_list)>0 } checked="checked" {/if} /></td>
                 <td>{$subscriber_list->name}</td>
                 <td>{$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)} abonnés</td>
                 <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
@@ -42,8 +41,9 @@
         </tbody>
     </table>
 
-    <div><input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Continuer" type="submit"></div>
+    <div class="sendui-margin-top"><input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Continuer" type="submit" /></div>
 
     </form>
 
 </div>
+

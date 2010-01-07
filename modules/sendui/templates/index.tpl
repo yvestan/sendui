@@ -45,7 +45,7 @@
             <div class="content-bloc sendui-padding-simple">
                 <div class="sendui-center"><span class="big ui-corner-all">{$credits} crédit(s)</span> <span class="float-left">disponible(s) sur votre compte</a></span></div>
                 <div class="spacer"></div>
-                <div class="sendui-margin-top-simple"><a href="{jurl 'sendui~account:preparecredit'}" class="basket-add">obtenir d'autres crédits</a></div>
+                <div class="sendui-margin-top-simple"><a href="{jurl 'sendui~account:credits'}" class="basket-add">obtenir d'autres crédits</a></div>
             </div>
         {else}
             <p class="no-result">Vos n'avez aucun crédit actuellement sur votre compte. Souhaitez-vous <a href="{jurl 'sendui~account:credits'}" class="basket-add">créditer votre compte</a> ?</p>

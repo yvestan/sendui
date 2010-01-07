@@ -18,6 +18,7 @@ class messagesCtrl extends jController {
 
     // message et liste
     protected $dao_message = 'common~message';
+    protected $dao_message_subscriber_list = 'common~message_subscriber_list';
     protected $dao_subscriber_list = 'common~subscriber_list';
     protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
 
@@ -62,6 +63,31 @@ class messagesCtrl extends jController {
 
     // }}}
 
+    // {{{ draftdelete()
+
+    /**
+     * Supprimer un brouillon
+     *
+     * @return      redirect
+     */
+    public function draftdelete()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        // TODO tester aussi sur le customer pour la sécurité
+        $message = jDao::get($this->dao_message);
+        if($message->delete($this->param('idmessage'))) {
+            $rep->params = array('delete' => true);
+        }
+        
+        $rep->action = 'sendui~messages:drafts';
+        return $rep;
+
+    }
+
+    // }}}
+
     // {{{ sent()
 
     /**
@@ -87,7 +113,14 @@ class messagesCtrl extends jController {
         $list_sent = $message->getSent($session->idcustomer);
         $tpl->assign('list_sent', $list_sent); 
 
-        $rep->body->assign('MAIN', $tpl->fetch('messages_sent')); 
+        // response en ajax
+        if($this->param('response')=='ajax') {
+            $rep = $this->getResponse('htmlfragment');
+            $rep->tplname = 'messages_sent_ajax';
+            $rep->tpl->assign('list_sent', $list_sent); 
+        } else {
+            $rep->body->assign('MAIN', $tpl->fetch('messages_sent')); 
+        }
 
         return $rep;
 
@@ -114,16 +147,15 @@ class messagesCtrl extends jController {
 
         $tpl = new jTpl();
 
+        $tpl->assign('idmessage', $this->param('idmessage')); 
+
         // récupérer le message 
         $message = jDao::get($this->dao_message);
         $message_infos = $message->get($this->param('idmessage'));
         $tpl->assign('message', $message_infos); 
-        $tpl->assign('idmessage', $this->param('idmessage')); 
 
-        // récupérer les listes associées
-        $subscriber_list = jDao::get($this->dao_subscriber_list);
-        $message_subscriber_list = $subscriber_list->getByMessage($this->param('idmessage'));
-        $tpl->assign('message_subscriber_list', $message_subscriber_list); 
+        // les listes associées
+        $tpl->assign('message_subscriber_list', $message->getLists($this->param('idmessage'))); 
 
         $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
         $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 

@@ -36,7 +36,8 @@
                 <td>{$message->sent|jdatetime:'db_datetime','lang_datetime'}</td>
                 <td>
                     <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}" class="newmessage">re-expédier</a>
-                    <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}" class="table-delete">supprimer</a>
+                    <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}" class="table-delete confirm_action"
+                        title="Êtes-vous sur de vouloir supprimer ce message ?">supprimer</a>
                 </td>
             </tr>
             {/foreach}

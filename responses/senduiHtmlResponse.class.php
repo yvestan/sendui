@@ -30,6 +30,7 @@ class senduiHtmlResponse extends jResponseHtml {
         $this->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/jquery-1.3.2.min.js');
         $this->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/jquery-ui-1.7.2.custom.min.js');
         $this->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/button.js');
+        $this->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/function.js');
 
     }
 

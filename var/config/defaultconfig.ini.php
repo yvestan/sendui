@@ -25,11 +25,6 @@ trustedModules =
 ; or not installed.
 unusedModules = jacldb
 
-
-[coordplugins]
-;authentification
-auth = "auth.coord.ini.php"
-
 [tplplugins]
 defaultJformsBuilder = html
 
@@ -190,3 +185,9 @@ sendui=/sendui
 
 ;[tplplugins] 
 ;defaultJformsBuilder = test
+
+[htmleditors]
+default.engine.name = ckeditor
+default.engine.file = js/ckeditor/ckeditor.js
+default.config = js/ckeditor/ckeditor_default.js
+default.skin.default = js/ckeditor/empty.css
