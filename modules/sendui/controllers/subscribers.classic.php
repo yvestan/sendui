@@ -21,8 +21,17 @@ class subscribersCtrl extends jController {
     protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
     protected $dao_subscriber = 'common~subscriber';
 
+    // customer
+    protected $dao_customer = 'common~customer';
+
     // formulaire liste
     protected $form_subscriber_list = 'sendui~subscriber_list';
+
+    // formulaire upload
+    protected $form_subscribers_file = 'sendui~subscribers_file';
+
+    // formulaire plusieurs subscribers
+    protected $form_subscribers_text = 'sendui~subscribers_text';
 
     // formulaire abonné
     protected $form_subscriber = 'sendui~subscriber';
@@ -63,8 +72,58 @@ class subscribersCtrl extends jController {
 
         $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
         $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
+    
+        // response en ajax
+        if($this->param('response')=='ajax') {
+            $rep = $this->getResponse('htmlfragment');
+            $rep->tplname = 'subscribers_index_ajax';
+            $rep->tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
+            $rep->tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
+        } else {
+            $rep->body->assign('MAIN', $tpl->fetch('subscribers_index')); 
+        }
 
-        $rep->body->assign('MAIN', $tpl->fetch('subscribers_index')); 
+        return $rep;
+
+    }
+
+    // }}}
+
+    // {{{ generateform()
+
+    /**
+     * génération d'un formulaire pour site
+     *
+     * @template    subscribers_generateform
+     * @return      html
+     */
+    public function generateform()
+    {
+
+        $rep = $this->getResponse('html');
+
+        $rep->title = 'Générer un formulaire d\'abonnement';
+
+        $session = jAuth::getUserSession();
+
+        $tpl = new jTpl();
+
+        // clients
+        $customer = jDao::get($this->dao_customer);
+        $tpl->assign('customer', $customer->get($session->idcustomer)); 
+
+        // récupérer les listes du client et la liste en cours
+        $subscriber_list = jDao::get($this->dao_subscriber_list);
+        $list_subscribers_lists = $subscriber_list->getByCustomer($session->idcustomer);
+        $tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
+
+        // liste en cours TODO vérif sur le customer ?
+        if($this->param('idsubscriber_list')!='') {
+            $tpl->assign('subscriber_list', $subscriber_list->get($this->param('idsubscriber_list'))); 
+            $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list')); 
+        }
+
+        $rep->body->assign('MAIN', $tpl->fetch('subscribers_generateform')); 
 
         return $rep;
 
@@ -138,9 +197,20 @@ class subscribersCtrl extends jController {
             return $rep;
         }
 
+        if($this->param('idsubscriber_list')!='') {
+            $subscriber_list = jDao::get($this->dao_subscriber_list);    
+            $tpl->assign('subscriber_list', $subscriber_list->get($this->param('idsubscriber_list')));
+        }
+
         $tpl->assign('form_subscriber_list', $form_subscriber_list);
         $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list'));
         $tpl->assign('from_page', $this->param('from_page'));
+
+        if($this->param('idsubscriber_list')!='') {
+            $rep->title = 'Gérer la liste';
+        } else {
+            $rep->title = 'Créer une liste';    
+        }
 
         $rep->body->assign('MAIN', $tpl->fetch('subscribers_listview')); 
 
@@ -239,7 +309,10 @@ class subscribersCtrl extends jController {
 
         // infos sur la liste
         $subscriber_list = jDao::get($this->dao_subscriber_list);
-        $tpl->assign('subscriber_list', $subscriber_list->get($this->param('idsubscriber_list')));
+        $subscriber_list_infos = $subscriber_list->get($this->param('idsubscriber_list'));
+        $tpl->assign('subscriber_list', $subscriber_list_infos);
+
+        $rep->title = $subscriber_list_infos->name.' - Abonnés à la liste';
 
         // client
         $session = jAuth::getUserSession();
@@ -247,6 +320,10 @@ class subscribersCtrl extends jController {
         // récupérer les abonnés à la liste
         $subscriber = jDao::get($this->dao_subscriber);
         $list_subscribers = $subscriber->getByList($this->param('idsubscriber_list'),$session->idcustomer);
+
+        // dao liste
+        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
+        $tpl->assign('list', $subscriber_subscriber_list);
 
         $tpl->assign('list_subscribers', $list_subscribers);
         $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list'));
@@ -310,7 +387,16 @@ class subscribersCtrl extends jController {
     public function subscriber()
     {
 
+        // si pas de liste, retour
+        if($this->param('idsubscriber_list')=='') {
+            $rep = $this->getResponse('redirect');
+            $rep->action = 'sendui~subscribers:index';
+            return $rep;
+        }
+
         $rep = $this->getResponse('html');
+
+        $rep->title = 'Ajouter des abonnés';
 
         $tpl = new jTpl();
 
@@ -333,10 +419,32 @@ class subscribersCtrl extends jController {
             return $rep;
         }
 
+        // créer une instance du formulaire d'upload / détruire l'ancienne instance
+        $form_subscribers_file = jForms::get($this->form_subscribers_file);
+        if ($form_subscribers_file !== null) {
+            jForms::destroy($this->form_subscribers_file);
+        }
+        $form_subscribers_file = jForms::create($this->form_subscribers_file);
+        $tpl->assign('form_subscribers_file', $form_subscribers_file);
+
+        // créer une instance de formulaire pour l'ajout par lot
+        $form_subscribers_text = jForms::get($this->form_subscribers_text);
+        if ($form_subscribers_text !== null) {
+            jForms::destroy($this->form_subscribers_text);
+        }
+        $form_subscribers_text = jForms::create($this->form_subscribers_text);
+        $tpl->assign('form_subscribers_text', $form_subscribers_text);
+
         $tpl->assign('form_subscriber', $form_subscriber);
         $tpl->assign('idsubscriber', $this->param('idsubscriber'));
         $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list'));
         $tpl->assign('from_page', $this->param('from_page'));
+
+        // infos sur la liste TODO check avec le customer
+        if($this->param('idsubscriber_list')!='') {
+            $subscriber_list = jDao::get($this->dao_subscriber_list);
+            $tpl->assign('subscriber_list', $subscriber_list->get($this->param('idsubscriber_list')));
+        }
 
         $rep->body->assign('MAIN', $tpl->fetch('subscribers_subscriber')); 
 
@@ -443,5 +551,338 @@ class subscribersCtrl extends jController {
     }
 
     // }}}
+
+    // {{{ subscribers_textsave()
+
+    /**
+     * ajouter des abonnés depuis le champ text
+     * 
+     * @template    subscribersave
+     * @return      redirect
+     */
+    public function subscribers_textsave()
+    {
+
+        // récupere le form
+        $form_subscribers_text = jForms::fill($this->form_subscribers_text);
+
+        $rep = $this->getResponse('redirect');
+
+        // redirection si erreur
+        if ($form_subscribers_text!==null && !$form_subscribers_text->check()) {
+            $rep->params = array(
+                'idsubscriber_list' => $this->param('idsubscriber_list'),
+                'from_page' => $this->param('from_page')
+            );
+            $rep->anchor = 'subscribers-text';
+            $rep->action = 'sendui~subscribers:subscriber';
+            return $rep;
+        }
+
+        // le champ text
+        $subscribers_text = $this->param('subscribers');
+
+
+        // détruire le formulaire
+        jForms::destroy($this->form_subscribers_text);
+
+        if($results_subscribers_save = $this->subscribers_save($subscribers_text)) {
+            return $this->subscribers_save_response('subscribers-text',$results_subscribers_save);
+        }
+
+        $rep->params = array(
+            'idsubscriber_list' => $this->param('idsubscriber_list'),
+        );
+
+        // rediriger vers la page suivante
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');
+        } else {
+            $rep->action = 'sendui~subscribers:subscriber';
+        }
+
+        return $rep;
+
+
+    }
+
+    // }}}
+
+    // {{{ subscribers_filesave()
+
+    /**
+     * ajouter des abonnés depuis un fichier CSV
+     * 
+     * @template    subscribersave
+     * @return      redirect
+     */
+    public function subscribers_filesave()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        // récupere le form
+        $form_subscribers_file = jForms::fill($this->form_subscribers_file);
+
+        // redirection si erreur
+        if (!$form_subscribers_file->check()) {
+            $rep->params = array(
+                'idsubscriber_list' => $this->param('idsubscriber_list'),
+                'from_page' => $this->param('from_page')
+            );
+            $rep->action = 'sendui~subscribers:subscriber';
+            $rep->anchor = 'subscribers-file';
+            return $rep;
+        }
+
+        $file_path = JELIX_APP_WWW_PATH.'temp/';
+        $file_name = uniqid();
+
+        // sauvegarde le ficher
+        if($form_subscribers_file->saveFile('file_subscribers', $file_path, $file_name)) {
+
+            // ouvrir le ficher
+            $file_data = file_get_contents($file_path.$file_name);
+
+            // sauvegarde
+            if(!empty($file_data)) {
+                // si ok, affiche le résultat
+                $results_subscribers_save = $this->subscribers_save($file_data);
+                return $this->subscribers_save_response('subscribers-file',$results_subscribers_save);
+            }
+
+            
+        }
+
+    }
+
+    // }}}
+
+    // {{{ subscribers_save_response()
+
+    /**
+     * afficher les résultats de l'ajout d'abonnés
+     * 
+     * @template    subscribers_save_response
+     * @return      html
+     */
+    protected function subscribers_save_response($type,$results)
+    {
+
+        // le nombre d'abonnés ajoutés + un tableau avec les erreurs + choix ajouter autre ou retour liste 
+        $rep = $this->getResponse('html');
+
+        $rep->title = 'Ajout d\'abonnés à la liste';
+
+        $tpl = new jTpl();
+
+        // récupérer la liste TODO uniquement du client
+        $subscriber_list = jDao::get($this->dao_subscriber_list);
+        $tpl->assign('subscriber_list', $subscriber_list->get($this->param('idsubscriber_list')));
+        $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list'));
+
+        // envoyer la liste des erreurs et le nb de OK
+
+        $rep->body->assign('MAIN', $tpl->fetch('subscribers_save_response')); 
+
+        return $rep;
+
+    }
+
+    // }}}
+
+    // {{{ subscribers_save()
+
+    /**
+     * ajouter des abonnés : méthode commune
+     * 
+     * @return  bool
+     */
+    protected function subscribers_save($subscribers_text)
+    {
+
+        // variable
+        $subscribers_tabs_list_error = array();
+        $subscribers_tabs_list_success = array();
+
+        // session avec idcustomer
+        $session = jAuth::getUserSession();
+
+        // explode par ligne
+        $subscribers_tabs = explode("\n", $subscribers_text);
+
+        $keyval = array('email','fullname','lastname','firtsname');
+
+        // découpage par point virgule et chaque champ avec des doubles quotes
+        if(is_array($subscribers_tabs) && !empty($subscribers_tabs)) {
+
+            // on parcours le tableau
+            foreach($subscribers_tabs as $k=>$v) {
+
+                // on exploide chaque ligne sur les points virgules
+                $subscriber_value = explode(';', $v);
+
+                // on parcour chaque ligne
+                if(is_array($subscriber_value) && !empty($subscriber_value)) {
+
+                    $subscriber_value_final = array();
+                    $i = 0;
+
+                    foreach($subscriber_value as $kf=>$f) {
+                        
+                        // attention au espace
+                        $f = trim($f);
+
+                        if(!empty($f)) {
+                            $f = str_replace('"','',$f);
+                        }
+
+                        // la première colonne DOIT être un email => sinon, colonne dans l'erreur
+                        if($i==0  && !filter_var($f, FILTER_VALIDATE_EMAIL)) {
+                            $subscriber_value['error'] = 'La première colonne n\'est pas un email valide';
+                            $subscribers_tabs_list_error[] = $subscriber_value;
+                            break;
+                        }
+
+                        // une des colonnes suivantes contient un mail
+                        if($i>0 && filter_var($f, FILTER_VALIDATE_EMAIL)) {
+                            $subscriber_value['error'] = 'Seule la première colonne doit contenir un email valide';
+                            $subscribers_tabs_list_error[] = $subscriber_value;
+                            break;
+                        }
+
+                         if(!empty($f)) {
+                            $subscriber_value_final[$keyval[$i]] = $f;
+                            $i++;
+                        }
+
+                        
+
+                    }
+
+                    // on ajoute le array de l'abonné dans le array général
+                    if(!empty($subscriber_value_final)) {
+                        $subscribers_tabs_list[] = $subscriber_value_final;
+                    }
+
+                }
+            }
+        }
+
+        // on a une liste
+        if(!empty($subscribers_tabs_list)) {
+        
+            $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
+            $subscriber = jDao::get($this->dao_subscriber);
+
+            // on parcours et on ajoute
+            foreach($subscribers_tabs_list as $k=>$s) {
+
+                // on ajoute l'utilisateur
+                $record_subscriber = jDao::createRecord($this->dao_subscriber);
+
+                foreach($s as $field=>$val) {
+                    $record_subscriber->$field = $val;
+                }
+                // statique
+                $record_subscriber->html_format = 1;
+                $record_subscriber->text_format = 1;
+                $record_subscriber->subscribe_from = 'internal';
+                $record_subscriber->idcustomer = $session->idcustomer;
+                $subscriber->insert($record_subscriber);
+
+                // récup du nouvel ID
+                $idsubscriber = $record_subscriber->idsubscriber;
+
+                // on l'ajoute dans la bonne liste
+                $record_subscriber_list = jDao::createRecord($this->dao_subscriber_subscriber_list);
+                $record_subscriber_list->idsubscriber = $idsubscriber;
+                $record_subscriber_list->idcustomer = $session->idcustomer;
+                $record_subscriber_list->idsubscriber_list = $this->param('idsubscriber_list');
+
+                // insérer dans subscriber_subscriber_list
+                $subscriber_subscriber_list->insert($record_subscriber_list);
+
+                // ajoute dans la table
+                $subscribers_tabs_list_success[] = $s;
+
+            }
+
+        }
+
+        return array(
+            'success' => $subscribers_tabs_list_success,
+            'error' => $subscribers_tabs_list_error,
+        );
+
+
+    }
+
+    // }}}
+
+    // {{{ listdelete()
+
+    /**
+     * Supprimer une liste
+     *
+     * @return      redirect
+     */
+    public function listdelete()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        if($this->param('idsubscriber_list')!='') {
+            
+            // TODO tester aussi sur le customer pour la sécurité ET double vérification
+            $subscriber_list = jDao::get($this->dao_subscriber_list);
+
+            if($subscriber_list->delete($this->param('idsubscriber_list'))) {
+                $rep->params = array('delete' => true);
+            }
+        
+        }
+
+        $rep->action = 'sendui~subscribers:index';
+        return $rep;
+
+    }
+
+    // }}}
+   
+    // {{{ subscriberdelete()
+
+    /**
+     * Supprimer un utilisateur
+     *
+     * @return      redirect
+     */
+    public function deletesubscriber()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        if($this->param('idsubscriber')!='') {
+            
+            // TODO tester aussi sur le customer pour la sécurité ET double vérification
+            $subscriber = jDao::get($this->dao_subscriber);
+
+            if($subscriber->delete($this->param('idsubscriber'))) {
+                $rep->params = array(
+                    'delete_subscriber' => true,
+                    'idsubscriber_list' => $this->param('idsubscriber_list'),
+                );
+            }
+        
+        }
+
+        $rep->action = 'sendui~subscribers:view';
+
+        return $rep;
+
+    }
+
+    // }}}
+
 
 }
