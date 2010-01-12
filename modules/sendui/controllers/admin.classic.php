@@ -3,7 +3,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */
 
 /**
- * Listes des abonnés
+ * Administration
  *
  * @package      sendui
  * @subpackage   sendui
@@ -14,7 +14,7 @@
  * @version      0.1.0
  */
 
-class subscribersCtrl extends jController {
+class adminCtrl extends jController {
 
     // les daos pour abonnés
     protected $dao_subscriber_list = 'common~subscriber_list';
@@ -23,18 +23,6 @@ class subscribersCtrl extends jController {
 
     // customer
     protected $dao_customer = 'common~customer';
-
-    // formulaire liste
-    protected $form_subscriber_list = 'sendui~subscriber_list';
-
-    // formulaire upload
-    protected $form_subscribers_file = 'sendui~subscribers_file';
-
-    // formulaire plusieurs subscribers
-    protected $form_subscribers_text = 'sendui~subscribers_text';
-
-    // formulaire abonné
-    protected $form_subscriber = 'sendui~subscriber';
 
     protected function _dataTables(&$rep)
     {

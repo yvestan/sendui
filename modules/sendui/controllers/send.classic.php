@@ -30,6 +30,43 @@ class sendCtrl extends jController {
         $rep = $this->getResponse('html');
 
         $rep->title = 'Confirmer l\'envoi du message';
+        
+        $run = jClasses::getService('sendui~run');
+
+        // lancer
+        $cmd = JELIX_APP_PATH.'/scripts/send --idmessage 10 >/dev/null';
+        $pid = $run->runBackground($cmd);
+
+        // stopper
+        if($action=='stop' && !empty($_GET['pid'])) {
+            $run->stopProcess($_GET['pid']);
+            $pid = $_GET['pid'];
+        }
+
+        $tpl = new jTpl();
+
+        $rep->body->assign('MAIN', $tpl->fetch('send_index')); 
+
+        return $rep;
+        
+    }
+
+    // }}}
+
+    // {{{ go()
+
+    /**
+     * Envoyer le message
+     *
+     * @template    send_go
+     * @return      redirect
+     */
+    public function go()
+    {
+
+        $rep = $this->getResponse('html');
+
+        $rep->title = 'Confirmer l\'envoi du message';
 
         $tpl = new jTpl();
 

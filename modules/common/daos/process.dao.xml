@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="process" realname="process" primarykey="idprocess" />
+    </datasources>
+    <record>
+        <property name="idprocess" fieldname="idprocess" datatype="autoincrement"/>
+        <property name="log" fieldname="log" datatype="string" required="true" maxlength="255"/>
+        <property name="pid" fieldname="pid" datatype="int"/>
+        <property name="idmessage" fieldname="idmessage" datatype="int" required="true"/>
+        <property name="counter" fieldname="counter" datatype="int" required="true"/>
+        <property name="date_log" fieldname="date_log" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
+    </record>
+    <factory>
+    </factory>
+</dao>

@@ -14,7 +14,10 @@
         <property name="return_path" fieldname="return_path" datatype="string" default="" maxlength="150"/>
         <property name="html_message" fieldname="html_message" datatype="text" default=""/>
         <property name="text_message" fieldname="text_message" datatype="text" default=""/>
-        <property name="sent" fieldname="sent" datatype="datetime" default=""/>
+        <property name="pause" fieldname="pause" datatype="int" default="0"/>
+        <property name="batch" fieldname="batch" datatype="int" default="0"/>
+        <property name="sent_start" fieldname="sent_start" datatype="datetime" default=""/>
+        <property name="sent_end" fieldname="sent_end" datatype="datetime" default=""/>
         <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
         <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
     </record>
@@ -23,7 +26,7 @@
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>
-                <isnull property="sent"/>
+                <isnull property="sent_start"/>
             </conditions>
             <order>
                 <orderitem property="date_update" way="asc" />
@@ -33,40 +36,40 @@
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>
-                <isnotnull property="sent"/>
+                <isnotnull property="sent_start"/>
             </conditions>
             <order>
-                <orderitem property="sent" way="asc" />
+                <orderitem property="sent_start" way="asc" />
             </order>
         </method>
         <method name="getLast" type="selectfirst">
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>
-                <isnotnull property="sent"/>
+                <isnotnull property="sent_end"/>
             </conditions>
             <order>
-                <orderitem property="sent" way="asc" />
+                <orderitem property="sent_end" way="asc" />
             </order>
         </method>
         <method name="getNext" type="select" distinct="idmessage"> 
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>
-                <isnotnull property="sent"/>
+                <isnotnull property="sent_start"/>
             </conditions>
             <order>
-                <orderitem property="sent" way="asc" />
+                <orderitem property="sent_start" way="asc" />
             </order>
         </method>
         <method name="getCurrent" type="select" distinct="idmessage">                                                                                                                  
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>
-                <isnotnull property="sent"/>
+                <isnotnull property="sent_start"/>
             </conditions>
             <order>
-                <orderitem property="sent" way="asc" />
+                <orderitem property="sent_end" way="asc" />
             </order>
         </method>
         <method type="php" name="getLists">

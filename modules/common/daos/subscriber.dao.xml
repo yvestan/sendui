@@ -40,5 +40,22 @@
                 <orderitem property="date_insert" way="asc" />
             </order>
         </method>
+        <method type="php" name="getSubscribers">
+            <parameter name="idmessage" />
+            <parameter name="status" />
+            <body><![CDATA[
+                $sql =  'SELECT *
+                        FROM '.$this->_primaryTable.' s, subscriber_subscriber_list sslist, message_subscriber_list msl
+                        WHERE sslist.idsubscriber_list=msl.idsubscriber_list
+                        AND sslist.idsubscriber=s.idsubscriber 
+                        AND sslist.status='.$this->_prepareValue($status, 'int').'
+                        AND s.status='.$this->_prepareValue($status, 'int').'
+                        AND sslist.sent IS NULL
+                        AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
+                $rs = $this->_conn->query($sql);
+                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                return $rs;
+            ]]></body> 
+        </method>
     </factory>
 </dao>

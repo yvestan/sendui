@@ -6,8 +6,10 @@
     <record>
         <property name="idsubscriber" fieldname="idsubscriber" datatype="int" required="true"/>
         <property name="idsubscriber_list" fieldname="idsubscriber_list" datatype="int" required="true"/>
+        <property name="idcustomer" fieldname="idcustomer" datatype="int" required="true"/>
         <property name="status" fieldname="status" datatype="int" required="true"/>
-        <property name="sent" fieldname="sent" datatype="int" required="true"/>
+        <property name="sent_date" fieldname="sent_date" datatype="datetime" default=""/>
+        <property name="sent" fieldname="sent" datatype="int" default=""/>
     </record>
     <factory>
         <method name="countSubscriberByList" type="count" distinct="idsubscriber">
@@ -25,6 +27,36 @@
                 <isnotnull property="sent"/>
             </conditions>
         </method>
-
+        <method name="updateSent" type="update">
+            <parameter name="idsubscriber"/>
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber" expr="$idsubscriber"/>
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+            <values>
+                <value property="sent_date" expr="NOW()"/>
+                <value property="sent" value="1"/>
+            </values>
+        </method>
+        <method type="php" name="resetSent">
+            <parameter name="idmessage" />
+            <body><![CDATA[
+                $sql =  'UPDATE '.$this->_primaryTable.' SET sent=NULL 
+                         WHERE idsubscriber_list IN (
+                            SELECT idsubscriber_list FROM message_subscriber_list WHERE idmessage='.$this->_prepareValue($idmessage, 'int').'
+                        )';
+                $this->_conn->exec($sql);
+            ]]></body> 
+        </method>
+        <method name="resetSentB" type="update">
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+            <values>
+                <value property="sent" value="NULL"/>
+            </values>
+        </method>
     </factory>
 </dao>
