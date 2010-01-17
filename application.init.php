@@ -22,4 +22,5 @@ if($_SERVER['SERVER_NAME']=='sendui') {
     define ('JELIX_APP_WWW_PATH',     '/home/grafactory/www/grafactory.net/www/sendui/');
 }
 define ('JELIX_APP_CMD_PATH',     JELIX_APP_PATH.'scripts/');
+define ('JELIX_APP_WWW',     'sendui/');
 
