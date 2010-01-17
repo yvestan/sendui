@@ -77,11 +77,14 @@
         </tbody>
     </table>
 
-
-                    <span class="flag-green">actif</span>
-                    <span class="flag-blue">inactif (suspendu)</span>
-                    <span class="flag-yellow">à supprimer (rebond)</span>
-                    <span class="flag-red">supprimé</span>
+    
+    <ul class="legende">
+        <li class="flag-green">actif</li>
+        <li class="flag-blue">inactif (suspendu)</li>
+        <li class="flag-yellow">à supprimer/vérifier (rebond)</li>
+        <li class="flag-red">supprimé (à confirmer)</li>
+    </ul>
+    <div class="spacer">&nbsp;</div>
 
     <h3 class="sendui-margin-top"><a href="{jurl 'sendui~subscribers:generateform', array('idsubscriber_list' => $idsubscriber_list)}" class="application-form-add">
         Créer un formulaire d'abonnement</a> pour votre site</h3>

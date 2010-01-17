@@ -23,10 +23,10 @@
     <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="main_menu">
         <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
             <li class="ui-corner-top ui-state-default dashboard"><a href="{jurl 'sendui~default:index'}">tableau de bord</a></li>
+            <li class="ui-corner-top ui-state-default subscribers"><a href="{jurl 'sendui~subscribers:index'}">gérer vos listes d'abonnés</a></li>
             <li class="ui-corner-top ui-state-default newmessage"><a href="{jurl 'sendui~settings:prepare'}">créer &amp; envoyer un message</a></li>
             <li class="ui-corner-top ui-state-default drafts"><a href="{jurl 'sendui~messages:drafts'}">brouillons</a></li>
-            <li class="ui-corner-top ui-state-default subscribers"><a href="{jurl 'sendui~subscribers:index'}">gérer vos listes d'abonnés</a></li>
-            <li class="ui-corner-top ui-state-default archives"><a href="{jurl 'sendui~messages:sent'}">messages envoyés</a></li>
+            <li class="ui-corner-top ui-state-default archives"><a href="{jurl 'sendui~messages:sent'}">messages en cours &amp; envoyés</a></li>
         </ul>
 
     {$MAIN}

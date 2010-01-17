@@ -20,6 +20,7 @@ class messagesCtrl extends jController {
     protected $dao_message = 'common~message';
     protected $dao_message_subscriber_list = 'common~message_subscriber_list';
     protected $dao_subscriber_list = 'common~subscriber_list';
+    protected $dao_subscriber = 'common~subscriber';
     protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
 
     protected function _dataTables(&$rep)
@@ -101,6 +102,8 @@ class messagesCtrl extends jController {
 
         $rep = $this->getResponse('html');
 
+        $rep->title = 'Messages en cours et envoyés';
+
         $this->_dataTables($rep);
 
         $tpl = new jTpl();
@@ -108,7 +111,7 @@ class messagesCtrl extends jController {
         // utilisateur
         $session = jAuth::getUserSession();
 
-        // récupérer les messages envoyés
+        // récupérer les messages envoyés (5) + en cours d'envoi (2) + en attente (1)
         $message = jDao::get($this->dao_message);
         $list_sent = $message->getSent($session->idcustomer);
         $tpl->assign('list_sent', $list_sent); 
@@ -153,6 +156,25 @@ class messagesCtrl extends jController {
         $message = jDao::get($this->dao_message);
         $message_infos = $message->get($this->param('idmessage'));
         $tpl->assign('message', $message_infos); 
+
+        // nb d'utilisateurs
+        $subscriber = jDao::get($this->dao_subscriber);
+        $subscribers_infos = $subscriber->countMessageSubscribers($this->param('idmessage'),1); 
+        $tpl->assign('nb_subscribers', $subscribers_infos->nb); 
+
+        // si le message est en cours d'envoi, afficher la progress bar
+        if($message_infos->status==2) {
+
+            $progress = jClasses::getService('sendui~progress');
+            $progress->view($rep,$this->param('idmessage'),$subscribers_infos->nb);
+            $tpl->assign('sending', true);
+
+            // en cours d'envoi
+            if(empty($message_infos->sent_end)) {
+                $tpl->assign('sending_progress', true);
+            }
+
+        }
 
         // les listes associées
         $tpl->assign('message_subscriber_list', $message->getLists($this->param('idmessage'))); 

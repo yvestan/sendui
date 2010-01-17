@@ -5,8 +5,9 @@ startModule=sendui
 startAction="default:index"
 
 [coordplugins]
-auth = "auth.coord.ini.php"
+auth=auth.coord.ini.php
 
 [responses]
 html=senduiHtmlResponse
 
+basePath="/sendui/"

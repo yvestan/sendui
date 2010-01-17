@@ -3,7 +3,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */
 
 /**
- * Entête de la partie privée
+ * Entête de la partie publique
  *
  * @package      sendui
  * @subpackage   sendui
@@ -16,10 +16,10 @@
 
 require_once (JELIX_LIB_CORE_PATH.'response/jResponseHtml.class.php');
 
-class senduiHtmlResponse extends jResponseHtml {
+class publicHtmlResponse extends jResponseHtml {
 
     // template principal
-    public $bodyTpl = 'sendui~main';
+    public $bodyTpl = 'public~main';
 
     // {{{ __construct
 
@@ -38,15 +38,6 @@ class senduiHtmlResponse extends jResponseHtml {
             $this->addCSSLink($base_path.'/css/'.$k.'.css');
         }
 
-        // jquery-ui
-        $this->addCSSLink($base_path.'/css/start/jquery-ui-1.7.2.custom.css');
-
-        // ajouter les javascript jquery
-        $this->addJSLink($base_path.'/js/jquery-1.3.2.min.js');
-        $this->addJSLink($base_path.'/js/jquery-ui-1.7.2.custom.min.js');
-        $this->addJSLink($base_path.'/js/button.js');
-        $this->addJSLink($base_path.'/js/function.js');
-
     }
 
     // }}}
@@ -59,14 +50,7 @@ class senduiHtmlResponse extends jResponseHtml {
      * @template    send_index
      * @return      html
      */
-    protected function doAfterActions() {
-
-        // utilisateur connecté
-        $session = jAuth::getUserSession();
-        $this->body->assign('session', $session);
-
-        $this->body->assignIfNone('MAIN','<p>no content</p>');
-    }
+    protected function doAfterActions() { $this->body->assignIfNone('MAIN','<p>no content</p>'); }
 
     // }}}
 

@@ -57,5 +57,38 @@
                 return $rs;
             ]]></body> 
         </method>
+        <method type="php" name="countMessageSubscribers">
+            <parameter name="idmessage" />
+            <parameter name="status" />
+            <body><![CDATA[
+                $sql =  'SELECT COUNT(s.idsubscriber) as nb
+                        FROM '.$this->_primaryTable.' s, subscriber_subscriber_list sslist, message_subscriber_list msl
+                        WHERE sslist.idsubscriber_list=msl.idsubscriber_list
+                        AND sslist.idsubscriber=s.idsubscriber 
+                        AND sslist.status='.$this->_prepareValue($status, 'int').'
+                        AND s.status='.$this->_prepareValue($status, 'int').'
+                        AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
+                $rs = $this->_conn->query($sql);
+                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                $record = $rs->fetch();
+                return $record;
+            ]]></body> 
+        </method>
+        <method type="php" name="countMessageSubscribersSent">
+            <parameter name="idmessage" />
+            <parameter name="status" />
+            <body><![CDATA[
+                $sql =  'SELECT COUNT(s.idsubscriber) as nb
+                        FROM '.$this->_primaryTable.' s, subscriber_subscriber_list sslist, message_subscriber_list msl
+                        WHERE sslist.idsubscriber_list=msl.idsubscriber_list
+                        AND sslist.idsubscriber=s.idsubscriber 
+                        AND sslist.status='.$this->_prepareValue($status, 'int').'
+                        AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
+                $rs = $this->_conn->query($sql);
+                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                $record = $rs->fetch();
+                return $record;
+            ]]></body> 
+        </method>
     </factory>
 </dao>

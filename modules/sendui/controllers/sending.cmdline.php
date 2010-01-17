@@ -19,9 +19,25 @@ class sendingCtrl extends jControllerCmdLine {
     // message
     protected $dao_message = 'common~message';
 
+    // log
+    protected $log_process = true;
+    protected $log_file = 'process';
+
+    // silencieux ?
+    protected $verbose = true;
+
+    // retour de ligne
+    protected $n = "\n";
+
     // abonnés
     protected $dao_subscriber = 'common~subscriber';
     protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
+
+    // le pid
+    protected $pid = 0;
+
+    // le message
+    protected $idmessage = 0;
 
     // log
     protected $dao_process = 'common~process';
@@ -41,6 +57,8 @@ class sendingCtrl extends jControllerCmdLine {
             '-i' => true,
             '--reset' => false,
             '-r' => false,
+            '--forcereset' => false,
+            '-f' => false,
             '--pid' => true,
             '-p' => true,
         ),
@@ -49,7 +67,8 @@ class sendingCtrl extends jControllerCmdLine {
     public $help = array(
         'index' => '
             -i --idmessage : identifiant du message
-            -r --reset : remettre a zero le flag d\'envoi
+            -r --reset : remettre à zéro le flag d\'envoi (champ sent)
+            -f --forcereset : force une remise à zero avant un envoi (champ sent)
             -p --pid : le pid du processus
             help : cette aide
         '
@@ -74,7 +93,6 @@ class sendingCtrl extends jControllerCmdLine {
     public function index() 
     {
 
-        $n = "\n";
 
         $rep = $this->getResponse(); 
 
@@ -85,20 +103,30 @@ class sendingCtrl extends jControllerCmdLine {
 
         // il faut l'identifiant du message
         if(empty($idmessage)) {
-            $rep->addContent('Vous devez préciser l\'identifiant du message'.$n);
+            $rep->addContent('Vous devez préciser l\'identifiant du message'.$this->n);
             return $rep;
+        } else {
+            $this->idmessage = $idmessage;    
         }
 
         // identifiant du pid
         $pid = $this->option('--pid');
-        if(empty($idmessage)) {
-            $pid = null;
+        if(empty($pid)) {
+            $pid = getmypid();
         }
+        $pid = str_replace('\n','',$pid);
+        $this->pid = $pid;
 
         // mise à zero
         $reset = $this->option('--reset');
         if(empty($reset)) {
             $reset = $this->option('-r');
+        }
+
+        // force la remise à zero avant l'envoi
+        $forcereset = $this->option('--forcereset');
+        if(empty($forcereset)) {
+            $reset = $this->option('-f');
         }
 
         // le message
@@ -108,24 +136,44 @@ class sendingCtrl extends jControllerCmdLine {
         // la table de process
         $process = jDao::get($this->dao_process);
 
+        // utilitaires
+        $utils = jClasses::getService('sendui~utils');
+
         // les destinataires trouvé via message_subscriber_list
         $subscriber = jDao::get($this->dao_subscriber);
         $subscribers_list = $subscriber->getSubscribers($idmessage,1); 
+
+        // compter le nb d'abonné
+        $nb_subscribers = 0;
+        foreach($subscribers_list as $s) {
+            $nb_subscribers++;
+        }
 
         // marqué envoyé ou autres actions
         $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
 
         // message inconnu
         if(empty($message_infos->idmessage)) {
-            $rep->addContent('L\'identifiant ne correspond pas a un message valide'.$n);
+            $rep->addContent('L\'identifiant ne correspond pas a un message valide'.$this->n);
             return $rep;
         }
 
-        // mise à zéro du champ d'envoi
-        if(!empty($reset)) {
-            $rep->addContent('Remise a zero du champ "sent" '.$n);
+        // mise à zéro du champ d'envoi, vide process et change status
+        if(!empty($reset) || !empty($forcereset)) {
+
+            $this->setLog('Remise a zero du champ "sent" et des logs/process/compteur');
+
             $subscriber_subscriber_list->resetSent($idmessage);
-            exit;
+            $message->setStatus($idmessage,1);
+            $message->resetCount($idmessage);
+            $process->deleteLogs($idmessage);
+
+            // ne pas continuer sauf si forcé
+            if(empty($forcereset)) {
+                $this->setLog('OK');
+                exit;
+            }
+
         }
 
         // on instancie swiftmailer
@@ -146,17 +194,17 @@ class sendingCtrl extends jControllerCmdLine {
         }*/
 
         // composition du message
-        $message = Swift_Message::newInstance();
-        $message->setReturnPath($message_infos->return_path); // adresse de retour des bounces
+        $message_compose = Swift_Message::newInstance();
+        $message_compose->setReturnPath($message_infos->return_path); // adresse de retour des bounces
 
         // sujet
-        $message->setSubject($message_infos->subject);
+        $message_compose->setSubject($message_infos->subject);
 
         // expediteur
-        $message->setFrom(array($message_infos->from_email => $message_infos->from_name));
+        $message_compose->setFrom(array($message_infos->from_email => $message_infos->from_name));
 
         // entêtes
-        $headers = $message->getHeaders();
+        $headers = $message_compose->getHeaders();
 
         // reply-to
         if($message_infos->reply_to!='') {
@@ -192,11 +240,31 @@ class sendingCtrl extends jControllerCmdLine {
         }
 
         // les infos pause et lot sont dans la conf du message aussi (pause, batch)
+        if($nb_subscribers==0) {
+            $this->setLog('[NOTICE] Il n\'y a aucun abonné pour ce message. Avez-vous réinitialisé le champ "sent" (option -r)');
+            exit;
+        } else {
+            $this->setLog('[START] Envoi du message ['.$idmessage.'] "'.$message_infos->subject.'" à '.$nb_subscribers.' abonnés');    
+        }
+
+        // valeur max
+        $max = 0;
+
+        // récuperer le compteur
+        $max_record = $process->getMaxCounter($idmessage);
+        $max = $max_record->max+1;
 
         // commencer la boucle
 
+        // début 
+        $time_start = microtime(true);
+
+        // marquer le début et le statut en cours d'envoi
+        $message->setStart($idmessage);
+        $message->setStatus(2);
+
         // init compteurs
-        $i = 1;
+        $i = $max;
         $count_success = 0;
 
         foreach($subscribers_list as $s) {
@@ -205,13 +273,13 @@ class sendingCtrl extends jControllerCmdLine {
             $email = strtolower($email);    
             
             // on verifie la validite syntaxique de l'adresse mail
-            /*if (!$utils->isEmailSyntaxValid($email)) {
-                   if(!$silent) {
-                    echo '-> Adresse '.$email.' ['.$s->idsubscriber[ID_USERS].'] non valide'.$n;
+            if (!$utils->isEmailSyntaxValid($email)) {
+                if(empty($silent)) {
+                    $this->setLog('Adresse '.$email.' ['.$s->idsubscriber.'] non valide');
                 }
                 // TODO : marquer l'email invalide dans la base ou dans un fichier de logs
                 continue;
-            }*/
+            }
 
             // si force limitation
             if (!empty($limit) && $i>= $limit) {
@@ -219,23 +287,21 @@ class sendingCtrl extends jControllerCmdLine {
             }
 
             // la pause (deconnection/reconnection)
-            if (($i % $message_infos->batch) == 0 && $i>0) {
+            if (($i % $message_infos->batch) == 0 && $i>1) {
 
                 // on deconnecte avant la pause
                 try {
                     $mailer->getTransport()->stop();
-                    if(empty($silent)) {
-                        echo "--> Deconnexion\n";
-                    }
+                    $this->setLog('[DISCONNECT] Déconnexion');
                 } catch (Exception $e) {
                     if(empty($silent)) {
-                        echo '--> Deconnexion impossible, arret de l\'envoi'.$n;
+                        $this->setLog('[WARN] Déconnexion impossible, arrêt de l\'envoi');
                     }
                     exit;
                 }
                 
                 if (empty($silent)) {
-                    echo '==============================> Pause de '.$message_infos->pause.' seconde(s) au niveau '.$i.' (CTRL+c pour couper le script)'.$n;
+                    $this->setLog('[PAUSE] Pause de '.$message_infos->pause.' seconde(s) au niveau '.$i.' (CTRL+c pour couper le script)');
                 }
 
                 for($t=0;$t<$message_infos->pause;$t++) {
@@ -252,11 +318,11 @@ class sendingCtrl extends jControllerCmdLine {
                 try {
                     $mailer->getTransport()->start();
                     if(empty($silent)) {
-                        echo "--> Connexion\n";
+                        $this->setLog('[CONNECT] Connexion');
                     }
                 } catch (Exception $e) {
                     if(empty($silent)) {
-                        echo '--> Connexion impossible, arret de l\'envoi'.$n;
+                        $this->setLog('[WARN] Connexion impossible, arrêt de l\'envoi');
                     }
                     exit;
                 }
@@ -275,34 +341,35 @@ class sendingCtrl extends jControllerCmdLine {
 
                 // contenu HTML ou simple TEXT
                 if($message_infos->html_message!='') {
-                    $message->setBody($r->parse($message_infos->html_message), 'text/html');
+                    $message_compose->setBody($r->parse($message_infos->html_message), 'text/html');
                 } else {
-                    $message->setBody($r->parse($message_infos->text_message), 'text/plain');
+                    $message_compose->setBody($r->parse($message_infos->text_message), 'text/plain');
                 }
 
                 // contenu TEXT en plus du HTML
                 if($message_infos->html_message!='' && $message_infos->text_message!='') {
-                    $message->addPart($r->parse($message_infos->text_message), 'text/plain');
+                    $message_compose->addPart($r->parse($message_infos->text_message), 'text/plain');
                 }
 
                 // destinataire
-                $message->setTo($email);
+                $message_compose->setTo($email);
 
-                $success = $mailer->send($message);
-                //$success = true;
+                //$success = $mailer->send($message);
+                $success = true;
 
                 // on comptabilise les succes
                 if ($success) $count_success++;
 
             }
 
-            // on met a jour le flag "envoye" dans subscriber_subscriber_list
+            // on met a jour le flag "envoye" dans subscriber_subscriber_list et le count message
             if (empty($noupdate) && ($success || $nosend)) {
                 $subscriber_subscriber_list->updateSent($s->idsubscriber,$s->idsubscriber_list);
+                $message->updateCount($idmessage);
             }
 
             if (empty($silent)) {
-                echo '-> Envoi en cours a '.$email.' ['.$s->idsubscriber.']'.$n;
+                $this->setLog('[SEND] Envoi en cours à '.$email.' ['.$s->idsubscriber.']');
             }
 
             // on enregistre le process
@@ -324,18 +391,39 @@ class sendingCtrl extends jControllerCmdLine {
         $mailer->getTransport()->stop();
 
         // fin
-        /*$time_end = microtime(true);
+        $time_end = microtime(true);
 
         // temps d'execution
         $time_exec = $time_end - $time_start;
+
+        // marquer la fin et le status à 5
+        $message->setEnd($idmessage);
+        $message->setStatus($idmessage,5);
+        
+        // noter le nb de destinataire à partir de subscriber_list
+        $nb_recipients = $subscriber_subscriber_list->countSent($idmessage);
         
         // fin de l'envoi
-        echo "=======> Envoi termine en ".$utils->timeExec($time_start,$time_end)." (".$count_success."/".$i.") !\n";*/
-
-        // le dao de process
-        //$process = jDao::get($this->dao_process);
+        $this->setLog('[END] Envoi terminé en '.$utils->getTimeExec($time_start,$time_end).' ('.$count_success.'/'.$i.') !');
 
         return $rep;
+
+    }
+
+    protected function setLog($msg)
+    {
+
+        $msg = '['.$this->pid.']['.$this->idmessage.'] '.$msg;
+
+        // affiche
+        if($this->verbose) {
+            echo $msg.$this->n;
+        }
+
+        // logue dans un fichier
+        if($this->log_process) {
+            jLog::log($msg, $this->log_file);
+        }    
 
     }
 

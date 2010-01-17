@@ -16,6 +16,14 @@
 
 class sendCtrl extends jController {
 
+    // dao process et message
+    protected $dao_process = 'common~process';
+    protected $dao_message = 'common~message';
+
+    // abonnés
+    protected $dao_subscriber = 'common~subscriber';
+    protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
+
     // {{{ index()
 
     /**
@@ -31,20 +39,35 @@ class sendCtrl extends jController {
 
         $rep->title = 'Confirmer l\'envoi du message';
         
-        $run = jClasses::getService('sendui~run');
-
-        // lancer
-        $cmd = JELIX_APP_PATH.'/scripts/send --idmessage 10 >/dev/null';
-        $pid = $run->runBackground($cmd);
-
-        // stopper
-        if($action=='stop' && !empty($_GET['pid'])) {
-            $run->stopProcess($_GET['pid']);
-            $pid = $_GET['pid'];
-        }
-
         $tpl = new jTpl();
 
+        $tpl->assign('idmessage', $this->param('idmessage')); 
+
+        // récupérer le message 
+        $message = jDao::get($this->dao_message);
+        $message_infos = $message->get($this->param('idmessage'));
+        $tpl->assign('message', $message_infos); 
+
+        // les destinataires trouvé via message_subscriber_list
+        $subscriber = jDao::get($this->dao_subscriber);
+        $subscribers_infos = $subscriber->countMessageSubscribers($this->param('idmessage'),1); 
+        $nb_subscribers = $subscribers_infos->nb;
+        $tpl->assign('nb_subscribers', $nb_subscribers); 
+
+        // ajout javascript pour progression
+        $rep->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/progressbar/jquery.progressbar.min.js');
+
+        // ajoute les infos
+        $js_more = '
+            var idmessage = '.$this->param('idmessage').';
+            var link_status = \''.jUrl::get('sendui~send:process', array('idmessage' => $this->param('idmessage'))).'\';
+            var nb_subscribers = '.$nb_subscribers.';
+            var path_app = \''.$GLOBALS['gJConfig']->path_app['sendui'].'\';
+        ';
+        $rep->addJSCode($js_more);
+        $rep->addHeadContent('<script type="text/javascript" src="'.$GLOBALS['gJConfig']->path_app['sendui'].'/js/state.js" ></script>');
+
+        
         $rep->body->assign('MAIN', $tpl->fetch('send_index')); 
 
         return $rep;
@@ -53,27 +76,170 @@ class sendCtrl extends jController {
 
     // }}}
 
-    // {{{ go()
+    // {{{ cancel()
 
     /**
-     * Envoyer le message
+     * Annuler la demande et revenir sur le status 1
      *
-     * @template    send_go
      * @return      redirect
      */
-    public function go()
+    public function cancel() { return $this->changeStatus(0); }
+
+    // }}}
+
+    // {{{ stop()
+
+    /**
+     * Stopper l'envoi
+     *
+     * @return      redirect
+     */
+    public function stop()
     {
 
-        $rep = $this->getResponse('html');
+        $rep = $this->getResponse('redirect');
 
-        $rep->title = 'Confirmer l\'envoi du message';
+        // récupérer le pid dans la table process
+        $process = jDao::get($this->dao_process);
+        $last_process = $process->getLast($this->param('idmessage'));
 
-        $tpl = new jTpl();
+        // stop !
+        if(!empty($last_process->pid)) {
+            $run = jClasses::getService('sendui~run');
+            $run->stopProcess($last_process->pid);
 
-        $rep->body->assign('MAIN', $tpl->fetch('send_index')); 
+            // on mets le champs status sur 3
+            $message = jDao::get($this->dao_message);
+            $message->setStatus($this->param('idmessage'),3);
+        }
+
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');    
+        } else {
+            $rep->action = 'sendui~send:index';
+        }
+
+        $rep->params = array('idmessage' => $this->param('idmessage'));
+
+        return $rep;
+
+    }
+
+    // }}}
+
+    // {{{ start()
+
+    /**
+     * Lancer l'envoi
+     *
+     * @return      redirect
+     */
+    public function start()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        $cmd_more = null;
+
+        $message = jDao::get($this->dao_message);
+        $message_infos = $message->get($this->param('idmessage'));
+
+        // si le compteur du message est à zero, force le reset
+        if($message_infos->count_recipients==0) {
+            $cmd_more .= '--forcereset';
+        }
+
+        // lancer
+        $run = jClasses::getService('sendui~run');
+        $cmd = JELIX_APP_PATH.'/scripts/send --idmessage '.((int)$this->param('idmessage')).' '.$cmd_more.' >/dev/null';
+        $pid = $run->runBackground($cmd);
+
+        // ici on log le pid et l'id du message
+        jLog::log('['.$pid.']['.$this->param('idmessage').'] '.$cmd, 'process');
+
+        // mettre le status à 2
+        if(!empty($pid)) {
+            $message->setStatus($this->param('idmessage'),2);
+        }
+        
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');    
+        } else {
+            $rep->action = 'sendui~send:index';
+        }
+
+        $rep->params = array('idmessage' => $this->param('idmessage'));
+
+        return $rep;
+
+    }
+
+    // }}}
+
+    // {{{ process()
+
+    /**
+     * Voir l'état d'avancement => réponse json
+     *
+     * @return      json
+     */
+    public function process()
+    {
+
+        $rep = $this->getResponse('json');
+        $idmessage = $this->param('idmessage');
+
+        $process = jDao::get($this->dao_process);
+        $last_process = $process->getLast($idmessage);
+
+        if(!empty($last_process->log)) {
+            $rep->data = array(
+                'log' => $last_process->log,
+                'idprocess' => $last_process->idprocess,
+                'counter' => $last_process->counter,
+                'lastproc' => false,
+            );
+        } else {
+            $rep->data = array(
+                'log' => null,
+                'idprocess' => 0,
+                'counter' => 0,
+                'lastproc' => true,
+            );
+        }
 
         return $rep;
         
+    }
+
+    // }}}
+
+    // {{{ changeStatus()
+
+    /**
+     * Changer le status
+     *
+     * @return  redirect
+     */
+    protected function changeStatus($status)
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        // on mets le champs status sur 3
+        $message = jDao::get($this->dao_message);
+        $message->setStatus($this->param('idmessage'),$status);
+
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');    
+        } else {
+            $rep->action = 'sendui~send:index';
+        }
+
+        $rep->params = array('idmessage' => $this->param('idmessage'));
+
+        return $rep;
+
     }
 
     // }}}
