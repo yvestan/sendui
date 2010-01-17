@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="message" realname="message" primarykey="idmessage" />
+    </datasources>
+    <record>
+        <property name="idmessage" fieldname="idmessage" datatype="autoincrement"/>
+        <property name="idcustomer" fieldname="idcustomer" datatype="int" required="true"/>
+        <property name="name" fieldname="name" datatype="string" required="true" maxlength="150"/>
+        <property name="subject" fieldname="subject" datatype="string" required="true" maxlength="150"/>
+        <property name="from_name" fieldname="from_name" datatype="string" required="true" maxlength="150"/>
+        <property name="from_email" fieldname="from_email" datatype="string" required="true" maxlength="150"/>
+        <property name="reply_to" fieldname="reply_to" datatype="string" required="true" maxlength="150"/>
+        <property name="return_path" fieldname="return_path" datatype="string" default="" maxlength="150"/>
+        <property name="html_message" fieldname="html_message" datatype="text" default=""/>
+        <property name="text_message" fieldname="text_message" datatype="text" default=""/>
+        <property name="pause" fieldname="pause" datatype="int" default="0"/>
+        <property name="batch" fieldname="batch" datatype="int" default="0"/>
+        <property name="status" fieldname="status" datatype="int" default="0"/>
+        <property name="count_recipients" fieldname="count_recipients" datatype="int" default="0"/>
+        <property name="sent_start" fieldname="sent_start" datatype="datetime" default=""/>
+        <property name="sent_end" fieldname="sent_end" datatype="datetime" default=""/>
+        <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
+    </record>
+    <factory>
+        <method name="getDrafts" type="select" distinct="idmessage">
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <eq property="status" expr="0"/>
+            </conditions>
+            <order>
+                <orderitem property="date_update" way="asc" />
+            </order>
+        </method>
+        <method name="getSent" type="select" distinct="idmessage"> 
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <in property="status" value="1,2,3,4,5"/>
+            </conditions>
+            <order>
+                <orderitem property="sent_start" way="asc" />
+            </order>
+        </method>
+        <method name="getLast" type="selectfirst">
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull property="sent_end"/>
+            </conditions>
+            <order>
+                <orderitem property="sent_end" way="desc" />
+            </order>
+        </method>
+        <method name="getNext" type="select" distinct="idmessage"> 
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull property="sent_start"/>
+            </conditions>
+            <order>
+                <orderitem property="sent_start" way="asc" />
+            </order>
+        </method>
+        <method name="getCurrent" type="selectfisrt">
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <eq property="status" value="2" />
+            </conditions>
+            <order>
+                <orderitem property="sent_start" way="desc" />
+            </order>
+        </method>
+        <method name="getCurrents" type="select" distinct="idmessage">
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <eq property="status" value="2" />
+            </conditions>
+            <order>
+                <orderitem property="sent_start" way="desc" />
+            </order>
+        </method>
+        <method name="countCurrents" type="count" distinct="idmessage">
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull property="sent_start"/>
+                <isnull property="sent_end"/>
+            </conditions>
+        </method>
+        <method name="setStart" type="update">                                                                                                                  
+            <parameter name="idmessage"/>
+            <conditions logic="AND">
+                <eq property="idmessage" expr="$idmessage"/>
+            </conditions>
+            <values>
+                <value property="sent_start" expr="NOW()" />
+            </values>
+        </method>
+        <method name="setEnd" type="update">                                                                                                                  
+            <parameter name="idmessage"/>
+            <conditions logic="AND">
+                <eq property="idmessage" expr="$idmessage"/>
+            </conditions>
+            <values>
+                <value property="sent_end" expr="NOW()" />
+            </values>
+        </method>
+        <method name="setStatus" type="update">                                                                                                                  
+            <parameter name="idmessage"/>
+            <parameter name="status"/>
+            <conditions logic="AND">
+                <eq property="idmessage" expr="$idmessage"/>
+            </conditions>
+            <values>
+                <value property="status" expr="$status" />
+            </values>
+        </method>
+        <method name="resetCount" type="update">                                                                                                                  
+            <parameter name="idmessage"/>
+            <conditions logic="AND">
+                <eq property="idmessage" expr="$idmessage"/>
+            </conditions>
+            <values>
+                <value property="count_recipients" value="0" />
+            </values>
+        </method>
+        <method type="php" name="updateCount">
+            <parameter name="idmessage"/>
+            <body><![CDATA[
+                $sql = 'UPDATE message SET count_recipients= count_recipients + 1';
+                $sql.= ' WHERE idmessage='.$this->_prepareValue($idmessage,'integer');
+                $this->_conn->exec($sql);
+            ]]></body> 
+        </method>
+        <method type="php" name="getLists">
+            <parameter name="idmessage" />
+            <body><![CDATA[
+                $sql = 'SELECT * FROM subscriber_list sl, message_subscriber_list msl
+                        WHERE sl.idsubscriber_list=msl.idsubscriber_list
+                        AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
+                $rs = $this->_conn->query($sql);
+                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                return $rs;
+            ]]></body> 
+          </method>
+    </factory>
+</dao>

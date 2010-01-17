@@ -1,0 +1,17 @@
+{
+	"sProcessing": "Patientez...",
+	"sLengthMenu": "Voir _MENU_ messages",
+	"sZeroRecords": "Aucun message correspondant",
+	"sInfo": "Résultat(s) _START_ à _END_ sur _TOTAL_",
+	"sInfoEmpty": "0 à 0 sur 0 message",
+	"sInfoFiltered": "(filtrer sur _MAX_ messages)",
+	"sInfoPostFix": "",
+	"sSearch": "Chercher",
+	"sUrl": "",
+	"oPaginate": {
+		"sFirst":    "Début",
+		"sPrevious": "Précédent",
+		"sNext":     "Suivant",
+		"sLast":     "Dernier"
+	}
+}

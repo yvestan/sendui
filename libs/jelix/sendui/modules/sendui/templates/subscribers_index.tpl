@@ -1,0 +1,57 @@
+<h2 class="mainpage subscribers float-left">Listes d'abonnés</h2>
+
+<div class="sendui-padding-mainpage float-right">
+    <a href="{jurl 'sendui~subscribers:listview'}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
+        <span class="ui-icon ui-icon-circle-plus"></span>Créer une nouvelle liste</a>
+</div>
+
+<div class="spacer"></div>
+
+{literal} 
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tab_subscribers_lists').dataTable({
+            "bJQueryUI": true,
+            "bAutoWidth": false,
+            "sPaginationType": "full_numbers",
+            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
+        });
+    });
+</script>
+{/literal} 
+
+<div class="sendui-standard-content">
+
+
+    <table class="tabl display" id="tab_subscribers_lists">
+        <thead>
+            <tr>
+
+                <th>Nom de la liste</th>
+                <th>Nombre d'abonnés</th>
+                <th>Dernier envoi</th>
+                <th>Crée le</th>
+                <th>Actions</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            {foreach $list_subscribers_lists as $subscriber_list}
+            <tr class="highlight">
+                <td><a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">{$subscriber_list->name}</a></td>
+                <td>
+                    <a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">
+                       {$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)} abonnés</a>
+                </td>
+                <td>{$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)}</td>
+                <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
+                <td>
+                    <a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}" class="table-go">voir les abonnés</a>
+                    <a href="{jurl 'sendui~subscribers:listview', array('idsubscriber_list' => $subscriber_list->idsubscriber_list, 'from_page' => 'sendui~subscribers:index')}" class="table-edit">modifier</a>
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+
+</div>
