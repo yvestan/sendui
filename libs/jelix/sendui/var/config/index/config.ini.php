@@ -10,4 +10,5 @@ auth=auth.coord.ini.php
 [responses]
 html=senduiHtmlResponse
 
+[urlengine]
 basePath="/sendui/"
