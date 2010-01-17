@@ -12,5 +12,31 @@
         <property name="date_log" fieldname="date_log" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
     </record>
     <factory>
+        <method type="php" name="getMaxCounter">
+            <parameter name="idmessage" />
+            <body><![CDATA[
+                $sql = 'SELECT MAX(counter) as max '.$this->_fromClause.' WHERE ';
+                $sql .= ' idmessage='.$this->_prepareValue($idmessage,'int');
+                $rs = $this->_conn->query($sql);
+                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                $record = $rs->fetch();
+                return $record;
+            ]]></body> 
+        </method>
+        <method name="deleteLogs" type="delete">  
+            <parameter name="idmessage"/>
+            <conditions logic="AND">
+                <eq property="idmessage" expr="$idmessage"/>
+            </conditions>
+        </method>
+        <method name="getLast" type="selectfirst">  
+            <parameter name="idmessage"/>
+            <conditions logic="AND">
+                <eq property="idmessage" expr="$idmessage"/>
+            </conditions>
+            <order>
+                <orderitem property="counter" way="desc" />
+            </order>
+        </method>
     </factory>
 </dao>
