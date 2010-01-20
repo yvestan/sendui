@@ -11,10 +11,10 @@
     <tbody>
         {foreach $list_sent as $message}
         <tr class="highlight">
-            <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="add">{$message->name}</a></td>
+            <td><a href="{jurl 'sendui~settings:index', array('idmessage' => $message->idmessage, 'reuse' => true)}" class="add">{$message->name}</a></td>
             <td>{$message->subject}</td>
-            <td>{$message->from_name} {$message->from_email}</td>
-            <td>{$message->sent|jdatetime:'db_datetime','lang_datetime'}</td>
+            <td>{$message->from_name} [{$message->from_email}]</td>
+            <td>{$message->sent_start|jdatetime:'db_datetime','lang_datetime'}</td>
         </tr>
         {/foreach}
     </tbody>

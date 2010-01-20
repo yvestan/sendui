@@ -54,9 +54,9 @@
                 </td>
                 <td>
                     {if $subscriber->status==3}
-                        <del><a href="{jurl 'sendui~subscribers:preparesubscriber', array('idsubscriber' => $subscriber->idsubscriber)}">{$subscriber->email}</a></del>
+                        <del><a href="{jurl 'sendui~subscriber:index', array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:view', 'idsubscriber_list' => $idsubscriber_list)}">{$subscriber->email}</a></del>
                     {else}
-                        <a href="{jurl 'sendui~subscribers:preparesubscriber', array('idsubscriber' => $subscriber->idsubscriber)}">{$subscriber->email}</a>
+                        <a href="{jurl 'sendui~subscriber:index', array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:index', 'idsubscriber_list' => $idsubscriber_list)}">{$subscriber->email}</a>
                     {/if}
                 </td>
                 <td>{if !empty($list->getLastSubscriberSent($subscriber->idsubscriber,$idsubscriber_list)->sent_date)}
@@ -67,7 +67,7 @@
                 </td>
                 <td>{$subscriber->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
                 <td>
-                    <a href="{jurl 'sendui~subscribers:preparesubscriber', 
+                    <a href="{jurl 'sendui~subscriber:prepare', 
                         array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:view', 'idsubscriber_list' => $idsubscriber_list)}" class="table-edit">modifier</a>
                     <a href="{jurl 'sendui~subscribers:deletesubscriber', array('idsubscriber' => $subscriber->idsubscriber, 'idsubscriber_list' => $idsubscriber_list)}" 
                         class="confirm_action table-delete" title="Êtes-vous sur de vouloir supprimer cet abonné ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !">supprimer</a>

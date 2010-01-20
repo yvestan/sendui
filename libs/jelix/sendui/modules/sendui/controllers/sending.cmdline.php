@@ -55,6 +55,8 @@ class sendingCtrl extends jControllerCmdLine {
         'index' => array(
             '--idmessage' => true,
             '-i' => true,
+            '--test' => true,
+            '-t' => true,
             '--reset' => false,
             '-r' => false,
             '--forcereset' => false,
@@ -107,6 +109,12 @@ class sendingCtrl extends jControllerCmdLine {
             return $rep;
         } else {
             $this->idmessage = $idmessage;    
+        }
+
+        // message de test ?
+        $test = $this->option('--test');
+        if(empty($test)) {
+            $test = $this->option('-t');
         }
 
         // identifiant du pid
@@ -231,12 +239,59 @@ class sendingCtrl extends jControllerCmdLine {
         // envoyer un message de test seulement
         if(!empty($test)) {
 
-            // remplacement avec valeur du client ?
+            // doit contenir des mails
+            $emails_tab = explode(',', $test);
+
+            $emails = array();
+
+            foreach($emails_tab as $e) {
+                if(filter_var($e, FILTER_VALIDATE_EMAIL)) {
+                    $emails[] = $e;
+                }
+            }
+
+            if(empty($emails)) {
+                $this->setLog('[FATAL] Il n\'y a aucun destinataire pour le message de test');
+                exit;
+            }
+
+            $nb_emails_test = count($emails);
+
+            if($nb_emails_test==0) {
+                $this->setLog('[FATAL] Il n\'y a aucun email pour le message de test');
+                exit;
+            } else {
+                $this->setLog('[TEST] Envoi du message ['.$idmessage.'] "'.$message_infos->subject.'" à '.$nb_emails_test.' adresse(s) de test');    
+            }
 
             // message
+            $headers->addTextHeader('List-Unsubscribe', 'http://www.grafactory.net/send-test');
 
-            // envoi
-            
+            // contenu HTML ou simple TEXT
+            if($message_infos->html_message!='') {
+                $message_compose->setBody($message_infos->html_message, 'text/html');
+            } else {
+                $message_compose->setBody($message_infos->text_message, 'text/plain');
+            }
+
+            // contenu TEXT en plus du HTML
+            if($message_infos->html_message!='' && $message_infos->text_message!='') {
+                $message_compose->addPart($message_infos->text_message, 'text/plain');
+            }
+
+            // destinataire
+            $message_compose->setTo($emails);
+
+            $success = $mailer->send($message_compose);
+
+            if($success) {
+                $this->setLog('[TEST] Message ['.$idmessage.'] "'.$message_infos->subject.'" envoyé');    
+            } else {
+                $this->setLog('[FATAL] Problème pendant l\'envoi de test du message ['.$idmessage.']');    
+            }
+
+            return $rep;
+
         }
 
         // les infos pause et lot sont dans la conf du message aussi (pause, batch)
@@ -354,7 +409,7 @@ class sendingCtrl extends jControllerCmdLine {
                 // destinataire
                 $message_compose->setTo($email);
 
-                //$success = $mailer->send($message);
+                //$success = $mailer->send($message_compose);
                 $success = true;
 
                 // on comptabilise les succes

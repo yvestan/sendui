@@ -1,3 +1,7 @@
+{if empty($from_page)}
+    {$steps}
+{/if}
+
 <h2 class="mainpage newmessage">Composer votre message</h2>
 
 {literal}

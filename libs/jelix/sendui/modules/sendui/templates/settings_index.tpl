@@ -1,37 +1,6 @@
-<div id="steps">
-    <div class="sendui-float-step">
-        <div><span class="ui-widget-header ui-state-active ui-corner-all sendui-padding-simple">1</span></div>
-        <div class="step-title">
-            Réglages
-        </div>
-    </div>
-    <div class="sendui-float-step">
-        <div><span class="ui-widget-header ui-state-disabled ui-corner-all sendui-padding-simple">2</span></div>
-        <div class="step-title ui-state-disabled">
-            Composition
-        </div>
-    </div>
-    <div class="sendui-float-step">
-        <div><span class="ui-widget-header ui-state-disabled ui-corner-all sendui-padding-simple">2</span></div>
-        <div class="step-title ui-state-disabled">
-            Destinataires
-        </div>
-    </div>
-    <div class="sendui-float-step">
-        <div><span class="ui-widget-header ui-state-disabled ui-corner-all sendui-padding-simple">2</span></div>
-        <div class="step-title ui-state-disabled">
-            Vérification
-        </div>
-    </div>
-    <div class="sendui-float-step">
-        <div><span class="ui-widget-header ui-state-disabled ui-corner-all sendui-padding-simple">2</span></div>
-        <div class="step-title ui-state-disabled">
-            Envoi
-        </div>
-    </div>
-    <div class="spacer"></div>
-</div>
-
+{if empty($from_page)}
+    {$steps}
+{/if}
 
 <h2 class="mainpage newmessage float-left">Définition de l'expéditeur et du sujet</h2>
 
@@ -66,7 +35,7 @@
 <div id="list-message" style="display:none;"></div>
 
 <div class="settings">
-{form $message_settings, 'sendui~settings:save', array('idmessage' => $idmessage, 'from_page' => $from_page)}
+{form $message_settings, 'sendui~settings:save', array('idmessage' => $idmessage, 'from_page' => $from_page, 'reuse' => $reuse)}
 
 <div class="bloc-form ui-corner-all">
     <div>{ctrl_label 'name'}</div>
@@ -93,7 +62,7 @@
     <p>{ctrl_control 'reply_to'}</p>
 </div>
 
-<p><input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Continuer" type="submit"></p>
+<p><input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Continuer" type="submit" /></p>
 
 {/form}
 </div>

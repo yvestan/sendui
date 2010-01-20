@@ -57,7 +57,7 @@ class defaultCtrl extends jController {
         }
 
         // ajout javascript pour progression
-        $rep->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/progressbar/jquery.progressbar.min.js');
+        /*$rep->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/progressbar/jquery.progressbar.min.js');
 
         // ajoute les infos
         $js_more = '
@@ -67,7 +67,7 @@ class defaultCtrl extends jController {
             var path_app = \''.$GLOBALS['gJConfig']->path_app['sendui'].'\';
         ';
         $rep->addJSCode($js_more);
-        $rep->addHeadContent('<script type="text/javascript" src="'.$GLOBALS['gJConfig']->path_app['sendui'].'/js/state.js" ></script>');
+        $rep->addHeadContent('<script type="text/javascript" src="'.$GLOBALS['gJConfig']->path_app['sendui'].'/js/state.js" ></script>');*/
 
         $tpl->assign('nb_subscribers', $nb_subscribers); 
 

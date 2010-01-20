@@ -81,6 +81,9 @@ class composeCtrl extends jController {
             return $rep;
         }
 
+        // la zone étapes
+        $tpl->assignZone('steps', 'steps',  array('step' => 2));
+
         $tpl->assign('message_compose', $message_compose);
         $tpl->assign('idmessage', $this->param('idmessage'));
         $tpl->assign('from_page', $this->param('from_page'));

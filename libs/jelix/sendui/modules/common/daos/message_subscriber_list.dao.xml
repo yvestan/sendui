@@ -16,8 +16,10 @@
         </method>
         <method name="isMessageList" type="count">
             <parameter name="idsubscriber_list"/>
+            <parameter name="idmessage"/>
             <conditions logic="AND">
                 <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+                <eq property="idmessage" expr="$idmessage"/>
             </conditions>
         </method>
     </factory>

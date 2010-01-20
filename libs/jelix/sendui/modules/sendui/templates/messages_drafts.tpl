@@ -19,7 +19,7 @@
     <table class="tabl display" id="tab_drafts">
         <thead>
             <tr>
-
+                <th>&nbsp;</th>
                 <th>Nom</th>
                 <th>Sujet</th>
                 <th>Expéditeur</th>
@@ -31,6 +31,7 @@
         <tbody>
             {foreach $list_drafts as $message}
             <tr class="highlight">
+                <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}" class="pencil nolink">&nbsp;</a></td>
                 <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}">{$message->name}</a></td>
                 <td>{$message->subject}</td>
                 <td>{$message->from_name} {$message->from_email}</td>
@@ -44,5 +45,10 @@
             {/foreach}
         </tbody>
     </table>
+
+    <ul class="legende">
+        <li class="pencil">brouillon / en cours d'édition</li>
+    </ul>
+    <div class="spacer"></div>
 
 </div>

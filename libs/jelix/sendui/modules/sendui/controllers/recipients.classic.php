@@ -73,6 +73,9 @@ class recipientsCtrl extends jController {
         $message_subscriber_list = jDao::get($this->dao_message_subscriber_list);
         $tpl->assign('message_subscriber_list', $message_subscriber_list); 
 
+        // la zone étapes
+        $tpl->assignZone('steps', 'steps',  array('step' => 3));
+
         $rep->body->assign('MAIN', $tpl->fetch('recipients_index')); 
 
         return $rep;
@@ -112,10 +115,8 @@ class recipientsCtrl extends jController {
             $record->idmessage = $this->param('idmessage');
 
             // la/les listes choisies
-            foreach($idsubscriber_list as $k=>$v) {
-                $record->idsubscriber_list = $v;
-                $message_subscriber_list->insert($record);
-            }
+            $record->idsubscriber_list = (int)$idsubscriber_list;
+            $message_subscriber_list->insert($record);
 
         }
 

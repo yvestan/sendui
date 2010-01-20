@@ -38,7 +38,10 @@ class settingsCtrl extends jController {
         // initialiser un message
         if($this->param('idmessage')!='') {
             $message_settings->initFromDao($this->dao_message);
-            $rep->params = array('idmessage' => $this->param('idmessage'));
+            $rep->params = array(
+                'idmessage' => $this->param('idmessage'),
+                'reuse' => $this->param('reuse'),
+            );
         }
 
         $rep->params['from_page'] = $this->param('from_page');
@@ -78,14 +81,19 @@ class settingsCtrl extends jController {
             $rep->params = array(
                 'idmessage' => $this->param('idmessage'),
                 'from_page' => $this->param('from_page'),
+                'reuse' => $this->param('reuse'),
             );
             $rep->action = 'sendui~settings:prepare';
             return $rep;
         }
 
+        // la zone étapes
+        $tpl->assignZone('steps', 'steps',  array('step' => 1));
+
         $tpl->assign('message_settings', $message_settings);
         $tpl->assign('idmessage', $this->param('idmessage'));
         $tpl->assign('from_page', $this->param('from_page'));
+        $tpl->assign('reuse', $this->param('reuse'));
 
         $rep->body->assign('MAIN', $tpl->fetch('settings_index')); 
 
@@ -119,6 +127,7 @@ class settingsCtrl extends jController {
             $rep->params = array(
                 'idmessage' => $this->param('idmessage'),
                 'from_page' => $this->param('from_page'),
+                'reuse' => $this->param('reuse'),
             );
             $rep->action = 'sendui~settings:index';
             return $rep;
@@ -131,9 +140,24 @@ class settingsCtrl extends jController {
         $session = jAuth::getUserSession();
         $result['daorec']->idcustomer = $session->idcustomer;
 
-        if($result['toInsert']) {
+            print_r($_POST);
+        if($result['toInsert'] || $this->param('reuse')!='') {
+
+            // réutilisation
+            if($this->param('reuse')!='') {
+                $result['daorec']->idmessage = null;
+
+                // mettre le status à 0 et vider les sent_start/sent_end
+                $result['daorec']->idmessage = null;
+                $result['daorec']->sent_start = null;
+                $result['daorec']->sent_end = null;
+                $result['daorec']->status = 0;
+
+            }
+
             $result['dao']->insert($result['daorec']);
             $idmessage = $result['daorec']->idmessage;
+
         } else {
             $update = $result['dao']->update($result['daorec']);
         }
@@ -142,7 +166,7 @@ class settingsCtrl extends jController {
         if(!empty($idmessage) || !empty($update)) {
 
             // dans le cas update
-            if(empty($idmessage)) {
+            if(empty($idmessage) && $this->param('reuse')=='') {
                 $idmessage = $this->param('idmessage');
             }
 

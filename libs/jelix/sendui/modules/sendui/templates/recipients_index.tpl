@@ -1,3 +1,7 @@
+{if empty($from_page)}
+    {$steps}
+{/if}
+
 <h2 class="mainpage newmessage">Sélection des destinataires</h2>
 
 {literal} 
@@ -23,7 +27,6 @@
     <table class="tabl display" id="tab_subscribers_lists">
         <thead>
             <tr>
-                <th>Choisir</th>
                 <th>Liste</th>
                 <th>Nombre d'abonnés</th>
                 <th>Dernier envoi</th>
@@ -32,8 +35,13 @@
         <tbody>
             {foreach $list_subscribers_lists as $subscriber_list}
             <tr class="highlight">
-                <td><input type="checkbox" name="idsubscriber_list[]" value="{$subscriber_list->idsubscriber_list}" {if $message_subscriber_list->isMessageList($subscriber_list->idsubscriber_list)>0 } checked="checked" {/if} /></td>
-                <td>{$subscriber_list->name}</td>
+                <td>
+                    {if $message_subscriber_list->isMessageList($subscriber_list->idsubscriber_list,$idmessage)>0 }
+                        <input type="radio" name="idsubscriber_list" value="{$subscriber_list->idsubscriber_list}" checked="checked" />
+                    {else}
+                        <input type="radio" name="idsubscriber_list" value="{$subscriber_list->idsubscriber_list}" />
+                    {/if}
+                {$subscriber_list->name}</td>
                 <td>{$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)} abonnés</td>
                 <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
             </tr>

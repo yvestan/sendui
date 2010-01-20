@@ -36,11 +36,20 @@ class subscribersCtrl extends jController {
     // formulaire abonné
     protected $form_subscriber = 'sendui~subscriber';
 
+    // {{{ _dataTables()
+
+    /**
+     * Js et css pour les tables
+     *
+     * @return      mixed
+     */
     protected function _dataTables(&$rep)
     {
         $rep->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/datatables/js/jquery.dataTables.min.js');
         $rep->addCSSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/datatables/css/demo_table_jui.css');
     }
+
+    // }}}
 
     // {{{ index()
 

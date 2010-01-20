@@ -214,6 +214,76 @@ class sendCtrl extends jController {
 
     // }}}
 
+    // {{{ test()
+
+    /**
+     * Lancer l'envoi d'un test
+     *
+     * @return      redirect
+     */
+    public function test()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');    
+        } else {
+            $rep->action = 'sendui~send:index';
+        }
+
+        $rep->params = array('idmessage' => $this->param('idmessage'));
+
+        if($this->param('emails_test')=='') {
+            $rep->params['error'] = 'no_email';
+            return $rep;
+        }
+
+        // récupérer les emails
+        $emails_tab = explode(',', $this->param('emails_test'));
+
+        $emails = array();
+
+        foreach($emails_tab as $e) {
+            if(filter_var($e, FILTER_VALIDATE_EMAIL)) {
+                $emails[] = $e;
+            }
+            if(count($emails)>=5) break;
+        }
+
+        if(empty($emails)) {
+            $rep->params['error'] = 'no_email';
+            return $rep;
+        }
+
+        // les remetttres dans une string
+        $emails_string = join(',', $emails);
+
+        $cmd_more = null;
+
+        $message = jDao::get($this->dao_message);
+        $message_infos = $message->get($this->param('idmessage'));
+
+        $cmd_more = '--test '.$emails_string;
+
+        // lancer
+        $run = jClasses::getService('sendui~run');
+        $cmd = JELIX_APP_PATH.'/scripts/send --idmessage '.((int)$this->param('idmessage')).' '.$cmd_more.' >/dev/null';
+        $pid = $run->runBackground($cmd);
+
+        if(!empty($pid)) {
+            $rep->params['success'] = count($emails);    
+        }
+
+        // ici on log le pid et l'id du message
+        jLog::log('['.trim($pid).']['.$this->param('idmessage').'] '.$cmd, 'process');
+        
+        return $rep;
+
+    }
+
+    // }}}
+
     // {{{ changeStatus()
 
     /**

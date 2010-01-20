@@ -152,6 +152,9 @@ class messagesCtrl extends jController {
 
         $tpl->assign('idmessage', $this->param('idmessage')); 
 
+        // test ?
+        $tpl->assign('success', $this->param('success')); 
+
         // récupérer le message 
         $message = jDao::get($this->dao_message);
         $message_infos = $message->get($this->param('idmessage'));
@@ -181,6 +184,13 @@ class messagesCtrl extends jController {
 
         $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
         $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
+
+        // email de l'utilisateur connecté
+        $session = jAuth::getUserSession();
+        $tpl->assign('email_customer', $session->email); 
+
+        // la zone étapes
+        $tpl->assignZone('steps', 'steps',  array('step' => 4));
 
         $rep->body->assign('MAIN', $tpl->fetch('messages_preview')); 
 

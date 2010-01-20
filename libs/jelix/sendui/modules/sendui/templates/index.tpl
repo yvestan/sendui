@@ -1,5 +1,12 @@
 <h2 class="main dashboard">Tableau de bord</h2>
 
+{literal}
+<script type="text/javascript">
+    $('.sendui-float-bloc').masonry({ columnWidth: 200 });
+    $('.sendui-float-bloc').masonry({ singleMode: true });
+</script>
+{/literal}
+
 <div class="sendui-col-one">
 
     <div class="ui-tabs ui-widget ui-widget-content ui-corner-all sendui-float-bloc">

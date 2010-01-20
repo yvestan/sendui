@@ -53,9 +53,14 @@
                     {/if}
                     {if $message->status==2}
                         <a href="{jurl 'sendui~send:stop', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="control-pause">suspendre</a>
+                        <!--<a href="{jurl 'sendui~send:cancel', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="control-stop">annuler</a>-->
+                    {/if}
+                    {if $message->status==3}
+                        <a href="{jurl 'sendui~send:start', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="package-go">reprendre</a>
+                        <!--<a href="{jurl 'sendui~send:cancel', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="control-stop">annuler</a>-->
                     {/if}
                     {if $message->status==5}
-                        <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}" class="email-add">re-utiliser</a>
+                        <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage, 'reuse' => 1)}" class="email-add">ré-utiliser</a>
                     {/if}
                     {if $message->status==5}
                     <a href="{jurl 'sendui~messages:delete', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:send')}" class="table-delete confirm_action"

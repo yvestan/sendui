@@ -7,6 +7,9 @@ a {
     text-decoration: none;
     border-bottom: 1px solid #ccc;
 }
+.nolink {
+    border: none;    
+}
 .list_status {
     overflow: auto;
     border: 1px solid #4297d7;
@@ -112,16 +115,6 @@ h2.mainpage {
 }
 #main_menu li a {
     padding-left: 26px;
-}
-.fg-button { 
-    outline: 0; 
-    margin:0 4px 0 0; 
-    padding: .4em 1em; 
-    text-decoration:none !important; 
-    cursor:pointer; 
-    position: relative; 
-    text-align: center; 
-    zoom: 1; 
 }
 
 input, textarea {
@@ -300,6 +293,10 @@ p.no-result {
     background: left center url(/sendui/img/interface/icones/tick.png) no-repeat;
     padding-left: 20px;
 }
+.pencil {
+    background: left center url(/sendui/img/interface/icones/pencil.png) no-repeat;
+    padding-left: 20px;
+}
 .cross {
     background: left center url(/sendui/img/interface/icones/cross.png) no-repeat;
     padding-left: 20px;
@@ -328,6 +325,14 @@ p.no-result {
     background: left center url(/sendui/img/interface/icones/control_stop.png) no-repeat;
     padding-left: 20px;
 }
+.control-play {
+    background: left center url(/sendui/img/interface/icones/control_play.png) no-repeat;
+    padding-left: 20px;
+}
+.user-delete {
+    background: left center url(/sendui/img/interface/icones/user_delete.png) no-repeat;
+    padding-left: 20px;
+}
 .clock {
     background: left center url(/sendui/img/interface/icones/clock.png) no-repeat;
     padding-left: 20px;
@@ -346,6 +351,10 @@ p.no-result {
 }
 .email-add {
     background: left center url(/sendui/img/interface/icones/email_add.png) no-repeat;
+    padding-left: 20px;
+}
+.eye {
+    background: left center url(/sendui/img/interface/icones/eye.png) no-repeat;
     padding-left: 20px;
 }
 .form-login {
@@ -410,7 +419,7 @@ p.no-result {
 .fg-button { outline: 0; margin:0 4px 0 0; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
 .fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }
 
-a.fg-button { float:left; }
+/*a.fg-button { float:left; }*/
 
 /* remove extra button width in IE */
 button.fg-button { width:auto; overflow:visible; }
@@ -576,4 +585,14 @@ p.sendui-content {
     margin-right: 15px;
     font-size: 90%;
     color: #666
+}
+.legend_form {
+    font-size: 85%;
+    color: #666;
+}
+.sendui-big-button {
+    font-size: 130%;
+}
+.sendui-center {
+    text-align:center;    
 }

@@ -26,8 +26,8 @@
     <table class="tabl display" id="tab_subscribers_lists">
         <thead>
             <tr>
-
-                <th>Nom de la liste</th>
+                <th>&nbsp;</th>
+                <th>Liste</th>
                 <th>Nombre d'abonnés</th>
                 <th>Dernier envoi</th>
                 <th>Crée le</th>
@@ -38,6 +38,13 @@
         <tbody>
             {foreach $list_subscribers_lists as $subscriber_list}
             <tr class="highlight">
+                <td>
+                    {if $subscriber_list->status==1}
+                        <span class="tick">&nbsp;</span>
+                    {else}
+                        <span class="cross">&nbsp;</span>
+                    {/if}
+                </td>
                 <td><a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">{$subscriber_list->name}</a></td>
                 <td>
                     <a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">
@@ -53,5 +60,11 @@
             {/foreach}
         </tbody>
     </table>
+
+    <ul class="legende">
+        <li class="tick">active</li>
+        <li class="cross">inactive</li>
+    </ul>
+    <div class="spacer"></div>
 
 </div>
