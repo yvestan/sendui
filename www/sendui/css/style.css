@@ -299,6 +299,10 @@ p.no-result {
     background: left center url(/sendui/img/interface/icones/add.png) no-repeat;
     padding-left: 20px;
 }
+.user-add {
+    background: left center url(/sendui/img/interface/icones/user_add.png) no-repeat;
+    padding-left: 20px;
+}
 .application-form-add {
     background: left center url(/sendui/img/interface/icones/application_form_add.png) no-repeat;
     padding-left: 20px;
@@ -540,7 +544,7 @@ p.text_message_class textarea {
     padding-left: 40px;
     font-weight: normal;
 }
-.sendui-list-simple-content {
+.sendui-user-list-simple-content {
     border: 1px solid #ccc;
 }
 .sendui-list-simple {
@@ -639,4 +643,20 @@ p.sendui-content {
 #navigation .spacer {
     font-size: 1px;
     margin: 0; padding: 0;
+}
+#navigation .bullet-go {
+    padding-left: 16px;
+}
+#global ul.tabs-padding li a {
+    padding-left: 22px;    
+    background-position: 3px;
+}
+.sendui-liste {
+    margin: 10px;
+    list-style-type: square;
+}
+.sendui-liste li {
+    margin-left: 30px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }

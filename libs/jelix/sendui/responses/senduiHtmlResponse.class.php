@@ -33,13 +33,15 @@ class senduiHtmlResponse extends jResponseHtml {
 
         $base_path = $GLOBALS['gJConfig']->urlengine['basePath'];
 
+        $style_ui = 'start';
+
         // ajouter une feuille de style 
         foreach(array('reset','style') as $k) {
             $this->addCSSLink($base_path.'/css/'.$k.'.css');
         }
 
         // jquery-ui
-        $this->addCSSLink($base_path.'/css/start/jquery-ui-1.7.2.custom.css');
+        $this->addCSSLink($base_path.'/css/'.$style_ui.'/jquery-ui-1.7.2.custom.css');
 
         // ajouter les javascript jquery
         $this->addJSLink($base_path.'/js/jquery-1.3.2.min.js');

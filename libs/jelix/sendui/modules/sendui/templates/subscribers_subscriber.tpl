@@ -17,7 +17,7 @@
 
     <div id="tabs-compose" class="sendui-tabs-content">
 
-        <ul>
+        <ul class="tabs-padding">
             <li><a href="#subscribers-text" class="page-white-edit">Ajout simple</a></li>
             <li><a href="#subscribers-file" class="page-white-get">Depuis un fichier</a></li>
             <li><a href="#subscribers-unique" class="layout-edit">Ajouter un seul abonné</a></li>
@@ -36,7 +36,7 @@
                 <li>autre@domaine.net</li>
             </ul>
 
-            <p class="sendui-content">Pour ajouter plus d'abonnés en même temps, préférez <a href="#subscribers-file" class="page-white-get">l'ajout depuis un fichier</a></p>
+            <p class="sendui-content">Pour ajouter plus d'abonnés en même temps, préférez <span class="page-white-get">l'ajout depuis un fichier</span></p>
 
             {form $form_subscribers_text, 'sendui~subscribers:subscribers_textsave', array('idsubscriber' => $idsubscriber, 'idsubscriber_list' => $idsubscriber_list, 'from_page' => $from_page)}
 

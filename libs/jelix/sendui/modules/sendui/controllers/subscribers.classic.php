@@ -499,11 +499,22 @@ class subscribersCtrl extends jController {
         // infos sur la liste TODO check avec le customer
         if($this->param('idsubscriber_list')!='') {
             $subscriber_list = jDao::get($this->dao_subscriber_list);
-            $tpl->assign('subscriber_list', $subscriber_list->get($this->param('idsubscriber_list')));
+            $subscriber_list_infos = $subscriber_list->get($this->param('idsubscriber_list'));
+            $tpl->assign('subscriber_list', $subscriber_list_infos);
         }
 
         // marquer le menu
         $rep->body->assign('active_page', 'subscribers');
+
+        // fil d'arianne
+        if($this->param('idsubscriber_list')!='') {
+            $navigation = array(
+                array('action' => 'sendui~subscribers:index', 'params' => array(), 'title' => 'Listes d\'abonnés'),
+                array('action' => 'sendui~subscribers:view', 'params' => array('idsubscriber_list' => $subscriber_list_infos->idsubscriber_list), 'title' => $subscriber_list_infos->name),
+                array('action' => '0', 'params' => array(), 'title' => 'Ajouter des abonnés'),
+            );
+        }
+		$rep->body->assign('navigation', $navigation);
 
         $rep->body->assign('MAIN', $tpl->fetch('subscribers_subscriber')); 
 
@@ -641,7 +652,6 @@ class subscribersCtrl extends jController {
         // le champ text
         $subscribers_text = $this->param('subscribers');
 
-
         // détruire le formulaire
         jForms::destroy($this->form_subscribers_text);
 
@@ -737,10 +747,25 @@ class subscribersCtrl extends jController {
 
         // récupérer la liste TODO uniquement du client
         $subscriber_list = jDao::get($this->dao_subscriber_list);
-        $tpl->assign('subscriber_list', $subscriber_list->get($this->param('idsubscriber_list')));
+        $subscriber_list_infos = $subscriber_list->get($this->param('idsubscriber_list'));
+        $tpl->assign('subscriber_list', $subscriber_list_infos);
         $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list'));
 
         // envoyer la liste des erreurs et le nb de OK
+        $tpl->assign('results', $results);
+        $tpl->assign('nb_success', count($results['success']));
+        $tpl->assign('nb_error', count($results['error']));
+
+        // fil d'arianne
+        if($this->param('idsubscriber_list')!='') {
+            $navigation = array(
+                array('action' => 'sendui~subscribers:index', 'params' => array(), 'title' => 'Listes d\'abonnés'),
+                array('action' => 'sendui~subscribers:view', 'params' => array('idsubscriber_list' => $subscriber_list_infos->idsubscriber_list), 'title' => $subscriber_list_infos->name),
+                array('action' => 'sendui~subscribers:subscriber', 'params' => array('idsubscriber_list' => $subscriber_list_infos->idsubscriber_list), 'title' => 'Ajouter des abonnés'),
+                array('action' => '0', 'params' => array(), 'title' => 'Résultat'),
+            );
+        }
+		$rep->body->assign('navigation', $navigation);
 
         $rep->body->assign('MAIN', $tpl->fetch('subscribers_save_response')); 
 
@@ -766,6 +791,13 @@ class subscribersCtrl extends jController {
 
         // session avec idcustomer
         $session = jAuth::getUserSession();
+
+        if(empty($subscribers_text)) {
+            return array(
+                'success' => $subscribers_tabs_list_success,
+                'error' => $subscribers_tabs_list_error,
+            );
+        }
 
         // explode par ligne
         $subscribers_tabs = explode("\n", $subscribers_text);
