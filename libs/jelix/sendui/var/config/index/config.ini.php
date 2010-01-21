@@ -12,3 +12,4 @@ html=senduiHtmlResponse
 
 [urlengine]
 basePath="/sendui/"
+notfoundAct="sendui~error:notfound"
