@@ -66,7 +66,37 @@ class senduiHtmlResponse extends jResponseHtml {
         $session = jAuth::getUserSession();
         $this->body->assign('session', $session);
 
-        $this->body->assignIfNone('MAIN','<p>no content</p>');
+        // le menu
+        $menu_items = array(
+            'dashboard' => array(
+                'url' => 'sendui~default:index',
+                'name' => 'tableau de bord',
+            ),
+            'subscribers' => array(
+                'url' => 'sendui~subscribers:index',
+                'name' => 'gérer vos listes d\'abonnés',
+            ),
+            'newmessage' => array(
+                'url' => 'sendui~settings:prepare',
+                'name' => 'créer &amp; envoyer un message',
+            ),
+            'drafts' => array(
+                'url' => 'sendui~messages:drafts',
+                'name' => 'brouillons',
+            ),
+            'archives' => array(
+                'url' => 'sendui~messages:sent',
+                'name' => 'messages en cours &amp; envoyés',
+            ),
+        );
+        foreach($menu_items as $k=>$m) {
+            $menu_items[$k]['state'] = 'default';    
+        }
+        $this->body->assign('menu_items', $menu_items);
+         
+        // si pas de contenu
+        $this->body->assignIfNone('MAIN','<p>Cette page n\'existe pas</p>');
+
     }
 
     // }}}

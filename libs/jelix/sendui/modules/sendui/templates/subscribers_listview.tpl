@@ -25,9 +25,10 @@
 </div>
 
 <p class="sendui-margin-top">
-    <input name="_submit" id="jforms_sendui_form_subscriber_list_submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Enregistrer" type="submit">
+    <input name="_submit" id="jforms_sendui_form_subscriber_list_submit" 
+        class="jforms-submit fg-button ui-state-default ui-corner-all" value="Enregistrer" type="submit">
     {if !empty($from_page)}
-    <a href="{jurl $from_page, array('idsubscriber_list' => $idsubscriber_list)}" class="cancel cross">annuler</a>
+        <a href="{jurl $from_page, array('idsubscriber_list' => $idsubscriber_list)}" class="cancel cross">annuler</a>
     {/if}
 </p>
 

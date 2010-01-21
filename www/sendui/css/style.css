@@ -33,6 +33,7 @@ a {
 }
 .sendui-float-bloc {
     width: 435px;
+    height: 100px;
     float: left;
     margin: 10px;
 }
@@ -103,6 +104,15 @@ h2.mainpage {
     font-weight: normal;
     margin: 15px;
     margin-bottom:0;
+    margin-top:10px;
+    padding-left: 24px;
+}
+h2.mainpage-nav {
+    font-size: 160%;
+    font-weight: normal;
+    margin: 15px;
+    margin-bottom:0;
+    margin-top:5px;
     padding-left: 24px;
 }
 .sendui-padding-mainpage {
@@ -211,6 +221,18 @@ p.no-result {
 }
 .logout {
     background: left center url(/sendui/img/interface/icones/door_out.png) no-repeat;
+    padding-left: 20px;
+}
+.sitemap-color {
+    background: left center url(/sendui/img/interface/icones/sitemap_color.png) no-repeat;
+    padding-left: 20px;
+}
+.bullet-go {
+    background: left center url(/sendui/img/interface/icones/bullet_go.png) no-repeat;
+    padding-left: 20px;
+}
+.emoticon-unhappy {
+    background: left center url(/sendui/img/interface/icones/emoticon_unhappy.png) no-repeat;
     padding-left: 20px;
 }
 .table-go {
@@ -595,4 +617,26 @@ p.sendui-content {
 }
 .sendui-center {
     text-align:center;    
+}
+.sendui-small {
+    font-size: 90%;
+}
+#navigation {
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 85%;
+}
+#navigation ul li {
+    float: left;
+    color: #666;
+}
+#navigation ul li a {
+    padding: 0; margin: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    color: #666;
+}
+#navigation .spacer {
+    font-size: 1px;
+    margin: 0; padding: 0;
 }

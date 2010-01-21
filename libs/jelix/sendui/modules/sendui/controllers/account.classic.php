@@ -81,6 +81,12 @@ class accountCtrl extends jController {
         $customer_settings->initFromDao($this->dao_customer);
         $tpl->assign('customer_settings', $customer_settings);
 
+        // fil d'arianne
+        $navigation = array(
+            array('action' => '0', 'params' => array(), 'title' => 'Votre compte'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
         $rep->body->assign('MAIN', $tpl->fetch('account_index')); 
 
         return $rep;
@@ -157,6 +163,13 @@ class accountCtrl extends jController {
         $tpl = new jTpl();
 
         $tpl->assign('credits', $session->credit);
+
+        // fil d'arianne
+        $navigation = array(
+            array('action' => '0', 'params' => array(), 'title' => 'Vos crédits'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
 
         $rep->body->assign('MAIN', $tpl->fetch('account_credits')); 
 

@@ -90,6 +90,9 @@ class settingsCtrl extends jController {
         // la zone étapes
         $tpl->assignZone('steps', 'steps',  array('step' => 1));
 
+        // marquer le menu
+        $rep->body->assign('active_page', 'newmessage');
+
         $tpl->assign('message_settings', $message_settings);
         $tpl->assign('idmessage', $this->param('idmessage'));
         $tpl->assign('from_page', $this->param('from_page'));

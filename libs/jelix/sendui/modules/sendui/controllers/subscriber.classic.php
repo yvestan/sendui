@@ -32,7 +32,7 @@ class subscriberCtrl extends jController {
     /**
      * abonné
      *
-     * @template    subscribers_index
+     * @template    subscriber_index
      * @return      html
      */
     public function index()
@@ -40,11 +40,44 @@ class subscriberCtrl extends jController {
 
         $rep = $this->getResponse('html');
 
+        $rep->params = array(
+            'idsubscriber' => $this->param('idsubscriber'),
+            'idsubscriber_list' => $this->param('idsubscriber_list'),
+        );
+
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');
+        } else {
+            $rep->action = 'sendui~subscribers:index';
+        }
+
+        if($this->param('idsubscriber')=='' || $this->param('idsubscriber_list')=='') {
+            $rep = $this->getResponse('redirect');
+            return $rep;
+        }
+
         $rep->title = 'Abonné';
 
         $session = jAuth::getUserSession();
 
         $tpl = new jTpl();
+
+        // l'abonné TODO : checker avec le customer !
+        $subscriber = jDao::get($this->dao_subscriber);
+        $tpl->assign('subscriber', $subscriber->get($this->param('idsubscriber')));
+
+        // marquer le menu
+        $rep->body->assign('active_page', 'subscribers');
+
+        // fil d'arianne
+        $navigation = array(
+            array('action' => 'sendui~subscribers:index', 'params' => array(), 'title' => 'Listes d\'abonnés'),
+            array('action' => 'sendui~subscribers:view', 'params' => array('idsubscriber_list' => $subscriber_list_infos->idsubscriber_list), 'title' => $subscriber_list_infos->name),
+            array('action' => '0', 'params' => array(), 'title' => 'Informations sur l\'abonné'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
+        $rep->body->assign('MAIN', $tpl->fetch('subscriber_index')); 
 
         return $rep;
 
@@ -143,7 +176,8 @@ class subscriberCtrl extends jController {
         // infos sur la liste TODO check avec le customer
         if($this->param('idsubscriber_list')!='') {
             $subscriber_list = jDao::get($this->dao_subscriber_list);
-            $tpl->assign('subscriber_list', $subscriber_list->get($this->param('idsubscriber_list')));
+            $subscriber_list_infos = $subscriber_list->get($this->param('idsubscriber_list'));
+            $tpl->assign('subscriber_list', $subscriber_list_infos);
         }
 
         // infos sur l'utilisateur
@@ -151,6 +185,17 @@ class subscriberCtrl extends jController {
             $subscriber = jDao::get($this->dao_subscriber);
             $tpl->assign('subscriber', $subscriber->get($this->param('idsubscriber')));
         }
+
+        // fil d'arianne
+        $navigation = array(
+            array('action' => 'sendui~subscribers:index', 'params' => array(), 'title' => 'Listes d\'abonnés'),
+            array('action' => 'sendui~subscribers:view', 'params' => array('idsubscriber_list' => $subscriber_list_infos->idsubscriber_list), 'title' => $subscriber_list_infos->name),
+            array('action' => '0', 'params' => array(), 'title' => 'Modifier l\'abonné'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
+        // marquer le menu
+        $rep->body->assign('active_page', 'subscribers');
 
         $rep->body->assign('MAIN', $tpl->fetch('subscriber_edit')); 
 

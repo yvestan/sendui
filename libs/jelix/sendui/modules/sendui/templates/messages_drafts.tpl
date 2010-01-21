@@ -8,7 +8,8 @@
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
             "aaSorting": [[3,'desc']],
-            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
+            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" },
+            "aaSorting": [[4, 'desc']]
         });
     });
 </script>
@@ -32,9 +33,9 @@
             {foreach $list_drafts as $message}
             <tr class="highlight">
                 <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}" class="pencil nolink">&nbsp;</a></td>
-                <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}">{$message->name}</a></td>
-                <td>{$message->subject}</td>
-                <td>{$message->from_name} {$message->from_email}</td>
+                <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}">{$message->name|truncate:35}</a></td>
+                <td class="sendui-small">{$message->subject|truncate:35}</td>
+                <td class="sendui-small">{$message->from_name} <span class="sendui-grey">[{$message->from_email}]</span></td>
                 <td>{$message->date_update|jdatetime:'db_datetime','lang_datetime'}</td>
                 <td>
                     <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}" class="newmessage">envoyer</a>

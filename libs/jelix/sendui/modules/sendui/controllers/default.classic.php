@@ -73,6 +73,9 @@ class defaultCtrl extends jController {
 
         // crédits disponibles
         $tpl->assign('credits', $session->credit); 
+
+        // menu actif
+        $rep->body->assign('active_page', 'dashboard');
  
         $rep->body->assign('MAIN', $tpl->fetch('index')); 
 

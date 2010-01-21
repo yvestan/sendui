@@ -56,6 +56,15 @@ class messagesCtrl extends jController {
         $list_drafts = $message->getDrafts($session->idcustomer);
         $tpl->assign('list_drafts', $list_drafts); 
 
+        // fil d'arianne
+        $navigation = array(
+            array('action' => '0', 'params' => array(), 'title' => 'Brouillons'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
+        // menu actif
+        $rep->body->assign('active_page', 'drafts');
+
         $rep->body->assign('MAIN', $tpl->fetch('messages_drafts')); 
 
         return $rep;
@@ -115,6 +124,15 @@ class messagesCtrl extends jController {
         $message = jDao::get($this->dao_message);
         $list_sent = $message->getSent($session->idcustomer);
         $tpl->assign('list_sent', $list_sent); 
+
+        // fil d'arianne
+        $navigation = array(
+            array('action' => '0', 'params' => array(), 'title' => 'Messages encours &amp; envoyés'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
+        // menu actif
+        $rep->body->assign('active_page', 'archives');
 
         // response en ajax
         if($this->param('response')=='ajax') {

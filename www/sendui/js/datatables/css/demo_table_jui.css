@@ -44,7 +44,7 @@
 }
 
 .paging_full_numbers {
-	width: 350px !important;
+	width: 400px;
 }
 
 .fg-toolbar {
@@ -328,9 +328,11 @@ tr.even td.sorting_3 {
 
 .dataTables_length, 
 .dataTables_info,
+.dataTables_paginate,
 .dataTables_filter {
     font-weight: normal;
     margin: 0; padding: 0;
+    font-size: 90%;
 }
 .dataTables_filter input {
     width: 150px;

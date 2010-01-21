@@ -1,7 +1,7 @@
 <h2 class="mainpage subscribers float-left">Listes d'abonnés</h2>
 
 <div class="sendui-padding-mainpage float-right">
-    <a href="{jurl 'sendui~subscribers:listview'}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
+    <a href="{jurl 'sendui~subscribers:listview', array('from_page' => 'sendui~subscribers:index')}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
         <span class="ui-icon ui-icon-circle-plus"></span>Créer une nouvelle liste</a>
 </div>
 
@@ -14,7 +14,8 @@
             "bJQueryUI": true,
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
-            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
+            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" },
+            "aaSorting": [[3, 'desc']]
         });
     });
 </script>

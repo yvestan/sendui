@@ -20,18 +20,39 @@
   
     </div>
 
-    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="main_menu">
-        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-            <li class="ui-corner-top ui-state-default dashboard"><a href="{jurl 'sendui~default:index'}">tableau de bord</a></li>
-            <li class="ui-corner-top ui-state-default subscribers"><a href="{jurl 'sendui~subscribers:index'}">gérer vos listes d'abonnés</a></li>
-            <li class="ui-corner-top ui-state-default newmessage"><a href="{jurl 'sendui~settings:prepare'}">créer &amp; envoyer un message</a></li>
-            <li class="ui-corner-top ui-state-default drafts"><a href="{jurl 'sendui~messages:drafts'}">brouillons</a></li>
-            <li class="ui-corner-top ui-state-default archives"><a href="{jurl 'sendui~messages:sent'}">messages en cours &amp; envoyés</a></li>
-        </ul>
+    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 
-    {$MAIN}
+        <div id="main_menu">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                {foreach $menu_items as $k=>$m}
+                    {if (!empty($active_page) && $active_page==$k)}
+                        <li class="ui-corner-top ui-state-active {$k}"><a href="{jurl $m['url']}">{$m['name']}</a></li>
+                    {else}
+                        <li class="ui-corner-top ui-state-{$m['state']} {$k}"><a href="{jurl $m['url']}">{$m['name']}</a></li>
+                    {/if}
+                {/foreach}
+            </ul>
+        </div>
 
-    <div class="spacer">&nbsp;</div>
+        {if !empty($navigation)}
+        <div id="navigation">
+            <ul>
+                <li id="start"><a href="{jurl 'sendui~default:index'}">Accueil</a></li>
+                {foreach $navigation as $url}
+                    {if $url['action']=='0'}
+                        <li class="bullet-go">{$url['title']}</li>
+                    {else}
+                        <li class="bullet-go"><a href="{jurl $url['action'], $url['params']}">{$url['title']}</a></li>
+                    {/if}
+                {/foreach}
+            </ul>
+            <div class="spacer">&nbsp;</div>
+        </div>
+        {/if}
+
+        {$MAIN}
+
+        <div class="spacer">&nbsp;</div>
 
     </div>
 

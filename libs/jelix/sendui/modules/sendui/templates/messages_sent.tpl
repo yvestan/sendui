@@ -7,7 +7,8 @@
             "bJQueryUI": true,
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
-            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
+            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" },
+            "aaSorting": [[4, 'desc']]
         });
     });
 </script>
@@ -44,8 +45,8 @@
                     {/if}
                 </td>
                 <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~message:sent')}">{$message->name}</a></td>
-                <td>{$message->subject}</td>
-                <td>{$message->from_name} [{$message->from_email}]</td>
+                <td class="sendui-small">{$message->subject|truncate:35}</td>
+                <td class="sendui-small">{$message->from_name} <span class="sendui-grey">[{$message->from_email}]</span></td>
                 <td>{$message->sent_start|jdatetime:'db_datetime','lang_datetime'}</td>
                 <td>
                     {if $message->status==1}

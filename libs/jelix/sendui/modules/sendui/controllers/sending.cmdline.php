@@ -157,7 +157,7 @@ class sendingCtrl extends jControllerCmdLine {
             $nb_subscribers++;
         }
 
-        // marqué envoyé ou autres actions
+        // liste
         $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
 
         // message inconnu
@@ -317,6 +317,8 @@ class sendingCtrl extends jControllerCmdLine {
         // marquer le début et le statut en cours d'envoi
         $message->setStart($idmessage);
         $message->setStatus(2);
+
+        // marquer l'envoi à la liste
 
         // init compteurs
         $i = $max;

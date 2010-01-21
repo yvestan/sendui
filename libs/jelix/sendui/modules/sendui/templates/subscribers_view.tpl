@@ -1,5 +1,5 @@
 <div class="float-left">
-    <h2 class="mainpage subscribers">Liste des abonnés {if !empty($subscriber_list->name)}à la liste{/if}</h2>
+    <h2 class="mainpage subscribers">Abonnés {if !empty($subscriber_list->name)}à la liste{/if}</h2>
     {if !empty($idsubscriber_list)}
         <h3 class="sendui-mainpage-h3">
             <a href="{jurl 'sendui~subscribers:listview', array('idsubscriber_list' => $idsubscriber_list, 'from_page' => 'sendui~subscribers:view')}" 
@@ -24,7 +24,8 @@
             "bJQueryUI": true,
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
-            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
+            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" },
+            "aaSorting": [[3, 'desc']]
         });
     });
 </script>
