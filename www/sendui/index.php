@@ -9,7 +9,11 @@
 */
 
 if($_SERVER['SERVER_NAME']=='sendui') {
-    $pathApp = '/Users/yves/Sites/sendui/web/';
+    if (!empty($_SERVER['SPECIAL_ID'])) {
+        $pathApp = '/home/yvestan/perso/sites/sendui/sendui/';
+    } else {
+        $pathApp = '/Users/yves/Sites/sendui/web/';
+    }
 } else {
     $pathApp = '/home/grafactory/';
 }

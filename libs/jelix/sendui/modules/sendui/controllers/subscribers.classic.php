@@ -18,7 +18,6 @@ class subscribersCtrl extends jController {
 
     // les daos pour abonnés
     protected $dao_subscriber_list = 'common~subscriber_list';
-    protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
     protected $dao_subscriber = 'common~subscriber';
 
     // customer
@@ -79,8 +78,7 @@ class subscribersCtrl extends jController {
         $list_subscribers_lists = $subscriber_list->getByCustomer($session->idcustomer);
         $tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
 
-        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
-        $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
+        $tpl->assign('subscriber', jDao::get($this->dao_subscriber));
     
         // fil d'arianne
         $navigation = array(
@@ -96,7 +94,6 @@ class subscribersCtrl extends jController {
             $rep = $this->getResponse('htmlfragment');
             $rep->tplname = 'subscribers_index_ajax';
             $rep->tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
-            $rep->tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
         } else {
             $rep->body->assign('MAIN', $tpl->fetch('subscribers_index')); 
         }
@@ -367,10 +364,6 @@ class subscribersCtrl extends jController {
         $subscriber = jDao::get($this->dao_subscriber);
         $list_subscribers = $subscriber->getByList($this->param('idsubscriber_list'),$session->idcustomer);
 
-        // dao liste
-        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
-        $tpl->assign('list', $subscriber_subscriber_list);
-
         $tpl->assign('list_subscribers', $list_subscribers);
         $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list'));
 
@@ -561,10 +554,17 @@ class subscribersCtrl extends jController {
         // enregistrer 
         $result = $form_subscriber->prepareDaoFromControls($this->dao_subscriber);
 
+        
+
         if($result['toInsert']) {
 
             // client pour la sécurité
             $result['daorec']->idcustomer = $session->idcustomer;
+
+            // si on a idsubscriber_list, enregistrer dans la bonne liste
+            if($this->param('idsubscriber_list')!='') {
+                $result['daorec']->idsubscriber_list = $this->param('idsubscriber_list');
+            }
 
             $result['dao']->insert($result['daorec']);
 
@@ -581,22 +581,6 @@ class subscribersCtrl extends jController {
             // dans le cas update
             if(empty($idsubscriber)) {
                 $idsubscriber = $this->param('idsubscriber');
-            }
-
-            // si on a idsubscriber_list, enregistrer dans la bonne liste
-            if($this->param('idsubscriber_list')!='' && empty($update)) {
-
-                $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
-                $record = jDao::createRecord($this->dao_subscriber_subscriber_list);
-
-                // utilisateur et sa liste
-                $record->idsubscriber = $idsubscriber;
-                $record->idsubscriber_list = $this->param('idsubscriber_list');
-
-                // client pour la sécurité
-                $record->idcustomer = $session->idcustomer;
-
-                $subscriber_subscriber_list->insert($record);
             }
 
             // détruire le formulaire
@@ -863,7 +847,6 @@ class subscribersCtrl extends jController {
         // on a une liste
         if(!empty($subscribers_tabs_list)) {
         
-            $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
             $subscriber = jDao::get($this->dao_subscriber);
 
             // on parcours et on ajoute
@@ -887,21 +870,14 @@ class subscribersCtrl extends jController {
                 $token = md5(uniqid(rand(), true));
                 $record_subscriber->token = $token;
 
+                // ajout dans la bonne liste
+                $record_subscriber->idsubscriber_list = $this->param('idsubscriber_list');
+
                 // insertion
                 $subscriber->insert($record_subscriber);
 
                 // récup du nouvel ID
                 $idsubscriber = $record_subscriber->idsubscriber;
-
-                // on l'ajoute dans la bonne liste
-                $record_subscriber_list = jDao::createRecord($this->dao_subscriber_subscriber_list);
-                $record_subscriber_list->idsubscriber = $idsubscriber;
-                $record_subscriber_list->idcustomer = $session->idcustomer;
-                $record_subscriber_list->status = 1; // actif
-                $record_subscriber_list->idsubscriber_list = $this->param('idsubscriber_list');
-
-                // insérer dans subscriber_subscriber_list
-                $subscriber_subscriber_list->insert($record_subscriber_list);
 
                 // ajoute dans la table
                 $subscribers_tabs_list_success[] = $s;

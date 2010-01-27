@@ -18,7 +18,7 @@ class recipientsCtrl extends jController {
 
     // dao des listes et du message
     protected $dao_subscriber_list = 'common~subscriber_list';
-    protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
+    protected $dao_subscriber = 'common~subscriber';
     protected $dao_message_subscriber_list = 'common~message_subscriber_list';
     protected $dao_message = 'common~message';
 
@@ -66,10 +66,11 @@ class recipientsCtrl extends jController {
         $subscriber_list = jDao::get($this->dao_subscriber_list);
         $list_subscribers_lists = $subscriber_list->getByCustomer($session->idcustomer);
         $tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
-        
-        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
-        $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
 
+        // les abonnes
+        $tpl->assign('subscriber', jDao::get($this->dao_subscriber));
+        
+        // quel liste utilise le message
         $message_subscriber_list = jDao::get($this->dao_message_subscriber_list);
         $tpl->assign('message_subscriber_list', $message_subscriber_list); 
 

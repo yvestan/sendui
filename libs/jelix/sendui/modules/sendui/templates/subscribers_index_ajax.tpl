@@ -11,7 +11,7 @@
         <tr class="highlight">
             <td>
                 <a href="{jurl 'sendui~settings:index', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">{$subscriber_list->name}</a>
-                 ({$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)} abonnés)
+                 ({$subscriber->countByList($subscriber_list->idsubscriber_list)} abonnés)
             </td>
             <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
         </tr>

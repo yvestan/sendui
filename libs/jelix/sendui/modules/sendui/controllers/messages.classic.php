@@ -21,7 +21,6 @@ class messagesCtrl extends jController {
     protected $dao_message_subscriber_list = 'common~message_subscriber_list';
     protected $dao_subscriber_list = 'common~subscriber_list';
     protected $dao_subscriber = 'common~subscriber';
-    protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
 
     // batch
     protected $class_batch = 'sendui~batch';
@@ -199,6 +198,7 @@ class messagesCtrl extends jController {
         $subscriber = jDao::get($this->dao_subscriber);
         $subscribers_infos = $subscriber->countMessageSubscribers($this->param('idmessage'),1); 
         $tpl->assign('nb_subscribers', $subscribers_infos->nb); 
+        $tpl->assign('subscriber', $subscriber); 
 
         // si le message est en cours d'envoi, afficher la progress bar
         if($message_infos->status==2) {
@@ -216,9 +216,6 @@ class messagesCtrl extends jController {
 
         // les listes associées
         $tpl->assign('message_subscriber_list', $message->getLists($this->param('idmessage'))); 
-
-        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
-        $tpl->assign('subscriber_subscriber_list', $subscriber_subscriber_list); 
 
         // email de l'utilisateur connecté
         $session = jAuth::getUserSession();

@@ -29,9 +29,11 @@ class sendingCtrl extends jControllerCmdLine {
     // retour de ligne
     protected $n = "\n";
 
+    // classe batch
+    protected $class_batch = 'sendui~batch';
+
     // abonnés
     protected $dao_subscriber = 'common~subscriber';
-    protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
 
     // le pid
     protected $pid = 0;
@@ -83,7 +85,8 @@ class sendingCtrl extends jControllerCmdLine {
      * is optional
      */
     protected $allowed_parameters = array();
-
+     
+        
     // {{{ index()
 
     /**
@@ -95,6 +98,11 @@ class sendingCtrl extends jControllerCmdLine {
     public function index() 
     {
 
+        // interceter le sigterm
+        declare(ticks = 1);
+       
+        pcntl_signal(SIGTERM, array($this, 'signalHandler'));
+        pcntl_signal(SIGINT, array($this,'signalHandler'));
 
         $rep = $this->getResponse(); 
 
@@ -141,15 +149,33 @@ class sendingCtrl extends jControllerCmdLine {
         $message = jDao::get($this->dao_message);
         $message_infos = $message->get($idmessage);
 
+        // message inconnu
+        if(empty($message_infos->idmessage)) {
+            $rep->addContent('L\'identifiant ne correspond pas a un message valide'.$this->n);
+            return $rep;
+        }
+
+        // un dao utilie
+        $subscriber = jDao::get($this->dao_subscriber);
+
         // la table de process
         $process = jDao::get($this->dao_process);
 
         // utilitaires
         $utils = jClasses::getService('sendui~utils');
+        
+        // destinataires
+        jClasses::inc($this->class_batch);
 
-        // les destinataires trouvé via message_subscriber_list
-        $subscriber = jDao::get($this->dao_subscriber);
-        $subscribers_list = $subscriber->getSubscribers($idmessage,1); 
+        // les destinataires trouvé via batch
+        $batch = new Batch($idmessage);
+
+        // si la table n'existe pas, on la crée
+        if(!$batch->isTable()) {
+            $batch->copyTable();    
+        }
+        
+        $subscribers_list = $batch->getSubscribers(); 
 
         // compter le nb d'abonné
         $nb_subscribers = 0;
@@ -157,23 +183,19 @@ class sendingCtrl extends jControllerCmdLine {
             $nb_subscribers++;
         }
 
-        // liste
-        $subscriber_subscriber_list = jDao::get($this->dao_subscriber_subscriber_list);
-
-        // message inconnu
-        if(empty($message_infos->idmessage)) {
-            $rep->addContent('L\'identifiant ne correspond pas a un message valide'.$this->n);
-            return $rep;
-        }
-
         // mise à zéro du champ d'envoi, vide process et change status
         if(!empty($reset) || !empty($forcereset)) {
 
             $this->setLog('Remise a zero du champ "sent" et des logs/process/compteur');
 
-            $subscriber_subscriber_list->resetSent($idmessage);
+            // mise à zero du champ sent dans la table batch
+            $batch->resetSent();
+
+            // change le status de message à 1 et resetn le compteur
             $message->setStatus($idmessage,1);
             $message->resetCount($idmessage);
+
+            // vide les enregistrements process du message
             $process->deleteLogs($idmessage);
 
             // ne pas continuer sauf si forcé
@@ -317,7 +339,7 @@ class sendingCtrl extends jControllerCmdLine {
 
         // marquer le début et le statut en cours d'envoi
         $message->setStart($idmessage);
-        $message->setStatus(2);
+        $message->setStatus($idmessage,2);
 
         // marquer l'envoi à la liste
 
@@ -420,9 +442,10 @@ class sendingCtrl extends jControllerCmdLine {
 
             }
 
-            // on met a jour le flag "envoye" dans subscriber_subscriber_list et le count message
+            // on met a jour le flag "envoye" dans la table batch et dans l'enregistrement subscriber le count dans message
             if (empty($noupdate) && ($success || $nosend)) {
-                $subscriber_subscriber_list->updateSent($s->idsubscriber,$s->idsubscriber_list);
+                $batch->updateSent($s->idsubscriber);
+                $subscriber->updateSent($s->idsubscriber);
                 $message->updateCount($idmessage);
             }
 
@@ -458,9 +481,6 @@ class sendingCtrl extends jControllerCmdLine {
         $message->setEnd($idmessage);
         $message->setStatus($idmessage,5);
         
-        // noter le nb de destinataire à partir de subscriber_list
-        $nb_recipients = $subscriber_subscriber_list->countSent($idmessage);
-        
         // fin de l'envoi
         $this->setLog('[END] Envoi terminé en '.$utils->getTimeExec($time_start,$time_end).' ('.$count_success.'/'.$i.') !');
 
@@ -485,6 +505,60 @@ class sendingCtrl extends jControllerCmdLine {
 
     }
 
-}
+    // {{{ stop()
 
+    /**
+     * Stopper l'envoi
+     *
+     * @return      redirect
+     */
+    public function stop($pid)
+    {
+
+        if(empty($this->pid)) {
+            $this->pid = $pid;    
+        }
+
+        $run = jClasses::getService('sendui~run');
+        $run->stopProcess($this->pid);
+
+        // on mets le champs status sur 3
+        $message = jDao::get($this->dao_message);
+        $message->setStatus($idmessage,3);
+
+        // ici on log le pid et l'id du message
+        $this->setLog('[STOP]  Arrêt demandé via console');
+        
+        return true;
+
+    }
+
+    // }}}
+
+    public function signalHandler($signal)
+    {
+
+        $sign = null;
+
+        switch($signal) {
+            case SIGTERM:
+                $sign = 'Caught SIGTERM';
+            case SIGKILL:
+                $sign = 'Caught SIGKILL';
+            case SIGINT:
+                $sign = 'Caught SIGINT';
+        }
+
+        // on mets le champs status sur 3 (suspendu)
+        $message = jDao::get($this->dao_message);
+        $message->setStatus($this->idmessage,3);
+
+        // marquer dans le log
+        $this->setLog('[STOP] Envoi stoppé par un signal '.$signal);
+
+        exit;
+
+    }
+
+}
 ?>

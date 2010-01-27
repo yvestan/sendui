@@ -17,7 +17,11 @@ define ('JELIX_APP_VAR_PATH',     JELIX_APP_PATH.'var/');
 define ('JELIX_APP_LOG_PATH',     JELIX_APP_PATH.'var/log/');
 define ('JELIX_APP_CONFIG_PATH',  JELIX_APP_PATH.'var/config/');
 if($_SERVER['SERVER_NAME']=='sendui') {
-    define ('JELIX_APP_WWW_PATH',     '/Users/yves/Sites/sendui/web/www/sendui/');
+    if (!empty($_SERVER['SPECIAL_ID'])) {
+        define ('JELIX_APP_WWW_PATH',     $_SERVER['PATH_APP_WWW']);
+    } else {
+        define ('JELIX_APP_WWW_PATH',     '/Users/yves/Sites/sendui/web/www/sendui/');
+    }
 } else {
     define ('JELIX_APP_WWW_PATH',     '/home/grafactory/www/grafactory.net/www/sendui/');
 }

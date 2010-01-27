@@ -22,7 +22,6 @@ class sendCtrl extends jController {
 
     // abonnés
     protected $dao_subscriber = 'common~subscriber';
-    protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
 
     // {{{ index()
 
@@ -105,13 +104,20 @@ class sendCtrl extends jController {
 
         // stop !
         if(!empty($last_process->pid)) {
+
             $run = jClasses::getService('sendui~run');
             $run->stopProcess($last_process->pid);
 
-            // on mets le champs status sur 3
-            $message = jDao::get($this->dao_message);
-            $message->setStatus($this->param('idmessage'),3);
+            // ici on log le pid et l'id du message
+            jLog::log('['.$last_process->pid.']['.$this->param('idmessage').'][STOP]  Arrêt demandé via GUI','process');
+
+        } else {
+            jLog::log('['.$last_process->pid.']['.$this->param('idmessage').'][FATAL] Arrêt demandé via GUI impossible : aucun PID','process');
         }
+        
+        // on mets le champs status sur 3
+        $message = jDao::get($this->dao_message);
+        $message->setStatus($this->param('idmessage'),3);
 
         if($this->param('from_page')!='') {
             $rep->action = $this->param('from_page');    

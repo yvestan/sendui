@@ -110,7 +110,7 @@
 
         <ul class="tabstyle">
             {foreach $message_subscriber_list as $subscriber_list}
-                <li>{$subscriber_list->name} <span class="sendui-strong-grey">({$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)} abonnés)</span></a>
+                <li>{$subscriber_list->name} <span class="sendui-strong-grey">({$subscriber->countByList($subscriber_list->idsubscriber_list)} abonnés)</span></a>
             {/foreach}
         </ul>
 

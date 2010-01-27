@@ -49,9 +49,9 @@
                 <td><a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">{$subscriber_list->name}</a></td>
                 <td>
                     <a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">
-                       {$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)} abonnés</a>
+                       {$subscriber->countByList($subscriber_list->idsubscriber_list)} abonnés</a>
                 </td>
-                <td>{$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)}</td>
+                <td>{$subscriber->countByList($subscriber_list->idsubscriber_list)}</td>
                 <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
                 <td>
                     <a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}" class="table-go">voir les abonnés</a>

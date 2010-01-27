@@ -44,7 +44,7 @@ class Batch {
         $this->idmessage = (int)$idmessage;
 
         // table
-        $this->batch_table = $this->batch_table.$this->idmessage;
+        $this->batch_table = $this->batch_table_prefix.$this->idmessage;
 
         // instance jDb
         $this->db = jDb::getConnection();
@@ -83,6 +83,8 @@ class Batch {
           `html_format` tinyint(1) NOT NULL,
           `text_format` tinyint(1) NOT NULL,
           `subscribe_from` varchar(50) NOT NULL,
+          `sent_date` timestamp NULL default NULL,
+          `sent` tinyint(1) default NULL,
           `date_update` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
           `date_insert` timestamp NULL default NULL,';
 
@@ -92,7 +94,8 @@ class Batch {
           KEY `email` (`email`),
           KEY `status` (`status`),
           KEY `confirmed` (`confirmed`),
-          KEY `idcustomer` (`idcustomer`)';
+          KEY `idcustomer` (`idcustomer`),
+          KEY `sent` (`sent`)';
 
         $engine = ' ENGINE=InnoDB  DEFAULT CHARSET=utf8';
 
@@ -152,10 +155,8 @@ class Batch {
     {
 
         // copier uniquement les utilisateurs qui sont actifs pour la liste du message
-        $sql =  'SELECT s.* FROM subscriber s, subscriber_subscriber_list sslist, message_subscriber_list msl
-                    WHERE sslist.idsubscriber_list=msl.idsubscriber_list
-                    AND sslist.idsubscriber=s.idsubscriber 
-                    AND sslist.status=1
+        $sql =  'SELECT s.* FROM subscriber s, message_subscriber_list msl
+                    WHERE s.idsubscriber_list=msl.idsubscriber_list
                     AND s.status=1
                     AND msl.idmessage='.$this->idmessage;
 
@@ -175,13 +176,16 @@ class Batch {
     public function deleteTable()
     {
 
-        if(!$this->isTable()) {
+        $msg = null;
+
+        if($this->isTable()) {
             $sql = 'DROP TABLE '.$this->batch_table;
             return $this->db->exec($sql);
         } else {
             $msg = 'La table '.$this->batch_table.' n\'existe pas';
-            
         }
+
+        return $msg;
 
     }
 
@@ -228,21 +232,21 @@ class Batch {
     * @access   public
     * @return   bool
     */
-    public function getSubscribers()
+    public function getSubscribers($sent=null)
     {
 
-        $sql = 'SELECT * FROM '.$this->table.' 
+        $sql = 'SELECT * FROM '.$this->batch_table.' 
                 WHERE email IS NOT NULL ';
 
         // envoyé ou tous
-        if($sent==0) {
-            $sql .= ' AND sent=0';
+        if(is_null($sent)) {
+            $sql .= ' AND sent IS NULL';
         } elseif ($sent==1) {
             $sql .= ' AND sent=1';    
         }
 
         $rs = $this->db->query($sql);
-        $rs->setFetchMode($rs->FETCH_CLASS , 'subscriber');
+        //$rs->setFetchMode($rs->FETCH_CLASS , 'subscriber');
 
         return $rs;
 
@@ -308,11 +312,11 @@ class Batch {
     * @access   public
     * @return   bool
     */
-    public function updateSent()
+    public function updateSent($idsubscriber)
     {
 
-        $sql = 'UPDATE FROM '.$this->table.'
-                SET sent=1 AND sent_date=NOW()';
+        $sql = 'UPDATE '.$this->batch_table.'
+                SET sent=1, sent_date=NOW() WHERE idsubscriber='.(int)$idsubscriber;
 
         return $this->db->exec($sql);
 
@@ -320,6 +324,25 @@ class Batch {
 
     // }}}
     
+    // {{{ resetSent()
+
+   /** mettre à jour le chap envoyé
+    *
+    * @access   public
+    * @return   bool
+    */
+    public function resetSent()
+    {
+
+        $sql = 'UPDATE '.$this->batch_table.'
+                SET sent=NULL, sent_date=NULL ';
+
+        return $this->db->exec($sql);
+
+    }
+
+    // }}}
+
     // {{{ getSubscriberTableName()
 
    /** nom de la table subscriber

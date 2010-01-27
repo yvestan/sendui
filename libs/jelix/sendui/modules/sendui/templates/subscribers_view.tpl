@@ -60,8 +60,8 @@
                         <a href="{jurl 'sendui~subscriber:index', array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:index', 'idsubscriber_list' => $idsubscriber_list)}">{$subscriber->email}</a>
                     {/if}
                 </td>
-                <td>{if !empty($list->getLastSubscriberSent($subscriber->idsubscriber,$idsubscriber_list)->sent_date)}
-                    {$list->getLastSubscriberSent($subscriber->idsubscriber,$idsubscriber_list)->sent_date|jdatetime:'db_datetime','lang_datetime'}
+                <td>{if !empty($subscriber->sent_date)}
+                        {$subscriber->sent_date|jdatetime:'db_datetime','lang_datetime'}
                     {else}
                         Aucun envoi
                     {/if}

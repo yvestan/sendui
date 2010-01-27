@@ -2,10 +2,11 @@
 <dao xmlns="http://jelix.org/ns/dao/1.0">
     <datasources>
         <primarytable name="subscriber" realname="subscriber" primarykey="idsubscriber" />
-        <foreigntable name="subscriber_subscriber_list" realname="subscriber_subscriber_list" primarykey="idsubscriber" onforeignkey="idsubscriber" />
+        <foreigntable name="subscriber_list" realname="subscriber_list" primarykey="idsubscriber_list" onforeignkey="idsubscriber_list" />
     </datasources>
     <record>
         <property name="idsubscriber" fieldname="idsubscriber" datatype="autoincrement"/>
+        <property name="idsubscriber_list" fieldname="idsubscriber_list" datatype="int"/>
         <property name="idcustomer" fieldname="idcustomer" datatype="int"/>
         <property name="token" fieldname="token" datatype="string" default="" maxlength="50"/>
         <property name="email" fieldname="email" datatype="string" required="true" maxlength="150"/>
@@ -23,9 +24,10 @@
         <property name="html_format" fieldname="html_format" datatype="int" required="true"/>
         <property name="text_format" fieldname="text_format" datatype="int" required="true"/>
         <property name="subscribe_from" fieldname="subscribe_from" datatype="string" required="true" maxlength="50"/>
+        <property name="sent" fieldname="sent" datatype="int" default=""/>
+        <property name="sent_date" fieldname="sent_date" datatype="datetime" default="" />
         <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
         <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
-        <property name="idsubscriber_list" fieldname="idsubscriber_list" table="subscriber_subscriber_list" datatype="int"/>
     </record>
     <factory>
         <method name="getByList" type="select" distinct="idsubscriber">  
@@ -40,32 +42,20 @@
                 <orderitem property="date_insert" way="asc" />
             </order>
         </method>
-        <method type="php" name="getSubscribers">
-            <parameter name="idmessage" />
-            <parameter name="status" />
-            <body><![CDATA[
-                $sql =  'SELECT *
-                        FROM '.$this->_primaryTable.' s, subscriber_subscriber_list sslist, message_subscriber_list msl
-                        WHERE sslist.idsubscriber_list=msl.idsubscriber_list
-                        AND sslist.idsubscriber=s.idsubscriber 
-                        AND sslist.status='.$this->_prepareValue($status, 'int').'
-                        AND s.status='.$this->_prepareValue($status, 'int').'
-                        AND sslist.sent IS NULL
-                        AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
-                $rs = $this->_conn->query($sql);
-                $rs->setFetchMode(8,$this->_DaoRecordClassName);
-                return $rs;
-            ]]></body> 
+        <method name="countByList" type="count" distinct="idsubscriber">  
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
         </method>
         <method type="php" name="countMessageSubscribers">
             <parameter name="idmessage" />
             <parameter name="status" />
             <body><![CDATA[
+                // les abonnés pour un message ayant un status défini
                 $sql =  'SELECT COUNT(s.idsubscriber) as nb
-                        FROM '.$this->_primaryTable.' s, subscriber_subscriber_list sslist, message_subscriber_list msl
-                        WHERE sslist.idsubscriber_list=msl.idsubscriber_list
-                        AND sslist.idsubscriber=s.idsubscriber 
-                        AND sslist.status='.$this->_prepareValue($status, 'int').'
+                        FROM '.$this->_primaryTable.' s, message_subscriber_list msl
+                        WHERE s.idsubscriber_list=msl.idsubscriber_list
                         AND s.status='.$this->_prepareValue($status, 'int').'
                         AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
                 $rs = $this->_conn->query($sql);
@@ -74,21 +64,14 @@
                 return $record;
             ]]></body> 
         </method>
-        <method type="php" name="countMessageSubscribersSent">
-            <parameter name="idmessage" />
-            <parameter name="status" />
-            <body><![CDATA[
-                $sql =  'SELECT COUNT(s.idsubscriber) as nb
-                        FROM '.$this->_primaryTable.' s, subscriber_subscriber_list sslist, message_subscriber_list msl
-                        WHERE sslist.idsubscriber_list=msl.idsubscriber_list
-                        AND sslist.idsubscriber=s.idsubscriber 
-                        AND sslist.status='.$this->_prepareValue($status, 'int').'
-                        AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
-                $rs = $this->_conn->query($sql);
-                $rs->setFetchMode(8,$this->_DaoRecordClassName);
-                $record = $rs->fetch();
-                return $record;
-            ]]></body> 
+        <method name="updateSent" type="update">
+            <parameter name="idsubscriber" />
+            <values>
+                <value property="sent_date" expr="NOW()"/>
+            </values>
+            <conditions>
+                <eq property="idsubscriber" expr="$idsubscriber" />
+            </conditions>
         </method>
     </factory>
 </dao>

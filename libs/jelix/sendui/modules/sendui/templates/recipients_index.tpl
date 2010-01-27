@@ -42,7 +42,7 @@
                         <input type="radio" name="idsubscriber_list" value="{$subscriber_list->idsubscriber_list}" />
                     {/if}
                 {$subscriber_list->name}</td>
-                <td>{$subscriber_subscriber_list->countSubscriberByList($subscriber_list->idsubscriber_list)} abonnés</td>
+                <td>{$subscriber->countByList($subscriber_list->idsubscriber_list)} abonnés</td>
                 <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
             </tr>
             {/foreach}
