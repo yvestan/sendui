@@ -16,6 +16,7 @@
         <property name="zip" fieldname="zip" datatype="string" default="" maxlength="20"/>
         <property name="city" fieldname="city" datatype="string" default="" maxlength="150"/>
         <property name="country" fieldname="country" datatype="string" default=""/>
+        <property name="theme" fieldname="theme" datatype="string" default=""/>
         <property name="active" fieldname="active" datatype="int" required="true" default="0"/>
         <property name="credit" fieldname="credit" datatype="int" required="true" default="0"/>
         <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>

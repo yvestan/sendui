@@ -125,6 +125,7 @@ h2.mainpage-nav {
 }
 #main_menu li a {
     padding-left: 26px;
+    font-size: 90%;
 }
 
 input, textarea {

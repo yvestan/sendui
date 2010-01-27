@@ -21,6 +21,9 @@ class senduiHtmlResponse extends jResponseHtml {
     // template principal
     public $bodyTpl = 'sendui~main';
 
+    // base du site
+    protected $base_path;
+
     // {{{ __construct
 
     /**
@@ -31,24 +34,22 @@ class senduiHtmlResponse extends jResponseHtml {
 
         parent::__construct();
 
-        $base_path = $GLOBALS['gJConfig']->urlengine['basePath'];
-
-        $style_ui = 'start';
+        $this->base_path = $GLOBALS['gJConfig']->urlengine['basePath'];
 
         // ajouter une feuille de style 
         foreach(array('reset','style') as $k) {
-            $this->addCSSLink($base_path.'/css/'.$k.'.css');
+            $this->addCSSLink($this->base_path.'css/'.$k.'.css');
         }
 
-        // jquery-ui
-        $this->addCSSLink($base_path.'/css/'.$style_ui.'/jquery-ui-1.7.2.custom.css');
 
         // ajouter les javascript jquery
-        $this->addJSLink($base_path.'/js/jquery-1.3.2.min.js');
-        $this->addJSLink($base_path.'/js/jquery-ui-1.7.2.custom.min.js');
-        $this->addJSLink($base_path.'/js/jquery.masonry.min.js');
-        $this->addJSLink($base_path.'/js/button.js');
-        $this->addJSLink($base_path.'/js/function.js');
+        $this->addJSLink($this->base_path.'js/jquery-1.3.2.min.js');
+        $this->addJSLink($this->base_path.'js/jquery-ui-1.7.2.custom.min.js');
+        $this->addJSLink($this->base_path.'js/jquery.masonry.min.js');
+        $this->addJSLink($this->base_path.'js/button.js');
+        $this->addJSLink($this->base_path.'js/function.js');
+
+        $this->addHeadContent('<link rel="icon" type="image/png" href="'.$this->base_path.'favicon.ico" />');
 
     }
 
@@ -67,6 +68,16 @@ class senduiHtmlResponse extends jResponseHtml {
         // utilisateur connecté
         $session = jAuth::getUserSession();
         $this->body->assign('session', $session);
+
+        // default
+        $style_ui = 'hot-sneaks';
+
+        // jquery-ui perso
+        if($session->theme!='' && is_dir(JELIX_APP_WWW_PATH.'css/'.$session->theme)) {
+            $style_ui = $session->theme;
+        }
+
+        $this->addCSSLink($this->base_path.'css/themes/'.$style_ui.'/jquery-ui-1.7.2.custom.css');
 
         // le menu
         $menu_items = array(

@@ -23,6 +23,9 @@ class messagesCtrl extends jController {
     protected $dao_subscriber = 'common~subscriber';
     protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
 
+    // batch
+    protected $class_batch = 'sendui~batch';
+
     protected function _dataTables(&$rep)
     {
         $rep->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/datatables/js/jquery.dataTables.min.js');
@@ -161,6 +164,20 @@ class messagesCtrl extends jController {
     {
 
         // TODO vérifier que le message appartient au client + erreur si pas de idmessage
+
+        jClasses::inc($this->class_batch);
+        $batch = new Batch($this->param('idmessage'));
+        if(!empty($_GET['copy'])) {
+            if(!$batch->isTable()) {
+                $batch->copyTable();
+            }
+        }
+        if(!empty($_GET['del'])) {
+            $batch->deleteTable();
+        }
+        if(!empty($_GET['crea'])) {
+            $batch->createTable();
+        }
 
         $rep = $this->getResponse('html');
 

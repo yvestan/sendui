@@ -44,7 +44,7 @@ class defaultCtrl extends jController {
         $last_message = $message->getLast($session->idcustomer);
         $tpl->assign('last_message', $last_message); 
 
-        // message(s) programmé(s)
+        // message(s) programmé(s) TODO
         $next_message = $message->getNext($session->idcustomer);
 
         // message en cours d'envoi
@@ -52,24 +52,18 @@ class defaultCtrl extends jController {
         $tpl->assign('nb_current_messages', $nb_current_messages); 
 
         if($nb_current_messages>0) {
+
             $current_messages = $message->getCurrents($session->idcustomer);
             $tpl->assign('current_messages', $current_messages); 
+
+            $nb_subscribers = 20;
+            $tpl->assign('nb_subscribers', $nb_subscribers); 
+
+            $progress = jClasses::getService('sendui~progress');
+            $progress->view($rep,10,20);
+            $tpl->assign('sending', true);
+
         }
-
-        // ajout javascript pour progression
-        /*$rep->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/progressbar/jquery.progressbar.min.js');
-
-        // ajoute les infos
-        $js_more = '
-            var idmessage = '.$idmessage.';
-            var link_status = \''.jUrl::get('sendui~send:process', array('idmessage' => $idmessage)).'\';
-            var nb_subscribers = '.$nb_subscribers.';
-            var path_app = \''.$GLOBALS['gJConfig']->path_app['sendui'].'\';
-        ';
-        $rep->addJSCode($js_more);
-        $rep->addHeadContent('<script type="text/javascript" src="'.$GLOBALS['gJConfig']->path_app['sendui'].'/js/state.js" ></script>');*/
-
-        $tpl->assign('nb_subscribers', $nb_subscribers); 
 
         // crédits disponibles
         $tpl->assign('credits', $session->credit); 

@@ -88,8 +88,7 @@
             <parameter name="idcustomer"/>
             <conditions logic="AND">
                 <eq property="idcustomer" expr="$idcustomer"/>
-                <isnotnull property="sent_start"/>
-                <isnull property="sent_end"/>
+                <eq property="status" value="2" />
             </conditions>
         </method>
         <method name="setStart" type="update">                                                                                                                  

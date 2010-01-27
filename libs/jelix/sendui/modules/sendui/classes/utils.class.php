@@ -36,7 +36,7 @@ class Utils {
 
     // }}}
 
-    /// {{{ isEmailSyntaxValid()
+    // {{{ isEmailSyntaxValid()
 
    /** Contrôle la validité de l'adresse email
     *

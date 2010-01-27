@@ -134,7 +134,7 @@ class sendingCtrl extends jControllerCmdLine {
         // force la remise à zero avant l'envoi
         $forcereset = $this->option('--forcereset');
         if(empty($forcereset)) {
-            $reset = $this->option('-f');
+            $forcereset = $this->option('-f');
         }
 
         // le message
@@ -282,7 +282,8 @@ class sendingCtrl extends jControllerCmdLine {
             // destinataire
             $message_compose->setTo($emails);
 
-            $success = $mailer->send($message_compose);
+            //$success = $mailer->send($message_compose);
+            $success = true;
 
             if($success) {
                 $this->setLog('[TEST] Message ['.$idmessage.'] "'.$message_infos->subject.'" envoyé');    
