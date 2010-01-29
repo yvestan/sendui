@@ -98,9 +98,8 @@ class sendingCtrl extends jControllerCmdLine {
     public function index() 
     {
 
-        // interceter le sigterm
+        // interceter le sigterm et le sigint
         declare(ticks = 1);
-       
         pcntl_signal(SIGTERM, array($this, 'signalHandler'));
         pcntl_signal(SIGINT, array($this,'signalHandler'));
 
@@ -524,7 +523,7 @@ class sendingCtrl extends jControllerCmdLine {
 
         // on mets le champs status sur 3
         $message = jDao::get($this->dao_message);
-        $message->setStatus($idmessage,3);
+        $message->setStatus($this->idmessage,3);
 
         // ici on log le pid et l'id du message
         $this->setLog('[STOP]  Arrêt demandé via console');
@@ -535,6 +534,13 @@ class sendingCtrl extends jControllerCmdLine {
 
     // }}}
 
+    // {{{ stop()
+
+    /**
+     * Action quand sigterm ou sigint
+     *
+     * @return      exit
+     */
     public function signalHandler($signal)
     {
 
@@ -554,7 +560,7 @@ class sendingCtrl extends jControllerCmdLine {
         $message->setStatus($this->idmessage,3);
 
         // marquer dans le log
-        $this->setLog('[STOP] Envoi stoppé par un signal '.$signal);
+        $this->setLog('[STOP] Envoi stoppé par un signal '.$sign);
 
         exit;
 

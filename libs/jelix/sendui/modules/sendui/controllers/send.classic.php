@@ -112,7 +112,7 @@ class sendCtrl extends jController {
             jLog::log('['.$last_process->pid.']['.$this->param('idmessage').'][STOP]  Arrêt demandé via GUI','process');
 
         } else {
-            jLog::log('['.$last_process->pid.']['.$this->param('idmessage').'][FATAL] Arrêt demandé via GUI impossible : aucun PID','process');
+            jLog::log('[0]['.$this->param('idmessage').'][FATAL] Arrêt demandé via GUI impossible : aucun PID','process');
         }
         
         // on mets le champs status sur 3
