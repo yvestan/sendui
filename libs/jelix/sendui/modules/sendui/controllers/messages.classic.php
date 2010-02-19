@@ -75,6 +75,39 @@ class messagesCtrl extends jController {
 
     // }}}
 
+    // {{{ delete()
+
+    /**
+     * Supprimer un message
+     *
+     * @return      redirect
+     */
+    public function delete()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        // TODO tester aussi sur le customer pour la sécurité
+        $message = jDao::get($this->dao_message);
+        if($message->delete($this->param('idmessage'))) {
+            $rep->params = array('delete' => true);
+        }
+
+        // supprimer la table batch
+        jClasses::inc($this->class_batch);
+        $batch = new Batch($this->param('idmessage'));
+
+        if($batch->isTable()) {
+            $batch->deleteTable();   
+        }
+        
+        $rep->action = 'sendui~messages:sent';
+        return $rep;
+
+    }
+
+    // }}}
+
     // {{{ draftdelete()
 
     /**
@@ -136,6 +169,11 @@ class messagesCtrl extends jController {
         // menu actif
         $rep->body->assign('active_page', 'archives');
 
+        // supprimer un message ?
+        if($this->param('delete')==1) {
+            $tpl->assign('delete', $this->param('delete'));
+        }
+
         // response en ajax
         if($this->param('response')=='ajax') {
             $rep = $this->getResponse('htmlfragment');
@@ -164,20 +202,6 @@ class messagesCtrl extends jController {
 
         // TODO vérifier que le message appartient au client + erreur si pas de idmessage
 
-        jClasses::inc($this->class_batch);
-        $batch = new Batch($this->param('idmessage'));
-        if(!empty($_GET['copy'])) {
-            if(!$batch->isTable()) {
-                $batch->copyTable();
-            }
-        }
-        if(!empty($_GET['del'])) {
-            $batch->deleteTable();
-        }
-        if(!empty($_GET['crea'])) {
-            $batch->createTable();
-        }
-
         $rep = $this->getResponse('html');
 
         $rep->title = 'Résumé du message';
@@ -194,17 +218,27 @@ class messagesCtrl extends jController {
         $message_infos = $message->get($this->param('idmessage'));
         $tpl->assign('message', $message_infos); 
 
-        // nb d'utilisateurs
+        // nombre de destinataires ety liste
         $subscriber = jDao::get($this->dao_subscriber);
-        $subscribers_infos = $subscriber->countMessageSubscribers($this->param('idmessage'),1); 
-        $tpl->assign('nb_subscribers', $subscribers_infos->nb); 
         $tpl->assign('subscriber', $subscriber); 
+
+        jClasses::inc($this->class_batch);
+        $batch = new Batch($this->param('idmessage'));
+
+        $nb_subscribers = $batch->countSubscribers();
+        $tpl->assign('nb_subscribers', $nb_subscribers); 
+
+        // pour avoir le bouton "envoyer", le message doit-être HTML et txt, au moins 1 destinataires, le status 0 ou 4
+        if(!empty($message_infos->html_message) && !empty($message_infos->text_message) 
+            && $nb_subscribers>0 && ($message_infos->status==0 || $message_infos->status==4)) {
+            $tpl->assign('ok_to_send', true); 
+        }
 
         // si le message est en cours d'envoi, afficher la progress bar
         if($message_infos->status==2) {
 
             $progress = jClasses::getService('sendui~progress');
-            $progress->view($rep,$this->param('idmessage'),$subscribers_infos->nb);
+            $progress->view($rep,$this->param('idmessage'),$nb_subscribers);
             $tpl->assign('sending', true);
 
             // en cours d'envoi

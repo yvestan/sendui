@@ -16,14 +16,20 @@
 
 <div class="sendui-standard-content">
 
+    {if !empty($delete)}
+        <div class="ui-state-highlight ui-corner-all sendui-padding-simple sendui-margin-bottom"> 
+                <p><span class="ui-icon ui-icon-info sendui-icon-float"></span>Le message a bien été supprimé.</p>
+        </div>
+    {/if}
+
     <table class="tabl display" id="tab_sent">
         <thead>
             <tr>
                 <th>&nbsp;</th>
                 <th>Nom</th>
                 <th>Sujet</th>
-                <th>Expéditeur</th>
                 <th>Envoyée le</th>
+                <th>A</th>
                 <th>Actions</th>
             </tr>
 
@@ -45,26 +51,28 @@
                     {/if}
                 </td>
                 <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~message:sent')}">{$message->name}</a></td>
-                <td class="sendui-small">{$message->subject|truncate:35}</td>
-                <td class="sendui-small">{$message->from_name} <span class="sendui-grey">[{$message->from_email}]</span></td>
+                <td class="sendui-small">{$message->subject|truncate:35}
+                    <!--<br />{$message->from_name} <span class="sendui-grey">[{$message->from_email}]</span>-->
+                </td>
                 <td>{$message->sent_start|jdatetime:'db_datetime','lang_datetime'}</td>
+                <td>{$message->count_recipients} <span class="sendui-small sendui-grey">destinataire(s) sur</span> 110</td>
                 <td>
                     {if $message->status==1}
                         <a href="{jurl 'sendui~send:cancel', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="control-stop">annuler</a>
                     {/if}
                     {if $message->status==2}
                         <a href="{jurl 'sendui~send:stop', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="control-pause">suspendre</a>
-                        <!--<a href="{jurl 'sendui~send:cancel', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="control-stop">annuler</a>-->
+                        <!--<a href="{jurl 'sendui~send:cancelall', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="control-stop">annuler complètement</a>-->
                     {/if}
                     {if $message->status==3}
                         <a href="{jurl 'sendui~send:start', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="package-go">reprendre</a>
-                        <!--<a href="{jurl 'sendui~send:cancel', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="control-stop">annuler</a>-->
+                        <a href="{jurl 'sendui~send:cancelall', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="cross">annuler complètement</a>
                     {/if}
                     {if $message->status==5}
                         <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage, 'reuse' => 1)}" class="email-add">ré-utiliser</a>
                     {/if}
                     {if $message->status==5}
-                    <a href="{jurl 'sendui~messages:delete', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:send')}" class="table-delete confirm_action"
+                    <a href="{jurl 'sendui~messages:delete', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:sent')}" class="table-delete confirm_action"
                         title="Êtes-vous sur de vouloir supprimer ce message ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !">supprimer</a>
                     {/if}
                 </td>

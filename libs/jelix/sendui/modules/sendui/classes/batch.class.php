@@ -261,23 +261,31 @@ class Batch {
     * @access   public
     * @return   bool
     */
-    public function countSubscribers($sent=null)
+    public function countSubscribers($sent='all')
     {
 
-        $sql = 'SELECT COUNT(*) as nb 
-                FROM '.$this->table.' 
-                WHERE email IS NOT NULL ';
+        if($this->isTable()) {
 
-        // envoyé ou tous
-        if($sent==0) {
-            $sql .= ' AND sent=0';
-        } elseif ($sent==1) {
-            $sql .= ' AND sent=1';    
+            $sql = 'SELECT COUNT(*) as nb 
+                    FROM '.$this->batch_table.' 
+                    WHERE email IS NOT NULL ';
+
+            // envoyé ou tous
+            if($sent!='all') {
+                if($sent==0) {
+                    $sql .= ' AND sent=0';
+                } elseif ($sent==1) {
+                    $sql .= ' AND sent=1';    
+                }
+            }
+
+            $rs = $this->dbw->fetchFirst($sql);
+
+            return $rs->nb;
+
         }
 
-        $rs = $this->dbw->fetchFirst($sql);
-
-        return $rs->nb;
+        return 0;    
 
     }
 

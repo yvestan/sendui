@@ -7,7 +7,7 @@
 <div class="sendui-padding-mainpage float-right">
     {if $message->status==2}
         <div class="progression ui-corner-all">
-            <div class="status">Envoyée à <span class="nb_send">0</span> sur <span class="total_subcriber">{$nb_subscribers}</span></div>
+            <div class="status">Envoyée à <span class="nb_send">0</span> sur <span class="total_subcriber">{$message->count_recipients}</span></div>
             <div id="pb1" class="progress"></div>
             <div class="control-send">
                 <a href="{jurl 'sendui~send:stop', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:preview')}" class="control-pause">suspendre</a>
@@ -38,7 +38,7 @@
                 Le message expédié partiellement est en attente de validation
             {elseif $message->status==5}
                 <p><span class="ui-icon ui-icon-info sendui-icon-float"></span>Ce message a déjà été <span class="tick"><strong>envoyé</strong></span>. 
-                    Vous pouvez <a href="#" class="package-go">le ré-utiliser</a> pour un nouveau message</p>
+                    Vous pouvez <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage, 'reuse' => 1)}" class="package-go">le ré-utiliser</a> pour un nouveau message</p>
             {else}
                 <p><span class="ui-icon ui-icon-info sendui-icon-float"></span>Ce message est un brouillon</p>
             {/if}
@@ -109,9 +109,7 @@
         <h3 class="ui-tabs ui-widget-header sendui-padding-simple ui-corner-top sendui-noborder">Destinataires</h3>
 
         <ul class="tabstyle">
-            {foreach $message_subscriber_list as $subscriber_list}
-                <li>{$subscriber_list->name} <span class="sendui-strong-grey">({$subscriber->countByList($subscriber_list->idsubscriber_list)} abonnés)</span></a>
-            {/foreach}
+            <li><strong>{if $nb_subscribers==0}Aucun{else}{$nb_subscribers}{/if}</strong> destinataires pour ce message</li>
         </ul>
 
         {if ($message->status==0 || $message->status==4)}
@@ -142,26 +140,32 @@
 
 
     <div class="sendui-margin-top">
-    {if empty($message->html_message) && empty($message->text_message)}
 
-        <div class="ui-state-highlight ui-corner-all sendui-padding-simple"> 
-            <p><span class="ui-icon ui-icon-info sendui-icon-float"></span>Votre message est vide ! Vous devez créer une version HTML et/ou une version texte pour pouvoir l'envoyer.</p>
-        </div>
-
-        <div class="sendui-margin-top sendui-center">
-            <a href="#" class="fg-button ui-state-default ui-state-disabled fg-button-icon-left ui-corner-all">
-                <span class="ui-icon ui-icon-circle-check"></span>Envoyer le message maintenant</a>
-        </div>
-
-    {else}
-        {if ($message->status==0 || $message->status==4)}
-        <div class="sendui-center">
-            <a href="{jurl 'sendui~send:index', array('idmessage' => $idmessage)}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all sendui-big-button">
-                <span class="ui-icon ui-icon-circle-check"></span>Envoyer le message maintenant</a>
-            <div class="spacer">&nbsp;</div>
-        </div>
+        {if empty($message->html_message) && empty($message->text_message)}
+            <div class="ui-state-highlight ui-corner-all sendui-padding-simple"> 
+                <p><span class="ui-icon ui-icon-info sendui-icon-float"></span>Votre message est vide ! Vous devez créer une version HTML et/ou une version texte pour pouvoir l'envoyer.</p>
+            </div>
         {/if}
-    {/if}
+
+        {if $nb_subscribers==0}
+            <div class="ui-state-highlight ui-corner-all sendui-padding-simple"> 
+                <p><span class="ui-icon ui-icon-info sendui-icon-float"></span>Votre message ne contient aucun destinataire ! Vous devez choisir une liste de destinataires pour pouvoir l'envoyer.</p>
+            </div>
+        {/if}
+
+        {if empty($ok_to_send)}
+            <div class="sendui-margin-top sendui-center">
+                <a href="#" class="fg-button ui-state-default ui-state-disabled fg-button-icon-left ui-corner-all">
+                    <span class="ui-icon ui-icon-circle-check"></span>Envoyer le message maintenant</a>
+            </div>
+        {else}
+            <div class="sendui-center">
+                <a href="{jurl 'sendui~send:index', array('idmessage' => $idmessage)}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all sendui-big-button">
+                    <span class="ui-icon ui-icon-circle-check"></span>Envoyer le message maintenant</a>
+                <div class="spacer">&nbsp;</div>
+            </div>
+        {/if}
+   
     </div>
 
   

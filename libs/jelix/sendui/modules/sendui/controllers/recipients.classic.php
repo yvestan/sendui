@@ -22,6 +22,8 @@ class recipientsCtrl extends jController {
     protected $dao_message_subscriber_list = 'common~message_subscriber_list';
     protected $dao_message = 'common~message';
 
+    // batch
+    protected $class_batch = 'sendui~batch';
 
     /**
      * Pour les tableaux
@@ -107,9 +109,8 @@ class recipientsCtrl extends jController {
         $message_subscriber_list->deleteByMessage($this->param('idmessage'));
 
         // vérifier que c'est une liste du client TODO
-        /*if($subscriber_list->getList($this->param('idsubscriber_list'),$session->idcustomer) {
-            
-        }*/
+        /*if($subscriber_list->getList($this->param('idsubscriber_list'),$session->idcustomer) { }*/
+
         if(!empty($idsubscriber_list)) {
 
             $record = jDao::createRecord($this->dao_message_subscriber_list);
@@ -119,6 +120,18 @@ class recipientsCtrl extends jController {
             $record->idsubscriber_list = (int)$idsubscriber_list;
             $message_subscriber_list->insert($record);
 
+            // si c'est OK, on crée la table batch
+            jClasses::inc($this->class_batch);
+            $batch = new Batch($this->param('idmessage'));
+
+            // on delete la table actuelle si existe
+            if($batch->isTable()) {
+                $batch->deleteTable();
+            }
+
+            // on copie
+            $batch->copyTable();
+            
         }
 
         // redirige sur message preview

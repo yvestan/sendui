@@ -86,6 +86,17 @@ class sendCtrl extends jController {
 
     // }}}
 
+    // {{{ cancelall()
+
+    /**
+     * Annuler la demande et passer en status 5
+     *
+     * @return      redirect
+     */
+    public function cancelall() { return $this->changeStatus(5); }
+
+    // }}}
+
     // {{{ stop()
 
     /**

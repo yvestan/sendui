@@ -143,7 +143,6 @@ class settingsCtrl extends jController {
         $session = jAuth::getUserSession();
         $result['daorec']->idcustomer = $session->idcustomer;
 
-            print_r($_POST);
         if($result['toInsert'] || $this->param('reuse')!='') {
 
             // réutilisation

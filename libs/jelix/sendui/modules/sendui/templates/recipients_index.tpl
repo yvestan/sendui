@@ -23,7 +23,6 @@
 
     <form method="post" action="{jurl 'sendui~recipients:save', array('idmessage' => $idmessage, 'from_page' => $from_page)}" id="form_recipients">
 
-
     <table class="tabl display" id="tab_subscribers_lists">
         <thead>
             <tr>
@@ -34,6 +33,7 @@
         </thead>
         <tbody>
             {foreach $list_subscribers_lists as $subscriber_list}
+            {if $subscriber->countByList($subscriber_list->idsubscriber_list)>0}
             <tr class="highlight">
                 <td>
                     {if $message_subscriber_list->isMessageList($subscriber_list->idsubscriber_list,$idmessage)>0 }
@@ -45,6 +45,7 @@
                 <td>{$subscriber->countByList($subscriber_list->idsubscriber_list)} abonnés</td>
                 <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
             </tr>
+            {/if}
             {/foreach}
         </tbody>
     </table>
