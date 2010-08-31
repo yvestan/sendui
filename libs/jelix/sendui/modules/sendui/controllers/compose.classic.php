@@ -55,7 +55,7 @@ class composeCtrl extends jController {
     /**
      * page de composition du message
      *
-     * @template    settings_index
+     * @template    compose_index.tpl
      * @return      html
      */
     public function index()
@@ -89,6 +89,9 @@ class composeCtrl extends jController {
         $tpl->assign('from_page', $this->param('from_page'));
 
         // galerie de templates
+
+        // menu actif
+        $rep->body->assign('active_page', 'newmessage');
 
         $rep->body->assign('MAIN', $tpl->fetch('compose_index')); 
 
@@ -139,6 +142,41 @@ class composeCtrl extends jController {
         $rep->action = 'sendui~compose:index';
         return $rep;
        
+    }
+
+    // }}}
+
+    // {{{ preview()
+
+    /**
+     * Prévisualisation du message
+     *
+     * @template    compose_preview
+     * @return      html
+     */
+    public function preview()
+    {
+
+        $rep = $this->getResponse('simple');
+
+        $message = jDao::get($this->dao_message);
+        $message_infos = $message->get($this->param('idmessage'));
+
+        $rep->title = $message_infos->subject;
+
+        $tpl = new jTpl();
+
+        // on veut afficher quoi ?
+        if($this->param('type_msg')=='text_message' || $this->param('type_msg')=='html_message') {
+            $tpl->assign('preview_message', $message_infos->{$this->param('type_msg')});
+        } else {
+            $tpl->assign('preview_message', $message_infos->html_message);
+        }
+
+        $rep->body->assign('MAIN', $tpl->fetch('compose_preview')); 
+
+        return $rep;
+        
     }
 
     // }}}

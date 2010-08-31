@@ -42,6 +42,14 @@
                 <orderitem property="date_insert" way="asc" />
             </order>
         </method>
+        <method name="isSubscriber" type="count" distinct="idsubscriber">  
+            <parameter name="email"/>
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="email" expr="$email"/>
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+        </method>
         <method name="countByList" type="count" distinct="idsubscriber">  
             <parameter name="idsubscriber_list"/>
             <conditions logic="AND">

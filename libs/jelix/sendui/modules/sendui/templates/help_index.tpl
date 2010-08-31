@@ -1,4 +1,4 @@
-<h2 class="mainpage help">Aide</h2>
+<h2 class="mainpage information">Aide</h2>
 
 <div class="sendui-standard-content">
 

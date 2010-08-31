@@ -149,10 +149,13 @@ class settingsCtrl extends jController {
             if($this->param('reuse')!='') {
                 $result['daorec']->idmessage = null;
 
-                // mettre le status à 0 et vider les sent_start/sent_end
+                // mettre le status à 0 et vider les sent_start/sent_end et le count_recipients
                 $result['daorec']->idmessage = null;
                 $result['daorec']->sent_start = null;
                 $result['daorec']->sent_end = null;
+                $result['daorec']->count_recipients = 0;
+                $result['daorec']->pause = 0;
+                $result['daorec']->batch = 0;
                 $result['daorec']->status = 0;
 
             }

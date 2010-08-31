@@ -303,7 +303,7 @@ class sendingCtrl extends jControllerCmdLine {
             // destinataire
             $message_compose->setTo($emails);
 
-            //$success = $mailer->send($message_compose);
+            $success = $mailer->send($message_compose);
             $success = true;
 
             if($success) {
@@ -433,7 +433,7 @@ class sendingCtrl extends jControllerCmdLine {
                 // destinataire
                 $message_compose->setTo($email);
 
-                //$success = $mailer->send($message_compose);
+                $success = $mailer->send($message_compose);
                 $success = true;
 
                 // on comptabilise les succes

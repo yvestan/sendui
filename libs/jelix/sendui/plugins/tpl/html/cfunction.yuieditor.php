@@ -1,10 +1,10 @@
 <?php
  
 /**
-    * cfunction plugin :  init a yui editor environnement
-    *    
-    * @param jTplCompiler $compiler 
-    */
+ * cfunction plugin :  init a yui editor environnement
+ *    
+ * @param jTplCompiler $compiler 
+**/
 function jtpl_cfunction_html_yuieditor($compiler, $params=array()) {
  
     // on génère du code php qui sera intégré dans le template compilé
@@ -23,4 +23,5 @@ function jtpl_cfunction_html_yuieditor($compiler, $params=array()) {
 
     $compiler->addMetaContent($codesource);
 }
+
 ?>

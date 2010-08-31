@@ -10,7 +10,7 @@
             <ul>
                 <li><a href="{jurl 'sendui~account:index'}"><i>{$session->login}</i></a></li>
                 <li><a href="{jurl 'sendui~account:index'}" class="account">votre compte</a></li>
-                <li><a href="{jurl 'sendui~account:credits'}" class="credits">vos crédits</a></li>
+                <!--<li><a href="{jurl 'sendui~account:credits'}" class="credits">vos crédits</a></li>-->
                 <li><a href="{jurl 'sendui~login:out'}" class="logout">quitter</a></li>
             </ul>
             <div class="spacer"></div>
@@ -58,9 +58,9 @@
 
     <div id="footer" class="ui-widget ui-widget-content ui-corner-all">
         <ul>
-            <li><a href="{jurl 'sendui~help:copyright'}">copyright</a></li>
-            <li><a href="{jurl 'sendui~help:index'}">aide</a></li>
-            <li><a href="{jurl 'sendui~help:contact'}">contact</a></li>
+            <li><a href="{jurl 'sendui~help:copyright'}" class="lightbulb_off">copyright/licence</a></li>
+            <li><a href="{jurl 'sendui~help:index'}" class="information">aide</a></li>
+            <li style="float:right;">Yves Tannier [<a href="http://www.grafactory.net">grafactory.net</a>]</li>
         </ul>
         <div class="spacer"></div>
     </div>

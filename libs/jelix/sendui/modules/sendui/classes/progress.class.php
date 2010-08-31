@@ -23,10 +23,6 @@ class progress {
 
     /** Voir la progression
      * 
-     * @return  int  retourne le pid
-     * @param   string  $cmd   la commande a lancer 
-     * @param   int     $priority   la priorité du process
-     *
      */
     public function view(&$rep, $idmessage, $nb_subscribers=null)
     {

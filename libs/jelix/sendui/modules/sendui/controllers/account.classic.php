@@ -75,6 +75,7 @@ class accountCtrl extends jController {
 
         // le client
         $session = jAuth::getUserSession();
+        $tpl->assign('session', $session);
 
         // formulaire
         $customer_settings = jForms::create($this->form_customer_settings, $session->idcustomer);

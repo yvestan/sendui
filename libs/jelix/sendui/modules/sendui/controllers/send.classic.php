@@ -42,31 +42,6 @@ class sendCtrl extends jController {
 
         $tpl->assign('idmessage', $this->param('idmessage')); 
 
-        // récupérer le message 
-        $message = jDao::get($this->dao_message);
-        $message_infos = $message->get($this->param('idmessage'));
-        $tpl->assign('message', $message_infos); 
-
-        // les destinataires trouvé via message_subscriber_list
-        $subscriber = jDao::get($this->dao_subscriber);
-        $subscribers_infos = $subscriber->countMessageSubscribers($this->param('idmessage'),1); 
-        $nb_subscribers = $subscribers_infos->nb;
-        $tpl->assign('nb_subscribers', $nb_subscribers); 
-
-        // ajout javascript pour progression
-        $rep->addJSLink($GLOBALS['gJConfig']->path_app['sendui'].'/js/progressbar/jquery.progressbar.min.js');
-
-        // ajoute les infos
-        $js_more = '
-            var idmessage = '.$this->param('idmessage').';
-            var link_status = \''.jUrl::get('sendui~send:process', array('idmessage' => $this->param('idmessage'))).'\';
-            var nb_subscribers = '.$nb_subscribers.';
-            var path_app = \''.$GLOBALS['gJConfig']->path_app['sendui'].'\';
-        ';
-        $rep->addJSCode($js_more);
-        $rep->addHeadContent('<script type="text/javascript" src="'.$GLOBALS['gJConfig']->path_app['sendui'].'/js/state.js" ></script>');
-
-        
         $rep->body->assign('MAIN', $tpl->fetch('send_index')); 
 
         return $rep;

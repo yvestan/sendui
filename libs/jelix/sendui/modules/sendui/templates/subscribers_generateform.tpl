@@ -15,13 +15,14 @@
 
     <p class="code text_message_class ui-corner-all">
 <textarea cols="40" rows="10" style="width:900px;">
-<form action="{jurl 'sendui~subscriber:public'}" method="post" id="sendui_form_{$customer->public_token}">
+<form action="{jurl 'public~default:subscribe'}" method="post" id="sendui_form_{$subscriber_list->token}">
     <div>
-        <label for="name_form_{$customer->public_token}">Name :</label> <input type="text" name="name_form_{$customer->public_token}" id="name_form_{$customer->public_token}" />
+        <label for="email_{$subscriber_list->token}">Email </label> 
+        <input type="text" name="email_{$subscriber_list->token}" id="email_{$subscriber_list->token}" />
     </div>
     <div>
-        <input type="hidden" name="list_{$subscriber_list->token}_{$customer->public_token}" value="1" />
-        <input type="submit" id="submit_form_{$customer->public_token}" name="submit_form_{$customer->public_token}" value="Abonnement" />
+        <input type="hidden" name="sendui_token" value="list_{$subscriber_list->token}_{$customer->public_token}" />
+        <input type="submit" id="submit_form_{$subscriber_list->token}" name="submit_form_{$subscriber_list->token}" value="Abonnement" />
     </div>
 </form>
 </textarea>

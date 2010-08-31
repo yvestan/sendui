@@ -33,7 +33,7 @@ class defaultCtrl extends jController {
 
         $session = jAuth::getUserSession();
 
-        $rep->title = 'Bienvenue '.$session->login;
+        $rep->title = 'Tableau de bord ';
         
         $tpl = new jTpl();
 
@@ -43,10 +43,7 @@ class defaultCtrl extends jController {
         // dernier message envoyé
         $last_message = $message->getLast($session->idcustomer);
         $tpl->assign('last_message', $last_message); 
-
-        // message(s) programmé(s) TODO
-        $next_message = $message->getNext($session->idcustomer);
-
+      
         // message en cours d'envoi
         $nb_current_messages = $message->countCurrents($session->idcustomer);
         $tpl->assign('nb_current_messages', $nb_current_messages); 
@@ -56,22 +53,26 @@ class defaultCtrl extends jController {
             $current_messages = $message->getCurrents($session->idcustomer);
             $tpl->assign('current_messages', $current_messages); 
 
-            $nb_subscribers = 20;
-            $tpl->assign('nb_subscribers', $nb_subscribers); 
+            foreach($current_messages as $cur) {
+                $progress = jClasses::getService('sendui~progress');
+                $progress->view($rep,$cur->idmessage,$cur->total_recipients);
+            }
 
-            $progress = jClasses::getService('sendui~progress');
-            $progress->view($rep,10,20);
             $tpl->assign('sending', true);
 
         }
 
         // crédits disponibles
-        $tpl->assign('credits', $session->credit); 
+        //$tpl->assign('credits', $session->credit); 
+
+        // message(s) programmé(s) TODO
+        //$next_message = $message->getNext($session->idcustomer);
 
         // menu actif
         $rep->body->assign('active_page', 'dashboard');
  
-        $rep->body->assign('MAIN', $tpl->fetch('index')); 
+        // le template
+        $rep->body->assign('MAIN', $tpl->fetch('default_index')); 
 
         return $rep;
 

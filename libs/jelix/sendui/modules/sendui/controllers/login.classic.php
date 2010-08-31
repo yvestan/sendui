@@ -92,8 +92,7 @@ class loginCtrl extends jController {
         }
 
         $rep = $this->getResponse('html');
-        //$rep->title =  jLocale::get ('auth.titlePage.login');
-        $rep->title =  'test';
+        $rep->title =  'Connexion';
         $rep->bodyTpl = 'jauth~index';
 
         $zp = array ('login'=>$this->param('login'),

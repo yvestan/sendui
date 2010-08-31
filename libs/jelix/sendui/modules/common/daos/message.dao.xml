@@ -18,6 +18,7 @@
         <property name="batch" fieldname="batch" datatype="int" default="0"/>
         <property name="status" fieldname="status" datatype="int" default="0"/>
         <property name="count_recipients" fieldname="count_recipients" datatype="int" default="0"/>
+        <property name="total_recipients" fieldname="total_recipients" datatype="int" default="0"/>
         <property name="sent_start" fieldname="sent_start" datatype="datetime" default=""/>
         <property name="sent_end" fieldname="sent_end" datatype="datetime" default=""/>
         <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>

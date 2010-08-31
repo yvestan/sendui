@@ -9,3 +9,4 @@ html=publicHtmlResponse
 
 [urlengine]
 basePath="/public/"
+notfoundAct="sendui~error:notfound"

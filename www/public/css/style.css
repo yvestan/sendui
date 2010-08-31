@@ -1,4 +1,36 @@
 body{ 
-    font: 72% Verdana, sans-serif; 
+    font: 80% Verdana, sans-serif; 
     margin: 20px;
+}
+#sendui_public {
+    width: 400px;
+    border: 4px solid #ccc;
+    padding: 1em;
+    margin-left: auto;
+    margin-right: auto;
+}
+#sendui_public a {
+    color: blue;
+}
+#sendui_public a:hover {
+    text-decoration: none;
+}
+#sendui_public h1 {
+    font-size: 2em;
+}
+#sendui_public h2.sendui_h2 {
+    font-size: 1.8em;
+    font-weight: normal;
+    margin-top: 0.1em;
+    margin-bottom: 0.5em;
+}
+#sendui_public div.sendui_error {
+    border: 1px dotted red;
+    padding: 5px;
+    background: #eee;
+}
+#sendui_public .sendui_success {
+    color: green;
+    font-weight: bold;
+    font-size: 1.09em;
 }

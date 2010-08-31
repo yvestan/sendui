@@ -66,27 +66,4 @@ class helpCtrl extends jController {
 
     // }}}
 
-    // {{{ contact()
-
-    /**
-     * Formulaire de contact
-     * 
-     * @template    help_contact
-     * @return      html
-     */
-    public function contact()
-    {
-
-        $rep = $this->getResponse('html');
-
-        $tpl = new jTpl();
-
-        $rep->body->assign('MAIN', $tpl->fetch('help_contact')); 
-
-        return $rep;
-
-    }
-
-    // }}}
-
 }

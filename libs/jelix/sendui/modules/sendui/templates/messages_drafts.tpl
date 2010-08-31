@@ -33,12 +33,12 @@
             {foreach $list_drafts as $message}
             <tr class="highlight">
                 <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}" class="pencil nolink">&nbsp;</a></td>
-                <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}">{$message->name|truncate:35}</a></td>
-                <td class="sendui-small">{$message->subject|truncate:35}</td>
+                <td><a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}" title="{$message->name}" class="tooltip_simple">{$message->name|truncate:25}</a></td>
+                <td class="sendui-small">{$message->subject|truncate:25}</td>
                 <td class="sendui-small">{$message->from_name} <span class="sendui-grey">[{$message->from_email}]</span></td>
                 <td>{$message->date_update|jdatetime:'db_datetime','lang_datetime'}</td>
                 <td>
-                    <a href="{jurl 'sendui~settings:prepare', array('idmessage' => $message->idmessage)}" class="newmessage">envoyer</a>
+                    <a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}" class="newmessage">envoyer</a>
                     <a href="{jurl 'sendui~messages:draftdelete', array('idmessage' => $message->idmessage)}" class="table-delete confirm_action"
                         title="Êtes-vous sur de vouloir supprimer ce brouillon ?">supprimer</a>
                 </td>

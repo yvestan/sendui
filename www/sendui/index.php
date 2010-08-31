@@ -21,7 +21,7 @@ if($_SERVER['SERVER_NAME']=='sendui') {
 require ($pathApp.'libs/jelix/sendui/application.init.php');
 require (JELIX_LIB_CORE_PATH.'request/jClassicRequest.class.php');
 
-$config_file = 'index/config.ini.php';
+$config_file = 'sendui/config.ini.php';
 
 $jelix = new jCoordinator($config_file);
 $jelix->process(new jClassicRequest());

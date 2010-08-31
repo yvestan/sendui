@@ -20,10 +20,21 @@ class defaultCtrl extends jController {
     protected $dao_subscriber_list = 'common~subscriber_list';
     protected $dao_subscriber_subscriber_list = 'common~subscriber_subscriber_list';
     protected $dao_subscriber = 'common~subscriber';
+    protected $dao_customer = 'common~customer';
+
+    // infos client et liste
+    protected $subscriber_list_infos = null;
+    protected $customer_infos = null;
 
     // log
     protected $log_process = true;
     protected $log_file = 'public';
+
+    // silencieux ?
+    protected $verbose = true;
+
+    // retour de ligne
+    protected $n = "\n";
 
     // {{{ index()
 
@@ -37,14 +48,14 @@ class defaultCtrl extends jController {
     {
 
         $rep = $this->getResponse('html');
-        echo jUrl::get('public~default:subscribe');
 
-        $rep->title = 'Accueil';
+        $rep->title = 'Gestion de votre abonnement';
 
         $tpl = new jTpl();
         $rep->body->assign('MAIN', $tpl->fetch('default_index')); 
 
         return $rep;
+
     }
 
     // }}}
@@ -52,7 +63,7 @@ class defaultCtrl extends jController {
     // {{{ subscribe()
 
     /**
-     * inscription
+     * page de résultat d'inscription
      *
      * @template    default_index
      * @return      html
@@ -64,13 +75,20 @@ class defaultCtrl extends jController {
 
         $rep->title = 'Inscription';
 
-        //print_r($_POST);
-
         $tpl = new jTpl();
 
+        $error = null;
+
+        // on n'a pas le token
         if(empty($_POST['sendui_token'])) {
+
             $this->setLog('[FATAL] Pas de champ "sendui_token" ');
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('formulaire_incorrect', true);
+            $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
             return $rep;
+
         } else {
             $sendui_token = $_POST['sendui_token'];    
         }
@@ -79,51 +97,133 @@ class defaultCtrl extends jController {
         $tokens = explode('_', $_POST['sendui_token']);
 
         if(empty($tokens) || count($tokens)!=3) {
+
             $this->setLog('[FATAL] Nombre de variable incorrecte dans le champ "sendui_token" ');
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('formulaire_incorrect', true);
+            $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
             return $rep;
+
         } else {
             $tokens_string = $tokens[1].'_'.$tokens[2];    
             $token_list = $tokens[1];    
         }
 
-        /*if(!isValidFormID($tokens[1],$tokens[2])) {
-            $this->setLog('[FATAL] Id client ou Id liste incorrect ('.$tokens[1].'/'.$tokens[2].') ');
-            return $rep;
-        /*SELECT * FROM customer c, subscriber_list sl
-        WHERE c.idcustomer=sl.idcustomer
-        AND c.active=1
-        AND sl.status=1*/
+        // le jeu formulaire (token 1) + client (token 2) doit-être valide
+        if(!$this->isValidFormID($tokens[1],$tokens[2])) {
 
-        //}
-        print_r($_POST);
+            $this->setLog('[FATAL] Id client ou Id liste incorrect ('.$tokens[1].'/'.$tokens[2].') ');
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('formulaire_incorrect', true);
+            $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
+            return $rep;
+
+
+        }
+
+        // on doit avoir au moins le mail
 
         // tester si les champs sont corrects (email correct ?)
-        if(empty($_POST['email_'.$token_list])) {
-            $this->setLog('[FATAL] Pas de champ "sendui_token" ');
+        if(!isset($_POST['email_'.$token_list])) {
+
+            $this->setLog('[FATAL] Pas de champ "email_'.$token_list.'" ');
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('formulaire_incorrect', true);
+            $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
             return $rep;
+
         } else {
             $email = trim($_POST['email_'.$token_list]);
         }
 
+        // tester l'email
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->setLog('[FATAL] Pas de champ "sendui_token" ');
+
+            $this->setLog('[USER_NOTICE] Email incorrect');
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('email_false', true);
+            $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
             return $rep;
+
         }
 
-        // tester si déjà inscrit
-        if($this->isSubscriber($email,$idsubscriber_list)) {
-            
+        // dao abonnés
+        $subscriber = jDao::get($this->dao_subscriber);
+
+        // tester si déjà inscrit avec le mail et l'id de la liste
+        if($subscriber->isSubscriber($email,$this->subscriber_list_infos->idsubscriber_list)) {
+
+            $this->setLog('[USER_NOTICE] Email déjà enregistré');
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('email_exist', true);
+            $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
+            return $rep;
+
         } else {
+
+            // liste des champs possibles TODO
+            /*token
+            date_insert*/
+            $possible_fields = array(
+                'email',
+                'fullname',
+                'firstname',
+                'lastname',
+                'phone',
+                'mobile',
+                'address',
+                'zip',
+                'city',
+                'country',
+                'html_format',
+                'text_format',
+                'subscribe_from',
+            );
+
+            // tester si ces champs sont dans le formulaire
+            foreach($possible_fields as $k=>$v) {
+                    
+            }
+
+            // enregistrer l'email dans la bonne liste avec éventuellement les autres infos
+            $record_subscriber = jDao::createRecord($this->dao_subscriber);
+
+            // la liste
+            $record_subscriber->idsubscriber_list = $this->subscriber_list_infos->idsubscriber_list;
+
+            // le client 
+            $record_subscriber->idcustomer = $this->customer_infos->idcustomer;
+
+            // le token 
+            $token = md5(uniqid(rand(), true));
+            $record_subscriber->token = $token;
+
+            $record_subscriber->email = $email;
+            $record_subscriber->html_format = 1;
+            $record_subscriber->text_format = 1;
+            $record_subscriber->subscribe_from = 'externe';
+            $record_subscriber->status = 1;
+
+            // enregistre
+            $subscriber->insert($record_subscriber);
+
+            if($record_subscriber->idsubscriber!='') {
+                $tpl->assign('response_subscribe', true);
+            } else {
+                $tpl->assign('error_subscribe', true);
+            }
+
+            $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
             
         }
-
-        // récupérer de quoi afficher le logo du client avec $idcustomer=$tokens[2]
-        //$customer_infos = $this->getLogo();
-
-        
-        $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
 
         return $rep;
+
     }
 
     // }}}
@@ -156,7 +256,9 @@ class defaultCtrl extends jController {
     {
 
         // à mettre dans les logs
-        $msg = ' -> '.$_SERVER['HTTP_REFERER'].' '.$_SERVER['HTTP_USER_AGENT'];
+        if(!empty($_SERVER['HTTP_REFERER'])) {
+            $msg .= ' -> '.$_SERVER['HTTP_REFERER'].' '.$_SERVER['HTTP_USER_AGENT'];
+        }
 
         // logue dans un fichier
         if($this->log_process) {
@@ -165,7 +267,35 @@ class defaultCtrl extends jController {
 
     }
 
+    protected function isValidFormID($token_subscriber_list,$token_customer)
+    {
+
+        // dao client
+        $customer = jDao::get($this->dao_customer);
+        $customer_infos = $customer->getByPublicToken($token_customer);
+
+        // checker si le client existe
+        if($customer_infos->idcustomer<1) {
+            return false;
+        } else {
+            // mettre les infos dans un attribut
+            $this->customer_infos = $customer_infos;
+        }
+
+        // dao list 
+        $subscriber_list = jDao::get($this->dao_subscriber_list);
+        $subscriber_list_infos = $subscriber_list->getByTokenCustomer($token_subscriber_list,$customer_infos->idcustomer);
+
+        if($subscriber_list_infos->idsubscriber_list>0) {
+            // mettre les infos dans un attribut
+            $this->subscriber_list_infos = $subscriber_list_infos;
+            return true;    
+        }
+
+        return false;
+
+    }
+
+
 }
-
 ?>
-

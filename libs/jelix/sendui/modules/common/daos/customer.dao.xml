@@ -72,5 +72,11 @@
                 <orderitem property="login" way="asc" />
             </order>
         </method>
+        <method name="getByPublicToken" type="selectfirst">                                                                                                                              
+            <parameter name="public_token" />
+            <conditions logic="AND">
+                <eq property="public_token" expr="$public_token" />
+            </conditions>
+        </method>
     </factory>
 </dao>

@@ -1,12 +1,4 @@
-<h2 class="mainpage account float-left">Votre compte</h2>
-
-<div class="ui-corner-all ui-helper-clearfix float-right sendui-padding-toolbar">
-    <div class="fg-toolbar fg-buttonset fg-buttonset-single ui-helper-clearfix">
-        <button class="fg-button ui-state-default ui-state-active ui-priority-primary ui-corner-left">Vos informations</button>
-        <button class="fg-button ui-state-default ui-priority-primary">Domaines autorisés</button>
-        <button class="fg-button ui-state-default ui-priority-primary ui-corner-right">Crédits</button>
-    </div>
-</div>
+<h2 class="mainpage account float-left">{$session->login}, votre compte</h2>
 
 <div class="spacer"></div>
 

@@ -7,7 +7,6 @@
         <license URL="http://www.grafactory.net/sendui/licence">GPL Gnu Public Licence</license>
         <copyright>2009 Yves Tannier</copyright>
         <creator name="Yves Tannier [grafactory.net]" email="yvestanSANSPAM@gmail.com" active="true"/>
-        <!--<contributor name="hisname" email="hisemail@yoursite.undefined" active="true" since="" role=""/>-->
         <homepageURL>http://www.grafactory.net/sendui</homepageURL>
         <!--<updateURL>http://www.grafactory.net/sendui/update.xml</updateURL>-->
     </info>
@@ -23,5 +22,6 @@
     </directories>
     <entrypoints>
         <entry file="index.php" config="index/config.ini.php"/>
-    <entry file="admin.php" config="admin/config.ini.php"/></entrypoints>
+        <entry file="admin.php" config="admin/config.ini.php"/>
+    </entrypoints>
 </project>

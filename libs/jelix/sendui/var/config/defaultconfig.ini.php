@@ -29,7 +29,7 @@ unusedModules=jacldb
 defaultJformsBuilder=html
 
 [responses]
-html=myHtmlResponse
+html=simpleHtmlResponse
 
 [error_handling]
 messageLogFormat="%date%\t[%code%]\t%msg%\t%file%\t%line%\n"
@@ -119,6 +119,7 @@ admin=1
 [logfiles]
 default=messages.log
 process=process.log
+public=public.log
 
 [mailer]
 webmasterEmail="root@localhost"

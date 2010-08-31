@@ -79,6 +79,9 @@ class recipientsCtrl extends jController {
         // la zone étapes
         $tpl->assignZone('steps', 'steps',  array('step' => 3));
 
+        // marquer le menu
+        $rep->body->assign('active_page', 'newmessage');
+
         $rep->body->assign('MAIN', $tpl->fetch('recipients_index')); 
 
         return $rep;
@@ -131,6 +134,12 @@ class recipientsCtrl extends jController {
 
             // on copie
             $batch->copyTable();
+
+            // on précise le nombre de subscriber dans la table message
+            $message = jDao::get($this->dao_message);
+            $record_message = $message->get($this->param('idmessage'));
+            $record_message->total_recipients = $batch->countSubscribers();
+            $update_message = $message->update($record_message);
             
         }
 
