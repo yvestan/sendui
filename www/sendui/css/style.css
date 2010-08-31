@@ -384,6 +384,22 @@ p.no-result {
     background: left center url(/sendui/img/interface/icones/eye.png) no-repeat;
     padding-left: 20px;
 }
+.information {
+    background: left center url(/sendui/img/interface/icones/information.png) no-repeat;
+    padding-left: 20px;
+}
+.rosette {
+    background: left center url(/sendui/img/interface/icones/rosette.png) no-repeat;
+    padding-left: 20px;
+}
+.page_white_text {
+    background: left center url(/sendui/img/interface/icones/page_white_text.png) no-repeat;
+    padding-left: 20px;
+}
+.lightbulb_off {
+    background: left center url(/sendui/img/interface/icones/lightbulb_off.png) no-repeat;
+    padding-left: 20px;
+}
 .form-login {
     padding: 20px;
 }
