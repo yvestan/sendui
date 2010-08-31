@@ -225,12 +225,9 @@ class messagesCtrl extends jController {
         jClasses::inc($this->class_batch);
         $batch = new Batch($this->param('idmessage'));
 
-        $nb_subscribers = $batch->countSubscribers();
-        $tpl->assign('nb_subscribers', $nb_subscribers); 
-
         // pour avoir le bouton "envoyer", le message doit-être HTML et txt, au moins 1 destinataires, le status 0 ou 4
         if(!empty($message_infos->html_message) && !empty($message_infos->text_message) 
-            && $nb_subscribers>0 && ($message_infos->status==0 || $message_infos->status==4)) {
+            && $message_infos->total_recipients>0 && ($message_infos->status==0 || $message_infos->status==4)) {
             $tpl->assign('ok_to_send', true); 
         }
 
@@ -238,7 +235,7 @@ class messagesCtrl extends jController {
         if($message_infos->status==2) {
 
             $progress = jClasses::getService('sendui~progress');
-            $progress->view($rep,$this->param('idmessage'),$nb_subscribers);
+            $progress->view($rep,$this->param('idmessage'),$message_infos->total_recipients);
             $tpl->assign('sending', true);
 
             // en cours d'envoi
@@ -257,6 +254,9 @@ class messagesCtrl extends jController {
 
         // la zone étapes
         $tpl->assignZone('steps', 'steps',  array('step' => 4));
+
+        // marquer le menu
+        $rep->body->assign('active_page', 'newmessage');
 
         $rep->body->assign('MAIN', $tpl->fetch('messages_preview')); 
 

@@ -7,7 +7,7 @@
 <div class="sendui-padding-mainpage float-right">
     {if $message->status==2}
         <div class="progression ui-corner-all">
-            <div class="status">Envoyée à <span class="nb_send">0</span> sur <span class="total_subcriber">{$message->count_recipients}</span></div>
+            <div class="status">Envoyée à <span class="nb_send">0</span> sur <span class="total_subcriber">{$message->total_recipients}</span></div>
             <div id="pb1" class="progress"></div>
             <div class="control-send">
                 <a href="{jurl 'sendui~send:stop', array('idmessage' => $message->idmessage, 'from_page' => 'sendui~messages:preview')}" class="control-pause">suspendre</a>
@@ -83,13 +83,15 @@
         <ul class="tabstyle">
             {if !empty($message->html_message)}
                 <li class="page-white-code sendui-icon">Vous avez créé un message au format HTML 
-                    &nbsp;&nbsp;<a href="{jurl 'sendui~compose:preview', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview', 'type_msg' => 'html')}" class="eye">prévisualiser</a></li>
+                    &nbsp;&nbsp;<a href="{jurl 'sendui~compose:preview', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview', 'type_msg' => 'html_message')}" 
+                    title="Prévisualisation du message au format HTML" class="eye open_frame">prévisualiser</a></li>
             {else}
                 <li class="page-white-error sendui-icon">Vous n'avez pas créé de message au format HTML</li>
             {/if}
             {if !empty($message->text_message)}
                 <li class="page-white last sendui-icon">Vous avez créé un message au format texte
-                    &nbsp;&nbsp;<a href="{jurl 'sendui~compose:preview', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview', 'type_msg' => 'txt')}" class="eye">prévisualiser</a></li>
+                    &nbsp;&nbsp;<a href="{jurl 'sendui~compose:preview', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview', 'type_msg' => 'text_message')}" 
+                    title="Prévisualisation du message au format texte" class="eye open_frame">prévisualiser</a></li>
             {else}
                 <li class="page-white-error last sendui-icon">Vous n'avez pas créé de message au format texte</li>
             {/if}
@@ -109,7 +111,7 @@
         <h3 class="ui-tabs ui-widget-header sendui-padding-simple ui-corner-top sendui-noborder">Destinataires</h3>
 
         <ul class="tabstyle">
-            <li><strong>{if $nb_subscribers==0}Aucun{else}{$nb_subscribers}{/if}</strong> destinataires pour ce message</li>
+            <li><strong>{if $message->total_recipients==0}Aucun{else}{$message->total_recipients}{/if}</strong> destinataires pour ce message</li>
         </ul>
 
         {if ($message->status==0 || $message->status==4)}
@@ -147,7 +149,7 @@
             </div>
         {/if}
 
-        {if $nb_subscribers==0}
+        {if $message->total_recipients==0}
             <div class="ui-state-highlight ui-corner-all sendui-padding-simple"> 
                 <p><span class="ui-icon ui-icon-info sendui-icon-float"></span>Votre message ne contient aucun destinataire ! Vous devez choisir une liste de destinataires pour pouvoir l'envoyer.</p>
             </div>
@@ -160,7 +162,9 @@
             </div>
         {else}
             <div class="sendui-center">
-                <a href="{jurl 'sendui~send:index', array('idmessage' => $idmessage)}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all sendui-big-button">
+            <a href="{jurl 'sendui~send:start', array('idmessage' => $idmessage, 'from_page' => 'sendui~messages:preview')}" 
+                 title="Êtes-vous sur de vouloir envoyer le message maintenant ?"
+                 class="confirm_action fg-button ui-state-active fg-button-icon-left ui-corner-all sendui-big-button">
                     <span class="ui-icon ui-icon-circle-check"></span>Envoyer le message maintenant</a>
                 <div class="spacer">&nbsp;</div>
             </div>
