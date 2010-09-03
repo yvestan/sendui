@@ -537,7 +537,7 @@ class sendingCtrl extends jControllerCmdLine {
     // {{{ stop()
 
     /**
-     * Action quand sigterm ou sigint
+     * Action à executer quand sigterm ou sigint
      *
      * @return      exit
      */
@@ -546,6 +546,7 @@ class sendingCtrl extends jControllerCmdLine {
 
         $sign = null;
 
+        // type d'erreur
         switch($signal) {
             case SIGTERM:
                 $sign = 'Caught SIGTERM';

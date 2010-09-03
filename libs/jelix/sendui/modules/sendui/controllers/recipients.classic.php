@@ -66,7 +66,7 @@ class recipientsCtrl extends jController {
 
         // récupérer les listes du client
         $subscriber_list = jDao::get($this->dao_subscriber_list);
-        $list_subscribers_lists = $subscriber_list->getByCustomer($session->idcustomer);
+        $list_subscribers_lists = $subscriber_list->getActiveByCustomer($session->idcustomer);
         $tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
 
         // les abonnes

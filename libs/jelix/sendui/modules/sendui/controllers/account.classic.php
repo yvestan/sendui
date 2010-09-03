@@ -3,7 +3,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */
 
 /**
- * Gestion du compte
+ * Gestion du compte de l'utilisateur
  *
  * @package      sendui
  * @subpackage   sendui
@@ -142,7 +142,7 @@ class accountCtrl extends jController {
     // {{{ credits()
 
     /**
-     * Ajouter des crédits
+     * TODO: Ajouter des crédits
      * 
      * @template    account_credits
      * @return      html

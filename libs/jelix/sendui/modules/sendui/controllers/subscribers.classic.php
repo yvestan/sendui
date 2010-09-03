@@ -139,6 +139,11 @@ class subscribersCtrl extends jController {
             $tpl->assign('idsubscriber_list', $this->param('idsubscriber_list')); 
         }
 
+        // envoyer l'url du site publique hack crado / supprimer le basePath
+        $url_sendui = jUrl::get('public~default:subscribe');
+        $url_public = str_replace('sendui/', '', $url_sendui);
+        $tpl->assign('url_public', $GLOBALS['gJConfig']->url_app['public'].$url_public);
+
         // fil d'arianne
         if($this->param('idsubscriber_list')!='') {
             $navigation = array(
@@ -300,6 +305,8 @@ class subscribersCtrl extends jController {
         $result['daorec']->idcustomer = $session->idcustomer;
 
         if($result['toInsert']) {
+            $token = uniqid();
+            $result['daorec']->token = $token;
             $idsubscriber_list = $result['dao']->insert($result['daorec']);
         } else {
             $update = $result['dao']->update($result['daorec']);
@@ -826,7 +833,7 @@ class subscribersCtrl extends jController {
                             break;
                         }
 
-                         if(!empty($f)) {
+                        if(!empty($f) && !empty($keyval[$i])) {
                             $subscriber_value_final[$keyval[$i]] = $f;
                             $i++;
                         }
@@ -856,7 +863,11 @@ class subscribersCtrl extends jController {
                 $record_subscriber = jDao::createRecord($this->dao_subscriber);
 
                 foreach($s as $field=>$val) {
-                    $record_subscriber->$field = $val;
+                    if(!empty($field)) {
+                        if(property_exists($record_subscriber, $field)) {
+                            $record_subscriber->$field = $val;
+                        }
+                    }
                 }
 
                 // statique

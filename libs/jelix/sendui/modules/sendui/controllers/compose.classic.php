@@ -16,7 +16,10 @@
 
 class composeCtrl extends jController {
 
+    // formulaire de composition
     protected $form_message_compose = 'sendui~message_compose';
+
+    // dao message
     protected $dao_message = 'common~message';
 
     /**
