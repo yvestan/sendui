@@ -8,5 +8,7 @@ startAction="default:index"
 html=publicHtmlResponse
 
 [urlengine]
-basePath="/public/"
+;basePath="/public/"
+basePath="/"
+
 notfoundAct="sendui~error:notfound"

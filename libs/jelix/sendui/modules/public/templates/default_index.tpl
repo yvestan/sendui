@@ -1,4 +1,5 @@
 <h2 class="sendui_h2">Gestion de votre abonnement</h2>
+{jurl 'public~default:subscribe'}
 
 {if !empty($sendui_token)}
 <ul>

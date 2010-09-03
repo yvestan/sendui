@@ -19,7 +19,7 @@
 
 <div class="sendui-standard-content">
 
-    <p class="sendui-content">Cochez les listes de destinataires pour l'envoi du message</p>
+    <p class="sendui-content">Choisissez une liste de destinataires pour l'envoi du message</p>
 
     <form method="post" action="{jurl 'sendui~recipients:save', array('idmessage' => $idmessage, 'from_page' => $from_page)}" id="form_recipients">
 

@@ -9,7 +9,7 @@
 * @license    All right reserved
 */
 
-if($_SERVER['SERVER_NAME']=='sendui') {
+if($_SERVER['SERVER_NAME']=='sendui' || $_SERVER['SERVER_NAME']=='public') {
     if (!empty($_SERVER['SPECIAL_ID'])) {
         $pathApp = '/home/yvestan/perso/sites/sendui/sendui/';
     } else {

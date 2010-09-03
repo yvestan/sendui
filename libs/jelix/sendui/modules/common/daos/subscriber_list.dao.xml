@@ -26,6 +26,17 @@
                 <orderitem property="date_update" way="asc" />
             </order>
         </method>
+        <method name="getActiveByCustomer" type="select" distinct="idsubscriber_list">  
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <eq property="status" value="1" />
+                <isnotnull property="idcustomer"/>
+            </conditions>
+            <order>
+                <orderitem property="date_update" way="asc" />
+            </order>
+        </method>
         <method name="getLast" type="selectfirst">  
             <parameter name="idcustomer"/>
             <conditions logic="AND">

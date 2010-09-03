@@ -400,6 +400,10 @@ p.no-result {
     background: left center url(/sendui/img/interface/icones/lightbulb_off.png) no-repeat;
     padding-left: 20px;
 }
+.link_break {
+    background: left center url(/sendui/img/interface/icones/link_break.png) no-repeat;
+    padding-left: 20px;
+}
 .form-login {
     padding: 20px;
 }

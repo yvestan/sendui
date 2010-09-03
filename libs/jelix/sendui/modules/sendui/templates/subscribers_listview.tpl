@@ -7,10 +7,6 @@
 
 <div class="sendui-standard-content">
 
-{if empty($idsubscriber_list)}
-<p>Single opt-in means new subscribers are added to this list as soon as they complete the subscribe form. Confirmed opt-in means a confirmation email will be sent with a link they must click to validate their address. This confirmation isn't required when you import existing subscribers, only when new subscribers join via your subscribe form.</p>
-{/if}
-
 <div class="settings">
 {form $form_subscriber_list, 'sendui~subscribers:listsave', array('idsubscriber_list' => $idsubscriber_list, 'from_page' => $from_page)}
 
@@ -22,6 +18,10 @@
 <div class="bloc-form ui-corner-all">
     <div>{ctrl_label 'description'}</div>
     <p>{ctrl_control 'description'}</p>
+</div>
+
+<div class="bloc-form ui-corner-all">
+    <div>{ctrl_label 'status'} {ctrl_control 'status'}</div>
 </div>
 
 <p class="sendui-margin-top">

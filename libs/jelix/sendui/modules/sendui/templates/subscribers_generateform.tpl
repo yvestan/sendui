@@ -15,7 +15,7 @@
 
     <p class="code text_message_class ui-corner-all">
 <textarea cols="40" rows="10" style="width:900px;">
-<form action="{jurl 'public~default:subscribe'}" method="post" id="sendui_form_{$subscriber_list->token}">
+<form action="{$url_public}" method="post" id="sendui_form_{$subscriber_list->token}">
     <div>
         <label for="email_{$subscriber_list->token}">Email </label> 
         <input type="text" name="email_{$subscriber_list->token}" id="email_{$subscriber_list->token}" />

@@ -70,7 +70,8 @@ class Template {
      * @param array $variables Tableau de valeurs
      * @return array
      */
-	protected function setVariables($variables=array()) {
+	protected function setVariables($variables=array())
+    {
 		$this->variables = $variables;
 	}
     
@@ -83,7 +84,8 @@ class Template {
      * @param array $matches Valeurs matchées
      * @return string
      */
-	protected function replace($matches) {
+	protected function replace($matches)
+    {
 		if (isset($this->variables[$matches[1]]))
 			return $this->variables[$matches[1]];
 		else

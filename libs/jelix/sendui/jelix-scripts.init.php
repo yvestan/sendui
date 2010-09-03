@@ -1,12 +1,19 @@
 <?php
+
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */
+
 /**
-* @package   sendui
-* @subpackage 
-* @author    Yves Tannier [grafactory.net]
-* @copyright 2009 Yves Tannier
-* @link      http://www.grafactory.net/sendui
-* @license   http://www.grafactory.net/sendui/licence GPL Gnu Public Licence
+ *
+ * Init de l'application en jelix
+ *
+ * @package   sendui
+ * @subpackage 
+ * @author    Yves Tannier [grafactory.net]
+ * @copyright 2009 Yves Tannier
+ * @link      http://www.grafactory.net/sendui
+ * @license   http://www.grafactory.net/sendui/licence GPL Gnu Public Licence
 */
+
 
 define ('JELIX_APP_PATH', dirname (__FILE__).DIRECTORY_SEPARATOR); // don't change
 

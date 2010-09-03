@@ -35,7 +35,7 @@ class publicHtmlResponse extends jResponseHtml {
 
         // ajouter une feuille de style 
         foreach(array('reset','style') as $k) {
-            $this->addCSSLink($base_path.'/css/'.$k.'.css');
+            $this->addCSSLink($base_path.'css/'.$k.'.css');
         }
 
     }

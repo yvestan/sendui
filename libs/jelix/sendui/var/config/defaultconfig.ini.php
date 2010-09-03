@@ -1,7 +1,11 @@
 ;<?php die(''); ?>
 ;for security reasons , don't remove or modify the first line
-;this file doesn't list all possible properties. See lib/jelix/core/defaultconfig.ini.php for that
 
+; URL du site publique sans slash
+[url_app]
+public=http://public
+
+; locale and charset
 locale=fr_FR
 charset=UTF-8
 
@@ -9,7 +13,6 @@ charset=UTF-8
 timeZone="Europe/Paris"
 
 theme=default
-
 pluginsPath="app:plugins/"
 
 modulesPath="lib:jelix-modules/,app:modules/"
@@ -17,12 +20,10 @@ modulesPath="lib:jelix-modules/,app:modules/"
 ; says if jelix should check trustedModules
 checkTrustedModules=off
 
-; list of modules which can be accessed from the web
-;    module,module,module
+; list of modules which can be accessed from the web: module,module,module
 trustedModules=
 
 ; list of modules which are not used by the application
-; or not installed.
 unusedModules=jacldb
 
 [tplplugins]
@@ -63,7 +64,6 @@ engine=basic_significant
 ; so you should indicate the relative path of this link/directory to the basePath, or an absolute path.
 jelixWWWPath="jelix/"
 
-
 ; enable the parsing of the url. Set it to off if the url is already parsed by another program
 ; (like mod_rewrite in apache), if the rewrite of the url corresponds to a simple url, and if
 ; you use the significant engine. If you use the simple url engine, you can set to off.
@@ -80,6 +80,7 @@ multiview=off
 ; and http://foo.com/aaa/bbb/other.php ), you MUST set the basePath (ex here, the higher entry point is index.php so
 ; : basePath="/aaa/" )
 ;basePath="/sendui/"
+basePath="/"
 
 defaultEntrypoint=index
 
@@ -172,7 +173,6 @@ start=1
 ; dao_selector = "jelix~jsession"
 ; dao_db_profile = ""
 
-
 [forms]
 ; define input type for datetime widgets : "textboxes" or "menulists"
 controls.datetime.input=menulists
@@ -187,12 +187,8 @@ default="jelix/js/jforms/datepickers/default/init.js"
 [path_app]
 sendui="/sendui"
 
-;[tplplugins] 
-;defaultJformsBuilder = test
-
 [htmleditors]
 default.engine.name=ckeditor
 default.engine.file="js/ckeditor/ckeditor.js"
 default.config="js/ckeditor/ckeditor_default.js"
 default.skin.default="js/ckeditor/empty.css"
-
