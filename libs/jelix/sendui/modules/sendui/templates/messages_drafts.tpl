@@ -1,5 +1,9 @@
 <h2 class="mainpage drafts">Brouillons</h2>
 
+<script type="text/javascript">
+    var url_datatables_lng = '{$j_basepath}js/datatables/i18n/fr_FR.txt';
+</script>
+
 {literal} 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
@@ -8,7 +12,7 @@
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
             "aaSorting": [[3,'desc']],
-            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" },
+            "oLanguage": { "sUrl": url_datatables_lng },
             "aaSorting": [[4, 'desc']]
         });
     });

@@ -12,8 +12,8 @@
     </script>
 {/literal}
 
-<script type="text/javascript" src="/sendui/js/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="/sendui/js/ckeditor/config.js"></script>
+<script type="text/javascript" src="{$j_basepath}js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{$j_basepath}js/ckeditor/config.js"></script>
 
 <div class="sendui-standard-content">
 

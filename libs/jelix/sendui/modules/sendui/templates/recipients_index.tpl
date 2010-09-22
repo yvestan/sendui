@@ -4,6 +4,10 @@
 
 <h2 class="mainpage newmessage">Sélection des destinataires</h2>
 
+<script type="text/javascript">
+    var url_datatables_lng = '{$j_basepath}js/datatables/i18n/fr_FR.txt';
+</script>
+
 {literal} 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
@@ -11,7 +15,7 @@
             "bJQueryUI": true,
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
-            "oLanguage": { "sUrl": "/sendui/js/datatables/i18n/fr_FR.txt" }
+            "oLanguage": { "sUrl": url_datatables_lng },
         });
     });
 </script>
