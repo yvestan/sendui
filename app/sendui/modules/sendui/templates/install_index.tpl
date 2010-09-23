@@ -1,4 +1,4 @@
-<h2 class="main dashboard">Configuration de la base de donnée</h2>
+<h2 class="main database_gear">Configuration de la base de donnée</h2>
 
 <div class="sendui-standard-content">
 
