@@ -1,0 +1,6 @@
+# Ignorer
+app/sendui/var/config/cmdline/cli.ini.php
+app/sendui/var/config/dbprofils.ini.php
+app/sendui/var/log/*.log
+app/temp/sendui
+app/temp/sendui-cli
