@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form xmlns="http://jelix.org/ns/forms/1.1">
 
-    <input ref="driver" required="true" maxlength="150">
+    <menulist ref="driver" required="true">
         <label>Type de base de donnée</label>
+        <item value="mysql">MySQL</item>    
         <help>Actuellement testé uniquement sur Mysql</help>
-    </input>
+    </menulist>
 
     <input ref="host" required="true" maxlength="150">
         <label>Hôte de la base</label>

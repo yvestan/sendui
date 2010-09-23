@@ -11,8 +11,7 @@
 
 {formcontrols array('driver')}
 <div class="bloc-form ui-corner-all">
-    <div>{ctrl_label}</div>
-    <p>{ctrl_control}</p>
+    <div>{ctrl_label}&nbsp;{ctrl_control}</div>
 </div>
 {/formcontrols}
 

@@ -145,7 +145,7 @@ class installCtrl extends jController {
             $rep->action = 'sendui~install:'.$action;
             return $rep;
         }
-               
+
         $file_init = array(
             'smtpmail' => array(
                 'path' => 'cmdline/',
@@ -161,15 +161,42 @@ class installCtrl extends jController {
             ),
         );
 
-        // on récup le fichier d'exemple
-        $ini =  new jIniFileModifier(JELIX_APP_CONFIG_PATH.$file_init[$action]['path'].$file_init[$action]['file'].'-example.ini.php');
+        // ajout dans des fichiers de conf
+        if(!empty($file_init[$action])) {
 
-        foreach($file_init[$action]['values'] as $v) {
-            $init_infos[$v] = $ini->getValue($v, $file_init[$action]['zone']);
-            $ini->setValue($v, $form_infos->getData($v),$file_init[$action]['zone']);
+            // on récup le fichier d'exemple
+            $ini =  new jIniFileModifier(JELIX_APP_CONFIG_PATH.$file_init[$action]['path'].$file_init[$action]['file'].'-example.ini.php');
+
+            foreach($file_init[$action]['values'] as $v) {
+                $init_infos[$v] = $ini->getValue($v, $file_init[$action]['zone']);
+                $ini->setValue($v, $form_infos->getData($v),$file_init[$action]['zone']);
+            }
+
+            $ini->saveAs(JELIX_APP_CONFIG_PATH.$file_init[$action]['path'].$file_init[$action]['file'].'.ini.php');
+
         }
 
-        $ini->saveAs(JELIX_APP_CONFIG_PATH.$file_init[$action]['path'].$file_init[$action]['file'].'.ini.php');
+        // ajout dans la table customer
+        if($action=='user') {
+
+            $dao_customer = 'sendui~common:customer';
+            
+            // dao client
+            $customer = jDao::get($dao_customer);
+
+            // créer un record
+            $record = jDao::create($dao_customer);
+
+            $values = array('login','email','lastname','firstname');
+
+            foreach($values as $v) {
+                $record->{$v} = $form_infos->getData($v);
+            }
+
+            // mot de passe crypté
+            $record->password = md5($form_infos->getData('password'));
+
+        }
 
         // rediriger vers la page suivante
         $rep->action = 'sendui~install:'.$next;
