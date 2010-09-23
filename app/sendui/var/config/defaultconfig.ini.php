@@ -1,9 +1,6 @@
 ;<?php die(''); ?>
 ;for security reasons , don't remove or modify the first line
 
-[url_app]
-public=http://public
-
 ; locale and charset
 locale=fr_FR
 charset=UTF-8
@@ -181,9 +178,6 @@ datepicker=default
 
 [datepickers]
 default="jelix/js/jforms/datepickers/default/init.js"
-
-[path_app]
-sendui="/sendui"
 
 [htmleditors]
 default.engine.name=ckeditor

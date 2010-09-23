@@ -1,10 +1,10 @@
 $(document).ready(function() {
     $("#pb1").progressBar(0, {
-            boxImage: path_app+'js/progressbar/images/progressbar.gif',
+            boxImage: base_path+'js/progressbar/images/progressbar.gif',
             barImage: {
-                0:  path_app+'js/progressbar/images/progressbg_red.gif',
-                30: path_app+'js/progressbar/images/progressbg_orange.gif',
-                70: path_app+'js/progressbar/images/progressbg_green.gif'
+                0:  base_path+'js/progressbar/images/progressbg_red.gif',
+                30: base_path+'js/progressbar/images/progressbg_orange.gif',
+                70: base_path+'js/progressbar/images/progressbg_green.gif'
             }
     });
     percent = 0;

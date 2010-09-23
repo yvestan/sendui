@@ -41,7 +41,7 @@ class progress {
             var idmessage = '.$idmessage.';
             var link_status = \''.jUrl::get('sendui~send:process', array('idmessage' => $idmessage)).'\';
             var nb_subscribers = '.$nb_subscribers.';
-            var path_app = \''.$GLOBALS['gJConfig']->urlengine['basePath'].'\';
+            var base_path = \''.$GLOBALS['gJConfig']->urlengine['basePath'].'\';
         ';
         $rep->addJSCode($js_more);
         $rep->addHeadContent('<script type="text/javascript" src="'.$GLOBALS['gJConfig']->urlengine['basePath'].'js/state.js" ></script>');
