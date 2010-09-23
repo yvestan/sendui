@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="subscriber_list" realname="subscriber_list" primarykey="idsubscriber_list" />
+    </datasources>
+    <record>
+        <property name="idsubscriber_list" fieldname="idsubscriber_list" datatype="autoincrement"/>
+        <property name="token" fieldname="token" datatype="string" maxlength="50"/>
+        <property name="idcustomer" fieldname="idcustomer" datatype="int" required="true"/>
+        <property name="name" fieldname="name" datatype="string" default="" maxlength="50"/>
+        <property name="description" fieldname="description" datatype="text" default=""/>
+        <property name="status" fieldname="status" datatype="int" required="true"/>
+        <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
+    </record>
+    <factory>
+        <method name="count" type="count" distinct="idsubscriber_list">
+        </method>
+        <method name="getByCustomer" type="select" distinct="idsubscriber_list">  
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull property="idcustomer"/>
+            </conditions>
+            <order>
+                <orderitem property="date_update" way="asc" />
+            </order>
+        </method>
+        <method name="getActiveByCustomer" type="select" distinct="idsubscriber_list">  
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <eq property="status" value="1" />
+                <isnotnull property="idcustomer"/>
+            </conditions>
+            <order>
+                <orderitem property="date_update" way="asc" />
+            </order>
+        </method>
+        <method name="getLast" type="selectfirst">  
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+            </conditions>
+            <order>
+                <orderitem property="date_update" way="asc" />
+            </order>
+        </method>
+        <method name="getByTokenCustomer" type="selectfirst">  
+            <parameter name="token"/>
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="token" expr="$token"/>
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <eq property="status" value="1" />
+            </conditions>
+        </method>
+    </factory>
+</dao>

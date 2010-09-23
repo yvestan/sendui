@@ -1,0 +1,17 @@
+{
+	"sProcessing": "Patientez...",
+	"sLengthMenu": "Voir _MENU_ enregistrements",
+	"sZeroRecords": "Aucun enregistrement correspondant",
+	"sInfo": "Résultat(s) _START_ à _END_ sur _TOTAL_",
+	"sInfoEmpty": "0 à 0 sur 0 enregistrement",
+	"sInfoFiltered": "(filtrer sur _MAX_ enregistrements)",
+	"sInfoPostFix": "",
+	"sSearch": "Chercher",
+	"sUrl": "",
+	"oPaginate": {
+		"sFirst":    "Début",
+		"sPrevious": "Précédent",
+		"sNext":     "Suivant",
+		"sLast":     "Dernier"
+	}
+}

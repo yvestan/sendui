@@ -1,0 +1,28 @@
+#!/usr/bin/php
+<?php
+
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */
+
+/**
+ *
+ * Wrapper pour le script executé en CLI
+ *
+ * @package   sendui
+ * @subpackage 
+ * @author    Yves Tannier [grafactory.net]
+ * @copyright 2009 Yves Tannier
+ * @link      http://www.grafactory.net/sendui
+ * @license   http://www.grafactory.net/sendui/licence GPL Gnu Public Licence
+*/
+
+require_once (dirname(__FILE__).'/../application-cli.init.php');
+
+require_once (JELIX_LIB_CORE_PATH.'jCmdlineCoordinator.class.php');
+
+require_once (JELIX_LIB_CORE_PATH.'request/jCmdLineRequest.class.php');
+
+$config_file = 'cmdline/cli.ini.php';
+
+$jelix = new jCmdlineCoordinator($config_file);
+$jelix->process(new jCmdLineRequest('true'));
+

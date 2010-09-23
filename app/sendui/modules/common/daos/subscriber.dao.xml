@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="subscriber" realname="subscriber" primarykey="idsubscriber" />
+        <foreigntable name="subscriber_list" realname="subscriber_list" primarykey="idsubscriber_list" onforeignkey="idsubscriber_list" />
+    </datasources>
+    <record>
+        <property name="idsubscriber" fieldname="idsubscriber" datatype="autoincrement"/>
+        <property name="idsubscriber_list" fieldname="idsubscriber_list" datatype="int"/>
+        <property name="idcustomer" fieldname="idcustomer" datatype="int"/>
+        <property name="token" fieldname="token" datatype="string" default="" maxlength="50"/>
+        <property name="email" fieldname="email" datatype="string" required="true" maxlength="150"/>
+        <property name="fullname" fieldname="fullname" datatype="string" default="" maxlength="50"/>
+        <property name="firstname" fieldname="firstname" datatype="string" default="" maxlength="50"/>
+        <property name="lastname" fieldname="lastname" datatype="string" default="" maxlength="50"/>
+        <property name="phone" fieldname="phone" datatype="string" default="" maxlength="50"/>
+        <property name="mobile" fieldname="mobile" datatype="string" default="" maxlength="50"/>
+        <property name="address" fieldname="address" datatype="string" default="" maxlength="250"/>
+        <property name="zip" fieldname="zip" datatype="string" default="" maxlength="15"/>
+        <property name="city" fieldname="city" datatype="string" default="" maxlength="100"/>
+        <property name="country" fieldname="country" datatype="string" default=""/>
+        <property name="status" fieldname="status" datatype="int" required="true"/>
+        <property name="confirmed" fieldname="confirmed" datatype="datetime" default=""/>
+        <property name="html_format" fieldname="html_format" datatype="int" required="true"/>
+        <property name="text_format" fieldname="text_format" datatype="int" required="true"/>
+        <property name="subscribe_from" fieldname="subscribe_from" datatype="string" required="true" maxlength="50"/>
+        <property name="sent" fieldname="sent" datatype="int" default=""/>
+        <property name="sent_date" fieldname="sent_date" datatype="datetime" default="" />
+        <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
+    </record>
+    <factory>
+        <method name="getByList" type="select" distinct="idsubscriber">  
+            <parameter name="idsubscriber_list"/>
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <isnotnull  property="idcustomer"/>
+            </conditions>
+            <order>
+                <orderitem property="date_insert" way="asc" />
+            </order>
+        </method>
+        <method name="isSubscriber" type="count" distinct="idsubscriber">  
+            <parameter name="email"/>
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="email" expr="$email"/>
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+        </method>
+        <method name="countByList" type="count" distinct="idsubscriber">  
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+        </method>
+        <method type="php" name="countMessageSubscribers">
+            <parameter name="idmessage" />
+            <parameter name="status" />
+            <body><![CDATA[
+                // les abonnés pour un message ayant un status défini
+                $sql =  'SELECT COUNT(s.idsubscriber) as nb
+                        FROM '.$this->_primaryTable.' s, message_subscriber_list msl
+                        WHERE s.idsubscriber_list=msl.idsubscriber_list
+                        AND s.status='.$this->_prepareValue($status, 'int').'
+                        AND msl.idmessage='.$this->_prepareValue($idmessage, 'int');
+                $rs = $this->_conn->query($sql);
+                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                $record = $rs->fetch();
+                return $record;
+            ]]></body> 
+        </method>
+        <method name="updateSent" type="update">
+            <parameter name="idsubscriber" />
+            <values>
+                <value property="sent_date" expr="NOW()"/>
+            </values>
+            <conditions>
+                <eq property="idsubscriber" expr="$idsubscriber" />
+            </conditions>
+        </method>
+    </factory>
+</dao>

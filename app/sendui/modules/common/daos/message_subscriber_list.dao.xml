@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="message_subscriber_list" realname="message_subscriber_list" primarykey="idmessage,idsubscriber_list" />
+    </datasources>
+    <record>
+        <property name="idmessage" fieldname="idmessage" datatype="int" required="true"/>
+        <property name="idsubscriber_list" fieldname="idsubscriber_list" datatype="int" required="true"/>
+    </record>
+    <factory>
+        <method name="deleteByMessage" type="delete">
+            <parameter name="idmessage"/>
+            <conditions logic="AND">
+                <eq property="idmessage" expr="$idmessage"/>
+            </conditions>
+        </method>
+        <method name="isMessageList" type="count">
+            <parameter name="idsubscriber_list"/>
+            <parameter name="idmessage"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+                <eq property="idmessage" expr="$idmessage"/>
+            </conditions>
+        </method>
+    </factory>
+</dao>

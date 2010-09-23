@@ -1,0 +1,683 @@
+body{ 
+    font: 72% Verdana, sans-serif; 
+    margin: 20px;
+    background: url(../img/interface/back.png);
+}
+a {
+    text-decoration: none;
+    border-bottom: 1px solid #ccc;
+}
+.nolink {
+    border: none;    
+}
+.list_status {
+    overflow: auto;
+    border: 1px solid #4297d7;
+    width: 350px;
+    height: 100px;
+}
+.list_status ul li {
+    border-bottom: 1px dotted #ccc;
+    padding: 2px;
+    background: #eee;
+    color: #000;
+    font-size: 90%;
+}
+#header {
+    margin-bottom: 10px;
+}
+.sendui-float-bloc h3,
+.sendui-bloc-simple h3 {
+    padding: 5px;
+    font-weight: normal;
+}
+.sendui-float-bloc {
+    width: 435px;
+    height: 100px;
+    float: left;
+    margin: 10px;
+}
+.sendui-center-bloc {
+    position: absolute;
+    left: 50%;  
+    top: 50%; 
+    width: 450px; 
+    height: 200px; 
+    margin-top: -100px; /* moitié de la hauteur */ 
+    margin-left: -225px; /* moitié de la largeur */ 
+}
+.sendui-menu-simple,
+.sendui-padding-simple {
+    padding: 5px;
+}
+.sendui-padding-double {
+    padding: 10px;
+}
+.sendui-menu-simple a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: normal;
+}
+.spacer {
+    clear: both;
+}
+#footer {
+    padding: 5px;
+    margin-top: 10px;
+}
+#footer li {
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#global {
+    width: 950px;
+    margin-left: auto; 
+    margin-right: auto; 
+}
+h1#logo {
+    float: left;
+    padding: 10px;
+    font-size: 170%;
+}
+h1#logo a {
+    text-decoration: none;
+}
+#account_menu {
+    float: right;
+    border-top: none;
+    border-right: none;
+}
+#account_menu ul li {
+    float: left;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+h2.main {
+    font-size: 140%;
+    font-weight: normal;
+    margin: 10px;
+    margin-bottom: 0;
+}
+h2.mainpage {
+    font-size: 160%;
+    font-weight: normal;
+    margin: 15px;
+    margin-bottom:0;
+    margin-top:10px;
+    padding-left: 24px;
+}
+h2.mainpage-nav {
+    font-size: 160%;
+    font-weight: normal;
+    margin: 15px;
+    margin-bottom:0;
+    margin-top:5px;
+    padding-left: 24px;
+}
+.sendui-padding-mainpage {
+    margin: 15px;
+    margin-bottom:0;
+}
+.sendui-padding-toolbar {
+    margin: 10px;
+    margin-bottom:0;
+}
+#main_menu li a {
+    padding-left: 26px;
+    font-size: 90%;
+}
+
+input, textarea {
+    border: 1px solid #ccc;
+    padding: 4px;
+    color: #000;
+    background: #fff;
+    font-size: 14px;
+}
+textarea { width: 700px; }
+label {
+    font-weight: normal;
+}
+.sendui-standard-content {
+    padding: 10px;
+}
+.settings .bloc-form {
+    background: #eee;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.settings .bloc-form input {
+    width: 500px;
+}
+.jforms-submit {
+    font-weight: bold;
+}
+#main_menu .dashboard {
+    margin-left: 10px;
+}
+#main_menu .dashboard a {
+    background: left center url(../img/interface/icones/application_view_tile.png) no-repeat;
+    background-position: 6px 8px;
+}
+#main_menu .newmessage a {
+    background: left center url(../img/interface/icones/email_go.png) no-repeat;
+    background-position: 6px 8px;
+}
+#main_menu .drafts a {
+    background: left center url(../img/interface/icones/email_edit.png) no-repeat;
+    background-position: 6px 8px;
+}
+#main_menu .subscribers a {
+    background: left center url(../img/interface/icones/book_addresses.png) no-repeat;
+    background-position: 6px 8px;
+}
+#main_menu .archives a {
+    background: left center url(../img/interface/icones/folder_page_white.png) no-repeat;
+    background-position: 6px 8px;
+}
+p.no-result {
+    padding: 5px;
+}
+.newmessage {
+    background: left center url(../img/interface/icones/email_go.png) no-repeat;
+    padding-left: 20px;
+}
+.dashboard {
+    background: left center url(../img/interface/icones/application_view_tile.png) no-repeat;
+    padding-left: 20px;
+}
+.drafts {
+    background: left center url(../img/interface/icones/email_edit.png) no-repeat;
+    padding-left: 20px;
+}
+.subscribers {
+    background: left center url(../img/interface/icones/book_addresses.png) no-repeat;
+    padding-left: 20px;
+}
+.archives {
+    background: left center url(../img/interface/icones/folder_page_white.png) no-repeat;
+    padding-left: 20px;
+}
+.current {
+    background: left center url(../img/interface/icones/arrow_refresh.png) no-repeat;
+    padding-left: 20px;
+}
+.credits {
+    background: left center url(../img/interface/icones/coins.png) no-repeat;
+    padding-left: 20px;
+}
+.schedule {
+    background: left center url(../img/interface/icones/time.png) no-repeat;
+    padding-left: 20px;
+}
+.last-message {
+    background: left center url(../img/interface/icones/bell.png) no-repeat;
+    padding-left: 20px;
+}
+.account {
+    background: left center url(../img/interface/icones/vcard.png) no-repeat;
+    padding-left: 20px;
+}
+.logout {
+    background: left center url(../img/interface/icones/door_out.png) no-repeat;
+    padding-left: 20px;
+}
+.sitemap-color {
+    background: left center url(../img/interface/icones/sitemap_color.png) no-repeat;
+    padding-left: 20px;
+}
+.bullet-go {
+    background: left center url(../img/interface/icones/bullet_go.png) no-repeat;
+    padding-left: 20px;
+}
+.emoticon-unhappy {
+    background: left center url(../img/interface/icones/emoticon_unhappy.png) no-repeat;
+    padding-left: 20px;
+}
+.table-go {
+    background: left center url(../img/interface/icones/table_go.png) no-repeat;
+    padding-left: 20px;
+}
+.table-edit {
+    background: left center url(../img/interface/icones/table_edit.png) no-repeat;
+    padding-left: 20px;
+}
+.table-delete {
+    background: left center url(../img/interface/icones/table_delete.png) no-repeat;
+    padding-left: 20px;
+}
+.page-white-code {
+    background: left center url(../img/interface/icones/page_white_code.png) no-repeat;
+    padding-left: 20px;
+}
+.page-white {
+    background: left center url(../img/interface/icones/page_white.png) no-repeat;
+    padding-left: 20px;
+}
+.layout-edit {
+    background: left center url(../img/interface/icones/layout_edit.png) no-repeat;
+    padding-left: 20px;
+}
+.book-edit {
+    background: left center url(../img/interface/icones/book_edit.png) no-repeat;
+    padding-left: 20px;
+}
+.error-warn {
+    background: left center url(../img/interface/icones/error.png) no-repeat;
+    padding-left: 20px;
+}
+.page-white-error {
+    background: left center url(../img/interface/icones/page_white_error.png) no-repeat;
+    padding-left: 20px;
+}
+.page-white-get {
+    background: left center url(../img/interface/icones/page_white_get.png) no-repeat;
+    padding-left: 20px;
+}
+.page-white-edit {
+    background: left center url(../img/interface/icones/page_white_edit.png) no-repeat;
+    padding-left: 20px;
+}
+.chart-pie {
+    background: left center url(../img/interface/icones/chart_pie.png) no-repeat;
+    padding-left: 20px;
+}
+.layout-content {
+    background: left center url(../img/interface/icones/layout_content.png) no-repeat;
+    padding-left: 20px;
+}
+.basket-add {
+    background: left center url(../img/interface/icones/basket_add.png) no-repeat;
+    padding-left: 20px;
+}
+.time-add {
+    background: left center url(../img/interface/icones/time_add.png) no-repeat;
+    padding-left: 20px;
+}
+.add {
+    background: left center url(../img/interface/icones/add.png) no-repeat;
+    padding-left: 20px;
+}
+.user-add {
+    background: left center url(../img/interface/icones/user_add.png) no-repeat;
+    padding-left: 20px;
+}
+.application-form-add {
+    background: left center url(../img/interface/icones/application_form_add.png) no-repeat;
+    padding-left: 20px;
+}
+.arrow-left {
+    background: left center url(../img/interface/icones/arrow_left.png) no-repeat;
+    padding-left: 20px;
+}
+.accept {
+    background: left center url(../img/interface/icones/accept.png) no-repeat;
+    padding-left: 20px;
+}
+.tick {
+    background: left center url(../img/interface/icones/tick.png) no-repeat;
+    padding-left: 20px;
+}
+.pencil {
+    background: left center url(../img/interface/icones/pencil.png) no-repeat;
+    padding-left: 20px;
+}
+.cross {
+    background: left center url(../img/interface/icones/cross.png) no-repeat;
+    padding-left: 20px;
+}
+.flag-green {
+    background: left center url(../img/interface/icones/flag_green.png) no-repeat;
+    padding-left: 20px;
+}
+.flag-yellow {
+    background: left center url(../img/interface/icones/flag_yellow.png) no-repeat;
+    padding-left: 20px;
+}
+.flag-blue {
+    background: left center url(../img/interface/icones/flag_blue.png) no-repeat;
+    padding-left: 20px;
+}
+.flag-red {
+    background: left center url(../img/interface/icones/flag_red.png) no-repeat;
+    padding-left: 20px;
+}
+.control-pause {
+    background: left center url(../img/interface/icones/control_pause.png) no-repeat;
+    padding-left: 20px;
+}
+.control-stop {
+    background: left center url(../img/interface/icones/control_stop.png) no-repeat;
+    padding-left: 20px;
+}
+.control-play {
+    background: left center url(../img/interface/icones/control_play.png) no-repeat;
+    padding-left: 20px;
+}
+.user-delete {
+    background: left center url(../img/interface/icones/user_delete.png) no-repeat;
+    padding-left: 20px;
+}
+.clock {
+    background: left center url(../img/interface/icones/clock.png) no-repeat;
+    padding-left: 20px;
+}
+.clock-pause {
+    background: left center url(../img/interface/icones/clock_pause.png) no-repeat;
+    padding-left: 20px;
+}
+.load-arrow-black {
+    background: left center url(../img/interface/icones/load_arrow_black.gif) no-repeat;
+    padding-left: 20px;
+}
+.package-go {
+    background: left center url(../img/interface/icones/package_go.png) no-repeat;
+    padding-left: 20px;
+}
+.email-add {
+    background: left center url(../img/interface/icones/email_add.png) no-repeat;
+    padding-left: 20px;
+}
+.eye {
+    background: left center url(../img/interface/icones/eye.png) no-repeat;
+    padding-left: 20px;
+}
+.information {
+    background: left center url(../img/interface/icones/information.png) no-repeat;
+    padding-left: 20px;
+}
+.rosette {
+    background: left center url(../img/interface/icones/rosette.png) no-repeat;
+    padding-left: 20px;
+}
+.page_white_text {
+    background: left center url(../img/interface/icones/page_white_text.png) no-repeat;
+    padding-left: 20px;
+}
+.lightbulb_off {
+    background: left center url(../img/interface/icones/lightbulb_off.png) no-repeat;
+    padding-left: 20px;
+}
+.link_break {
+    background: left center url(../img/interface/icones/link_break.png) no-repeat;
+    padding-left: 20px;
+}
+.form-login {
+    padding: 20px;
+}
+.form-login div label {
+    float: left;
+    width: 130px;
+    padding: 3px;
+    font-weight: bold;
+}
+.form-login p.field {
+    float: left;
+    width: 200px;
+    padding: 3px;
+}
+.form-login p.field input {
+    width: 150px;
+}
+.form-login .normal label,
+.form-login .button-login {
+    float: none;
+    font-weight: normal;
+    padding-left: 140px;
+}
+.spacer {
+    clear: both;
+}
+
+.tabstyle li {
+    padding: 3px;
+    border-bottom: 1px dotted #ccc;
+}
+.tabstyle .label {
+    color: #666;
+    width: 200px;
+    font-size: 90%;
+    display: block;
+    float: left;
+}
+.tabstyle li.last {
+    border: none;
+}
+.tabstyle li.sendui-icon {
+    padding-left: 20px;    
+}
+.sendui-noborder {
+    border: none;
+}
+.sendui-margin-bottom {
+    margin-bottom: 15px;    
+}
+.sendui-margin-top {
+    margin-top: 15px;    
+}
+.sendui-margin-top-double {
+    margin-top: 25px;    
+}
+.sendui-margin-top-simple {
+    margin-top: 5px;    
+}
+.fg-button { outline: 0; margin:0 4px 0 0; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
+.fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }
+
+/*a.fg-button { float:left; }*/
+
+/* remove extra button width in IE */
+button.fg-button { width:auto; overflow:visible; }
+
+.fg-button-icon-left { padding-left: 2.1em; }
+.fg-button-icon-right { padding-right: 2.1em; }
+.fg-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
+.fg-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
+
+.fg-button-icon-solo { display:block; width:8px; text-indent: -9999px; }     /* solo icon buttons must have block properties for the text-indent to work */ 
+
+.fg-buttonset { float:left; }
+.fg-buttonset .fg-button { float: left; }
+.fg-buttonset-single .fg-button, 
+.fg-buttonset-multi .fg-button { margin-right: -1px;}
+
+.fg-toolbar { padding: .5em; margin: 0;  }
+.fg-toolbar .fg-buttonset { margin-right:1.5em; padding-left: 1px; }
+#global .fg-toolbar .fg-button { font-size: 1em;  font-weight: normal; }
+
+/* accueil */
+.sendui-detail-simple {
+    font-size: 90%;
+    color: #666;
+}
+.sujet em {
+    font-weight: bold;
+}
+.big {
+    display: block;
+    float: left;
+    font-size: 130%;
+    font-weight: normal;
+    background: #ccc;
+    padding: 5px;
+}
+.float-left {
+    float: left;
+    padding: 5px;
+}
+.float-right {
+    float: right;
+    padding: 5px;
+}
+.sendui-right {
+    text-align: right;    
+}
+.sendui-link-view {
+    /*font-weight: bold;*/
+    text-decoration: none;
+    border: none;
+}
+.sendui-float-step {
+    float: left;
+    margin: 10px;
+}
+.sendui-float-step {
+    text-align: center;    
+}
+.sendui-float-step .step-title {
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 0; padding-bottom: 0;
+}
+.sendui-float-step .ui-widget-header {
+    font-weight: normal;
+}
+#steps {
+    margin: 0; padding: 0;
+    padding-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    border-bottom: 1px dotted #ccc;
+}
+p.text_message_class {
+    border: 2px solid #ccc;
+    padding: 3px;
+}
+p.text_message_class textarea {
+    width: 840px;
+    border: none;
+}
+#tabs-compose ul li a {
+    font-size: 90%;
+}
+#tabs-compose ul li a {
+    background-position: 5px 4px;
+}
+.sendui-icon-float {
+    float: left; 
+    margin-right: 0.3em;
+}
+
+.sendui-mainpage-h3 {
+    padding-left: 40px;
+    font-weight: normal;
+}
+.sendui-user-list-simple-content {
+    border: 1px solid #ccc;
+}
+.sendui-list-simple {
+    width: 100%;
+}
+.sendui-list-simple th {
+    font-weight: normal;
+    color: #999;
+    text-align: left;
+    padding: 3px;
+}
+.sendui-list-simple td {
+    padding: 5px;
+    border-top: 1px dotted #ccc;
+}
+.sendui-list-simple a {
+    border: none;
+}
+.fg-toolbar {
+    font-weight: normal;    
+}
+h3.sendui-content {
+    font-weight: normal;
+    font-size: 125%;
+    margin-bottom: 10px;
+}
+p.sendui-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.sendui-grey {
+    color: #666;
+    font-size: 90%;
+}
+.sendui-italic {
+    font-style: italic;
+}
+
+/* envoi en cours */
+.intro-send {
+    margin-left: 10px;
+}
+.progression {
+    margin: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+    font-size: 90%;
+    border: 1px solid #ccc;
+    color: #666;
+}
+.status, .progress, .control-send {
+    float: left;
+}
+.progress, .control-send {
+    padding-left: 10px;
+}
+#global ul.legende {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+#global ul.legende li {
+    float: left;
+    margin-right: 15px;
+    font-size: 90%;
+    color: #666
+}
+.legend_form {
+    font-size: 85%;
+    color: #666;
+}
+.sendui-big-button {
+    font-size: 130%;
+}
+.sendui-center {
+    text-align:center;    
+}
+.sendui-small {
+    font-size: 90%;
+}
+#navigation {
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 85%;
+}
+#navigation ul li {
+    float: left;
+    color: #666;
+}
+#navigation ul li a {
+    padding: 0; margin: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    color: #666;
+}
+#navigation .spacer {
+    font-size: 1px;
+    margin: 0; padding: 0;
+}
+#navigation .bullet-go {
+    padding-left: 16px;
+}
+#global ul.tabs-padding li a {
+    padding-left: 22px;    
+    background-position: 3px;
+}
+.sendui-liste {
+    margin: 10px;
+    list-style-type: square;
+}
+.sendui-liste li {
+    margin-left: 30px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}

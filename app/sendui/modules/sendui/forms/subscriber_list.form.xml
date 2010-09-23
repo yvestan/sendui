@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+    <input ref="name" maxlength="50">
+        <label>Nom de la liste</label>
+        <help>Identifie la liste sur l'interface publique et l'interface privée</help>
+    </input>
+
+    <textarea ref="description">
+        <label>Description</label>
+        <help>Description de la liste sur l'interface publique et l'interface privée</help>
+    </textarea>
+
+    <radiobuttons ref="status">
+        <label>Liste active</label>
+        <item value="1">oui</item>
+        <item value="0">non</item>
+        <help>La liste peut-elle recevoir des messages ?</help>
+    </radiobuttons>
+
+</form>
