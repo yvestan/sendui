@@ -13,7 +13,8 @@ simple=simpleHtmlResponse
 install=installHtmlResponse
 
 [urlengine]
-basePath="/admin/"
+;basePath="/devel/sendui/admin/"
+
 notfoundAct="sendui~error:notfound"
 
 checkTrustedModules=on
