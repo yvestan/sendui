@@ -1,1 +1,0 @@
-te plate public
