@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+    <input ref="login" required="true" maxlength="150">
+        <label>Nom d'utilisateur</label>
+        <help>Pour l'accès à l'administration</help>
+    </input>
+
+    <input ref="email" required="true" maxlength="150">
+        <label>Adresse email</label>
+        <help>Associée à votre compte</help>
+    </input>
+
+    <input ref="password" required="true" maxlength="150">
+        <label>Mot de passe</label>
+        <help>Mot de passe de plus de 6 caractères</help>
+    </input>
+
+    <submit ref="_submit">
+        <label>Terminer l'installation</label>
+    </submit>
+
+</form>

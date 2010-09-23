@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+    <input ref="driver" required="true" maxlength="150">
+        <label>Type de base de donnée</label>
+        <help>Actuellement testé uniquement sur Mysql</help>
+    </input>
+
+    <input ref="host" required="true" maxlength="150">
+        <label>Hôte de la base</label>
+        <help>Par exemple : localhost ou mysql.domain.tld</help>
+    </input>
+
+    <input ref="database" required="true" maxlength="150">
+        <label>Nom de la base de données</label>
+        <help>Le script ne crée pas de base de données, vous devez en utiliser une existante</help>
+    </input>
+
+    <input ref="user" required="true" maxlength="150">
+        <label>Utilisateur</label>
+        <help>Nom de l'utilisateur ayant les privilèges sur la base</help>
+    </input>
+
+    <input ref="password" required="true" maxlength="150">
+        <label>Mot de passe</label>
+        <help>Mot de passe de l'utlisateur ayant les priviléges sur la base</help>
+    </input>
+
+    <input ref="password" required="true" maxlength="150">
+        <label>Mot de passe</label>
+        <help>Mot de passe de l'utlisateur ayant les priviléges sur la base</help>
+    </input>
+
+    <submit ref="_submit">
+        <label>Continuer</label>
+    </submit>
+
+</form>

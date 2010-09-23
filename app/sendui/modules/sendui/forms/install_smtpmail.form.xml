@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+    <input ref="sSmtpHost" required="true" maxlength="150">
+        <label>Adresse du serveur d'envoi</label>
+        <help>Par exemple : smtp.domain.tld</help>
+    </input>
+
+    <input ref="sSmtpUsername" required="true" maxlength="150">
+        <label>Nom d'utilisateur</label>
+        <help>Si le serveur d'envoi requiert une authentification</help>
+    </input>
+
+    <input ref="sSmtpPassword" required="true" maxlength="150">
+        <label>Mot de passe</label>
+        <help>Si le serveur d'envoi requiert une authentification</help>
+    </input>
+
+    <submit ref="_submit">
+        <label>Continuer</label>
+    </submit>
+
+</form>

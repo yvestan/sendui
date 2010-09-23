@@ -10,6 +10,7 @@ auth=auth.coord.ini.php
 [responses]
 html=senduiHtmlResponse
 simple=simpleHtmlResponse
+install=installHtmlResponse
 
 [urlengine]
 basePath="/admin/"
