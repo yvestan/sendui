@@ -161,6 +161,35 @@ class installCtrl extends jController {
             ),
         );
 
+        // test la connexion à la base
+        if($action=='index') {
+
+            // bdd
+            $jdb = new jDb();
+
+            // le profil de connexion
+            foreach($file_init[$action]['values'] as $v) {
+                $profile[$v] = $form_infos->getData($v);
+            }
+
+            // mode persistent
+            $profile['persistent'] = 'on';
+
+            // test le profile
+            if(!$jdb->testProfile($profile)) {
+                $form_infos->setErrorOn('driver', 'Impossible de se connecter à la base de données'); 
+                $rep->action = 'sendui~install:'.$action;
+                return $rep;
+            } else {
+                
+                // ajouter la base de données
+                $db = jDb::getTools();
+                $db->execSQLScript(JELIX_APP_VAR_PATH.'sql/sendui.sql');
+
+            }
+
+        }
+
         // ajout dans des fichiers de conf
         if(!empty($file_init[$action])) {
 
@@ -197,6 +226,9 @@ class installCtrl extends jController {
             $record->password = md5($form_infos->getData('password'));
 
         }
+
+        // détruire l'instance de formulaire
+        jForms::destroy('sendui~install_'.$action);
 
         // rediriger vers la page suivante
         $rep->action = 'sendui~install:'.$next;
