@@ -1,4 +1,4 @@
-<h2 class="main dashboard">Création de l'utilisateur</h2>
+<h2 class="main user-add">Création de l'utilisateur</h2>
 
 <div class="sendui-standard-content">
 

@@ -121,7 +121,30 @@ class installCtrl extends jController {
      *
      * @return      redirect
      */
-    public function save_user() { return $this->save_form('user','end'); }
+    public function save_user() { return $this->save_form('user','end_install'); }
+
+    // }}}
+
+    // {{{ end_install()
+
+    /**
+     * fin de l'installation
+     *
+     * @template    user
+     * @return      html
+     */
+    public function end_install() 
+    { 
+
+        $rep = $this->getResponse('install');
+        $tpl = new jTpl();
+
+        // le template
+        $rep->body->assign('MAIN', $tpl->fetch('install_end_install')); 
+
+        return $rep;
+        
+    }
 
     // }}}
 
@@ -158,6 +181,7 @@ class installCtrl extends jController {
                 'file' => 'dbprofils',
                 'zone' => 'sendui',
                 'values' => array('driver','database','host','user','password'),
+                $jdb = JELIX_APP_CONFIG_PATH
             ),
         );
 
@@ -180,12 +204,6 @@ class installCtrl extends jController {
                 $form_infos->setErrorOn('driver', 'Impossible de se connecter à la base de données'); 
                 $rep->action = 'sendui~install:'.$action;
                 return $rep;
-            } else {
-                
-                // ajouter la base de données
-                $db = jDb::getTools();
-                $db->execSQLScript(JELIX_APP_VAR_PATH.'sql/sendui.sql');
-
             }
 
         }
@@ -203,20 +221,28 @@ class installCtrl extends jController {
 
             $ini->saveAs(JELIX_APP_CONFIG_PATH.$file_init[$action]['path'].$file_init[$action]['file'].'.ini.php');
 
+            // ajouter la base de données
+            if($action=='index') {
+                $db = jDb::getTools();
+                $db->execSQLScript(JELIX_APP_VAR_PATH.'sql/sendui.sql');
+            }
+
         }
 
         // ajout dans la table customer
         if($action=='user') {
 
-            $dao_customer = 'sendui~common:customer';
+            $dao_customer = 'common~customer';
+
+            $db = jDb::getConnection();
             
             // dao client
             $customer = jDao::get($dao_customer);
 
             // créer un record
-            $record = jDao::create($dao_customer);
+            $record = jDao::createRecord($dao_customer);
 
-            $values = array('login','email','lastname','firstname');
+            $values = array('login','email');
 
             foreach($values as $v) {
                 $record->{$v} = $form_infos->getData($v);
@@ -224,6 +250,8 @@ class installCtrl extends jController {
 
             // mot de passe crypté
             $record->password = md5($form_infos->getData('password'));
+
+            $customer->insert($record);
 
         }
 
@@ -256,17 +284,36 @@ class installCtrl extends jController {
         
         $tpl = new jTpl();
 
-        // récuperer l'instance de formulaire
-        $install = jForms::get('sendui~install_'.$action);
+        $get_form = true;
 
-        // le créer si il n'existe pas
-        if ($install === null) {
-            $rep = $this->getResponse('redirect');
-            $rep->action = 'sendui~install:prepare_'.$action;
-            return $rep;
+        // voir si le fichier de conf existe déjà pour les actions index
+        if($action=='index' && file_exists(JELIX_APP_CONFIG_PATH.'dbprofils.ini.php')) {
+            $tpl->assign('already_exists', true);
+            $get_form = false;
         }
 
-        $tpl->assign('install_'.$action, $install);
+        // voir si le fichier de conf existe déjà pour les actions index et mail
+        if($action=='smtpmail' && file_exists(JELIX_APP_CONFIG_PATH.'cmdline/cli.ini.php')) {
+            $tpl->assign('already_exists', true);
+            $get_form = false;
+        }
+
+        // sinon, le formulaire
+        if($get_form) {
+
+            // récuperer l'instance de formulaire
+            $install = jForms::get('sendui~install_'.$action);
+
+            // le créer si il n'existe pas
+            if ($install === null) {
+                $rep = $this->getResponse('redirect');
+                $rep->action = 'sendui~install:prepare_'.$action;
+                return $rep;
+            }
+
+            $tpl->assign('install_'.$action, $install);
+
+        }
 
         // le template
         $rep->body->assign('MAIN', $tpl->fetch('install_'.$action)); 
@@ -289,12 +336,11 @@ class installCtrl extends jController {
 
         $rep = $this->getResponse('redirect');
 
-        // formulaire
-        $install = jForms::create('sendui~install_'.$action);
-
         // redirection vers index
         $rep->action = 'sendui~install:'.$action;
 
+        // sinon, crée le form
+        $install = jForms::create('sendui~install_'.$action);
         return $rep;
 
     }
