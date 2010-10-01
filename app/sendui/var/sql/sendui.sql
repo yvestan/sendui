@@ -16,19 +16,23 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `zip` varchar(20) DEFAULT NULL,
   `city` varchar(150) DEFAULT NULL,
   `country` char(2) DEFAULT NULL,
+  `batch_quota` tinyint(5) NOT NULL DEFAULT '1',
+  `pause_quota` tinyint(5) NOT NULL DEFAULT '1',
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `theme` varchar(20) DEFAULT NULL,
   `credit` int(11) NOT NULL DEFAULT '0',
   `date_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `date_insert` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`idcustomer`),
+  UNIQUE KEY `login` (`login`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `public_token` (`public_token`),
   KEY `username` (`login`),
   KEY `dateupdate` (`date_update`),
   KEY `dateinsert` (`date_insert`),
   KEY `active` (`active`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE IF NOT EXISTS `message` (
   `idmessage` int(10) unsigned NOT NULL AUTO_INCREMENT,
