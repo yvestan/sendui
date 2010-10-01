@@ -9,6 +9,7 @@
         <div id="account_menu" class="ui-widget-header ui-corner-bl sendui-menu-simple">
             <ul>
                 <li><a href="{jurl 'sendui~account:index'}"><i>{$session->login}</i></a></li>
+                {if $session->is_admin==1}<li><a href="{jurl 'sendui~globaladmin:index'}"><i>Vous êtes administrateur</i></a></li>{/if}
                 <li><a href="{jurl 'sendui~account:index'}" class="account">votre compte</a></li>
                 <!--<li><a href="{jurl 'sendui~account:credits'}" class="credits">vos crédits</a></li>-->
                 <li><a href="{jurl 'sendui~login:out'}" class="logout">quitter</a></li>
