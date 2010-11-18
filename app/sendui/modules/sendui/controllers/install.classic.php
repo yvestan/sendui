@@ -248,8 +248,18 @@ class installCtrl extends jController {
                 $record->{$v} = $form_infos->getData($v);
             }
 
-            // mot de passe crypté
+            // crypter le mot de passe TODO : meilleur sécurité !
             $record->password = md5($form_infos->getData('password'));
+
+            // token public
+            $record->public_token = md5(uniqid(rand(), true));
+
+            // est admin et actif
+            $record->is_admin = 1;
+            $record->actif = 1;
+
+            // theme hot-sneaks
+            $record->theme = 'hot-sneaks';
 
             $customer->insert($record);
 

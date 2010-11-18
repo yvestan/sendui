@@ -124,6 +124,10 @@ class composeCtrl extends jController {
             $rep->action = 'sendui~compose:index';
             return $rep;
         }
+        if($this->param('html_message')!='') {
+            $html_message = stripslashes($this->param('html_message'));
+            $message_compose->setData('html_message',$html_message);
+        }
 
         // enregistrer le message
         if($message_compose->saveToDao($this->dao_message)) {

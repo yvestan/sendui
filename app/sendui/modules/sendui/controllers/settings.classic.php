@@ -143,6 +143,14 @@ class settingsCtrl extends jController {
         $session = jAuth::getUserSession();
         $result['daorec']->idcustomer = $session->idcustomer;
 
+        // on insert le nombre de batch et la pause entre chaque bacth autorisé pour cet utilisateur
+        if(isset($session->batch_quota) || $session->batch_quota==0) {
+            $result['daorec']->batch = $session->batch_quota;
+        }
+        if(isset($session->pause_quota) || $session->pause_quota==0) {
+            $result['daorec']->pause = $session->pause_quota;
+        }
+
         if($result['toInsert'] || $this->param('reuse')!='') {
 
             // réutilisation
@@ -154,8 +162,6 @@ class settingsCtrl extends jController {
                 $result['daorec']->sent_start = null;
                 $result['daorec']->sent_end = null;
                 $result['daorec']->count_recipients = 0;
-                $result['daorec']->pause = 0;
-                $result['daorec']->batch = 0;
                 $result['daorec']->status = 0;
 
             }

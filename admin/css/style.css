@@ -600,6 +600,22 @@ p.sendui-content {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.sendui-simple-content {
+    font-size: 90%;    
+}
+.sendui-simple-content ul li {
+    
+}
+.sendui-simple-content p,
+.sendui-simple-content ul {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.sendui-simple-content ul {
+    padding-left: 20px;
+    margin-left: 10px;
+    list-style-type: disc;
+}
 .sendui-grey {
     color: #666;
     font-size: 90%;
