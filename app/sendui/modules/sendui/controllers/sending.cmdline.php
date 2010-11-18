@@ -285,8 +285,8 @@ class sendingCtrl extends jControllerCmdLine {
                 $this->setLog('[TEST] Envoi du message ['.$idmessage.'] "'.$message_infos->subject.'" à '.$nb_emails_test.' adresse(s) de test');    
             }
 
-            // message
-            $headers->addTextHeader('List-Unsubscribe', 'http://www.grafactory.net/send-test');
+            // message TODO
+            //$headers->addTextHeader('List-Unsubscribe', 'http://www.grafactory.net/send-test');
 
             // contenu HTML ou simple TEXT
             if($message_infos->html_message!='') {
@@ -303,7 +303,7 @@ class sendingCtrl extends jControllerCmdLine {
             // destinataire
             $message_compose->setTo($emails);
 
-            //$success = $mailer->send($message_compose);
+            $success = $mailer->send($message_compose);
             $success = true;
 
             if($success) {
@@ -416,7 +416,7 @@ class sendingCtrl extends jControllerCmdLine {
                 // remplacement
                 $r = new Template(replaceArray($s,$replace_array));
 
-                $headers->addTextHeader('List-Unsubscribe', 'http://www.grafactory.net/'.$s->token);
+                //$headers->addTextHeader('List-Unsubscribe', $_SERVER['HTTP_HOST'].'/public/unsubscribe/?t='.$s->token);
 
                 // contenu HTML ou simple TEXT
                 if($message_infos->html_message!='') {
@@ -433,7 +433,7 @@ class sendingCtrl extends jControllerCmdLine {
                 // destinataire
                 $message_compose->setTo($email);
 
-                //$success = $mailer->send($message_compose);
+                $success = $mailer->send($message_compose);
                 $success = true;
 
                 // on comptabilise les succes

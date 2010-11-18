@@ -28,6 +28,7 @@
         <property name="sent_date" fieldname="sent_date" datatype="datetime" default="" />
         <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
         <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
+        <property name="name" fieldname="name" table="subscriber_list" datatype="string" />
     </record>
     <factory>
         <method name="getByList" type="select" distinct="idsubscriber">  
@@ -48,6 +49,18 @@
             <conditions logic="AND">
                 <eq property="email" expr="$email"/>
                 <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+        </method>
+        <method name="isSubscriberToken" type="count" distinct="idsubscriber">  
+            <parameter name="token"/>
+            <conditions logic="AND">
+                <eq property="token" expr="$token"/>
+            </conditions>
+        </method>
+        <method name="getSubscriberByToken" type="selectfirst">  
+            <parameter name="token"/>
+            <conditions logic="AND">
+                <eq property="token" expr="$token"/>
             </conditions>
         </method>
         <method name="countByList" type="count" distinct="idsubscriber">  

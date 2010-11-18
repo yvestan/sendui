@@ -69,13 +69,12 @@ class senduiHtmlResponse extends jResponseHtml {
         $session = jAuth::getUserSession();
         $this->body->assign('session', $session);
 
-        // default
-        $style_ui = 'hot-sneaks';
-
         // jquery-ui perso
-        /*if($session->theme!='' && is_dir(JELIX_APP_WWW_PATH.'css/'.$session->theme)) {
+        if($session->theme!='' && is_dir(JELIX_APP_WWW_PATH.'admin/css/themes/'.$session->theme)) {
             $style_ui = $session->theme;
-        }*/
+        } else {
+            $style_ui = 'hot-sneaks';
+        }
 
         $this->addCSSLink($this->base_path.'css/themes/'.$style_ui.'/jquery-ui-1.7.2.custom.css');
 

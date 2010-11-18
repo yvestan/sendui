@@ -3,7 +3,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */
 
 /**
- * page d'accueil et action principale (subscribe/unsubscribe)
+ * Page d'accueil et action principale (subscribe/unsubscribe)
  *
  * @package      sendui
  * @subpackage   sendui
@@ -228,30 +228,87 @@ class defaultCtrl extends jController {
 
     // }}}
 
-    // {{{ preparesubscribe()
+    // {{{ unsubscribe()
 
     /**
-     * prepare le formulaire d'inscription
+     * Page de désincription
      *
-     * @return      redirect
+     * @template    default_unsubscribe
+     * @return      html
      */
-    public function add() {
+    public function unsubscribe() 
+    {
 
         $rep = $this->getResponse('html');
 
-        $rep->title = 'Inscription';
-
-        // récupérer le token client+liste
+        $rep->title = 'Désinscription';
 
         $tpl = new jTpl();
 
-        $rep->body->assign('MAIN', $tpl->fetch('default_subscribe')); 
+        $error = null;
+
+        // on n'a pas le token
+        if($this->param('t')=='') {
+
+            $this->setLog('[FATAL] Pas de parametre "t" pour le subscriber_token');
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('subscriber_token', true);
+            $rep->body->assign('MAIN', $tpl->fetch('default_unsubscribe')); 
+            return $rep;
+
+        } else {
+            $subscriber_token = $this->param('t');    
+        }
+
+        // dao abonnés et list
+        $subscriber = jDao::get($this->dao_subscriber);
+
+        // checker si le token est celui d'un abonné
+        if($subscriber->isSubscriberToken($subscriber_token)) {
+
+            // on retrouve les infos sur la liste
+            $subscriber_infos = $subscriber->getSubscriberByToken($subscriber_token);
+            $tpl->assign('subscriber_infos', $subscriber_infos);
+
+            // on désabonne
+            if($this->param('us')==1) {
+                if($subscriber->delete($subscriber_infos->idsubscriber)) {
+                    $tpl->assign('response_unsubscribe', $subscriber_infos);
+                    $rep->body->assign('MAIN', $tpl->fetch('default_unsubscribe')); 
+                    return $rep;
+                }
+            }
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('subscriber_token', $subscriber_token);
+            $rep->body->assign('MAIN', $tpl->fetch('default_unsubscribe')); 
+            return $rep;
+
+        } else {
+            
+            $this->setLog('[FATAL] le subscriber_token n\'existe pas dans la base');
+
+            // prévient simplement l'utilisateur et renvoi
+            $tpl->assign('token_incorrect', true);
+            $rep->body->assign('MAIN', $tpl->fetch('default_unsubscribe')); 
+            return $rep;
+
+        }
 
         return $rep;
+
     }
 
     // }}}
 
+    // {{{ setLog()
+
+    /**
+     * Les logs du processus inscription/desinscription
+     *
+     * @return      null
+     */
     protected function setLog($msg)
     {
 
@@ -267,6 +324,17 @@ class defaultCtrl extends jController {
 
     }
 
+    // }}}
+
+    // {{{ isValidFormID()
+
+    /**
+     * Test si le jeu token_list+token_customer est valide
+     *
+     * @param  string $token_subscriber_list le token de la liste
+     * @param  string $token_customer le token du client
+     * @return  bool
+     */
     protected function isValidFormID($token_subscriber_list,$token_customer)
     {
 
@@ -296,6 +364,7 @@ class defaultCtrl extends jController {
 
     }
 
+    // }}}
 
 }
 ?>
