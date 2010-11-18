@@ -5,6 +5,10 @@
         <label>Nom d'utilisateur</label>
     </input>
 
+    <input ref="password" required="true" maxlength="50">
+        <label>Mot de passe</label>
+    </input>
+
     <input ref="email" required="true" maxlength="150">
         <label>Email</label>
     </input>
@@ -37,6 +41,14 @@
         <label>Pays</label>
     </input>
 
+    <input ref="batch_quota" required="true">
+        <label>Nombre de mail par lot</label>
+    </input>
+
+    <input ref="pause_quota" required="true">
+        <label>Secondes entre chaque lot</label>
+    </input>
+
     <menulist ref="theme" required="true">
         <label>Thème pour l'interface</label>
         <item value="hot-sneaks">Thème par défaut</item>
@@ -47,6 +59,18 @@
         <item value="start">Start</item>
         <item value="ui-lightness">UI Lightness</item>
     </menulist>
+
+    <radiobuttons ref="is_admin">
+        <label>Administrateur</label>
+        <item value="1">oui</item>
+        <item value="0">non</item>
+    </radiobuttons>
+
+    <radiobuttons ref="active">
+        <label>Actif</label>
+        <item value="1">oui</item>
+        <item value="0">non</item>
+    </radiobuttons>
 
     <submit ref="_submit">
         <label>Enregistrer</label>

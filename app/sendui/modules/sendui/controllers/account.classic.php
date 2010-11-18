@@ -129,6 +129,11 @@ class accountCtrl extends jController {
             // détruire le formulaire
             jForms::destroy($this->form_customer_settings);
 
+            // si le thème a changé, changer dans la session
+            if($result['daorec']->theme!=$session->theme) {
+                $session->theme = $result['daorec']->theme;    
+            }
+
             // rediriger vers index
             $rep->action = 'sendui~account:index';
             return $rep;

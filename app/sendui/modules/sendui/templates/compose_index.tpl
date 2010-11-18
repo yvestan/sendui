@@ -31,18 +31,23 @@
 
         <div id="message-html">
 
+            <div class="ui-tabs ui-widget-content ui-corner-all">
+                <div class="sendui-standard-content sendui-simple-content ">
 
-            <p>Vous pouvez utiliser les tags suivant pour personnaliser chaque message :</p>
-            <ul>
-                <li>{literal}{_(email)_}{/literal} : Email de l'abonné</li>
-                <li>{literal}{_(firstname)_}{/literal} : Prénom</li>
-                <li>{literal}{_(lastname)_}{/literal} : Nom</li>
-                <li>{literal}{_(token)_}{/literal} : Identifiant unique de l'abonné</li>
-            </ul>
+                <p>Vous pouvez utiliser les tags suivant pour <strong>personnaliser chaque message</strong> :</p>
+                <ul>
+                    <li>{literal}{_(email)_}{/literal} : Email de l'abonné</li>
+                    <li>{literal}{_(firstname)_}{/literal} : Prénom</li>
+                    <li>{literal}{_(lastname)_}{/literal} : Nom</li>
+                    <li>{literal}{_(token)_}{/literal} : Identifiant unique de l'abonné</li>
+                </ul>
 
-            <p>Pour ajouter le <span class="link_break">lien de désabonnement</span>, ajouter un lien hypertexte 
-                qui contient l'<acronym title="Universal Ressources Locator">URL</acronym> :<br />
-                http://</p>
+                <p>Pour ajouter le <span class="link_break">lien de désabonnement</span>, ajouter un lien hypertexte 
+                    qui contient l'<acronym title="Universal Ressources Locator">URL</acronym> :<br />
+                    http://domain.tld/public/default/unsubscribe/?t={literal}{_(token)_}{/literal}</p>
+
+                </div>
+            </div>
 
             {form $message_compose, 'sendui~compose:save', array('idmessage' => $idmessage,'from_page' => $from_page)}
 
@@ -51,7 +56,7 @@
 
                 <div class="spacer">&nbsp;</div>
 
-                <div class="page-white sendui-padding-simple">{ctrl_label 'text_message'} <a href="#" class="unsubscribe_link link_break">ajouter le lien de désabonnement</a></div>
+                <div class="page-white sendui-padding-simple">{ctrl_label 'text_message'} <!--<a href="#" class="unsubscribe_link link_break">ajouter le lien de désabonnement</a>--></div>
                 <p class="text_message_class ui-corner-all">{ctrl_control 'text_message'}</p>
 
                 <div class="spacer">&nbsp;</div>

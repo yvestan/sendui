@@ -1,68 +1,114 @@
-<h2 class="mainpage account float-left">{$session->login}, votre compte</h2>
-
-<div class="spacer"></div>
+{if empty($idsubscriber_list)}
+    <h2 class="mainpage user-add">Ajouter un utilisateur</h2>
+{else}
+    <h2 class="mainpage account">Modifier un utilisateur</h2>
+    <h3 class="sendui-mainpage-h3">{$customer->login}</h3>
+{/if}
 
 <div class="sendui-standard-content">
 
-<div class="settings">
-{form $customer_settings, 'sendui~account:index'}
+    <div class="settings">
+    {form $form_customer, 'sendui~globaladmin:saveuser'}
 
-<div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
-    <h3>Vos informations</h3>
-</div>
+    <div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
+        <h3>Informations générales</h3>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'lastname'}</div>
-    <p>{ctrl_control 'lastname'}</p>
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'login'}</div>
+        <p>{ctrl_control 'login'}</p>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'firstname'}</div>
-    <p>{ctrl_control 'firstname'}</p>
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'password'}</div>
+        <p>{ctrl_control 'password'}</p>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'company'}</div>
-    <p>{ctrl_control 'company'}</p>
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'email'}</div>
+        <p>{ctrl_control 'email'}</p>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'email'}</div>
-    <p>{ctrl_control 'email'}</p>
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'lastname'}</div>
+        <p>{ctrl_control 'lastname'}</p>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'username'}</div>
-    <p>{ctrl_control 'username'}</p>
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'firstname'}</div>
+        <p>{ctrl_control 'firstname'}</p>
+    </div>
 
-<div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
-    <h3>Votre adresse</h3>
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'company'}</div>
+        <p>{ctrl_control 'company'}</p>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'address'}</div>
-    <p>{ctrl_control 'address'}</p>
-</div>
+    <div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
+        <h3>Quotas d'expédition</h3>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'zip'}</div>
-    <p>{ctrl_control 'zip'}</p>
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'batch_quota'}</div>
+        <p>{ctrl_control 'batch_quota'}</p>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'city'}</div>
-    <p>{ctrl_control 'city'}</p>
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'pause_quota'}</div>
+        <p>{ctrl_control 'pause_quota'}</p>
+    </div>
 
-<div class="bloc-form ui-corner-all">
-    <div>{ctrl_label 'country'}</div>
-    <p>{ctrl_control 'country'}</p>
-</div>
+    <div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
+        <h3>Adresse</h3>
+    </div>
 
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'address'}</div>
+        <p>{ctrl_control 'address'}</p>
+    </div>
 
-<p><input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Enregistrer" type="submit"></p>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'zip'}</div>
+        <p>{ctrl_control 'zip'}</p>
+    </div>
 
-{/form}
-</div>
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'city'}</div>
+        <p>{ctrl_control 'city'}</p>
+    </div>
+
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'country'}</div>
+        <p>{ctrl_control 'country'}</p>
+    </div>
+
+    <div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
+        <h3>Interface</h3>
+    </div>
+
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'theme'}</div>
+        <p>{ctrl_control 'theme'}</p>
+    </div>
+
+    <div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
+        <h3>Status de l'utlisateur</h3>
+    </div>
+
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'active'} {ctrl_control 'active'}</div>
+    </div>
+
+    <p><input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Enregistrer" type="submit"></p>
+
+    {/form}
+    </div>
+
+    {if !empty($idcustomer)}
+    <p class="sendui-margin-top-double">
+        <a href="{jurl 'sendui~globaladmin:userdelete', array('idcustomer' => $idcustomer)}" 
+            class="confirm_action table-delete" title="Êtes-vous sur de vouloir supprimer cet utilisateur ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !">Supprimer cet utilisateur</a>
+    </p>
+    {/if}
+
 </div>
