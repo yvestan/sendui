@@ -27,7 +27,7 @@ class authListener extends jEventListener{
         $customer = jDao::get($this->dao_customer);
         $customer_infos = $customer->getByLogin($login);
 
-        // ajouter l'id dans la session
+        // ajouter l'id client dans la session
         if($customer_infos->idcustomer!='') {
             $_SESSION['idcustomer'] = $customer_infos->idcustomer;
         }

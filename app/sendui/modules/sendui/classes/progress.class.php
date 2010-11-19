@@ -3,7 +3,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */
 
 /**
- * progression
+ * Barre de progression progression
  *
  * @package      sendui
  * @subpackage   sendui
@@ -46,38 +46,6 @@ class progress {
         $rep->addJSCode($js_more);
         $rep->addHeadContent('<script type="text/javascript" src="'.$GLOBALS['gJConfig']->urlengine['basePath'].'js/state.js" ></script>');
 
-    }
-
-    // }}}
-
-    // {{{ isprocessrunning()
-
-    /** voir l'état du process
-     * 
-     * @return int
-     * @param   int     $pid    le pid
-     *
-     */
-    public static function isprocessrunning($pid)
-    {
-        exec('ps '.$pid, $process_state);
-        return count($process_state) >= 2;
-    }
-
-    // }}}
-
-    // {{{ stopprocess()
-
-    /** stopper le processus
-     * 
-     * @return  bool
-     * @param   int     $pid    le pid du process
-     *
-     */
-    public static function stopprocess($pid)
-    {
-        exec('kill -9 '.$pid);
-        return true;
     }
 
     // }}}
