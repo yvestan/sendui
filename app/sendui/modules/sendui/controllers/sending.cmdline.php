@@ -44,6 +44,10 @@ class sendingCtrl extends jControllerCmdLine {
     // log
     protected $dao_process = 'common~process';
 
+    // uniquement pour tester la progression sans envoyer les messages
+    protected $no_send = true;
+
+    // module sans authentification
     public $pluginParams = array(
       '*'=>array('auth.required'=>false)
     );
@@ -303,8 +307,12 @@ class sendingCtrl extends jControllerCmdLine {
             // destinataire
             $message_compose->setTo($emails);
 
-            $success = $mailer->send($message_compose);
-            $success = true;
+            if($this->no_send) {
+                $success = true;
+                $this->setLog('[NOTICE]] Pas d\'envoi, test seulement');    
+            } else {
+                $success = $mailer->send($message_compose);
+            }
 
             if($success) {
                 $this->setLog('[TEST] Message ['.$idmessage.'] "'.$message_infos->subject.'" envoyé');    
@@ -433,8 +441,12 @@ class sendingCtrl extends jControllerCmdLine {
                 // destinataire
                 $message_compose->setTo($email);
 
-                $success = $mailer->send($message_compose);
-                $success = true;
+                if($this->no_send) {
+                    $success = true;
+                    $this->setLog('[NOTICE]] Pas d\'envoi, test seulement');    
+                } else {
+                    $success = $mailer->send($message_compose);
+                }
 
                 // on comptabilise les succes
                 if ($success) $count_success++;
