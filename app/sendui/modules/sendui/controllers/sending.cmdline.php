@@ -45,7 +45,7 @@ class sendingCtrl extends jControllerCmdLine {
     protected $dao_process = 'common~process';
 
     // uniquement pour tester la progression sans envoyer les messages
-    protected $no_send = true;
+    protected $no_send = false;
 
     // module sans authentification
     public $pluginParams = array(
