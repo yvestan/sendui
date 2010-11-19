@@ -54,20 +54,34 @@
             
             <h3 class="sendui-content">Depuis un fichier de type CSV (tableur)</h3>
 
-            <p class="sendui-content"><strong>Important</strong> : les colonnes de votre fichier CSV doivent-être 
-                séparées par des points virgules et les valeurs entourées par des guillemets.</p>
+            {if !empty($no_writable)}
 
-            <p>Exemple :</p>
+                <div class="ui-state-error ui-corner-all sendui-padding-simple sendui-margin-bottom"> 
+                    <p><span class="ui-icon ui-icon-alert sendui-icon-float"></span> Erreur : le répertoire d'upload n'est pas accessible en écriture</p>
+                </div>
 
-            {form $form_subscribers_file, 'sendui~subscribers:subscribers_filesave', array('idsubscriber' => $idsubscriber, 'idsubscriber_list' => $idsubscriber_list, 'from_page' => $from_page)}
+                <div class="ui-state-error ui-corner-all sendui-padding-simple sendui-margin-bottom"> 
+                    <p><span class="ui-icon ui-icon-alert sendui-icon-float"></span>Répertoire <em>{$no_writable}</em></p>
+                </div>
 
-            <div>{ctrl_control 'file_subscribers'}</div>
+            {else}
 
-            <div class="spacer">&nbsp;</div>
+                <p class="sendui-content"><strong>Important</strong> : les colonnes de votre fichier CSV doivent-être 
+                    séparées par des points virgules et les valeurs entourées par des guillemets.</p>
 
-            <p><input name="_submit_text" id="form_subscribers_text" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Ajouter les abonnés" type="submit"></p>
+                <p>Exemple :</p>
 
-            {/form}
+                {form $form_subscribers_file, 'sendui~subscribers:subscribers_filesave', array('idsubscriber' => $idsubscriber, 'idsubscriber_list' => $idsubscriber_list, 'from_page' => $from_page)}
+
+                <div>{ctrl_control 'file_subscribers'}</div>
+
+                <div class="spacer">&nbsp;</div>
+
+                <p><input name="_submit_text" id="form_subscribers_text" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Ajouter les abonnés" type="submit"></p>
+
+                {/form}
+
+            {/if}
         </div>
 
         <div class="settings" id="subscribers-unique">

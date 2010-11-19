@@ -13,7 +13,7 @@
 
     <radiobuttons ref="status">
         <label>Liste active</label>
-        <item value="1">oui</item>
+        <item value="1" selected="true">oui</item>
         <item value="0">non</item>
         <help>La liste peut-elle recevoir des messages ?</help>
     </radiobuttons>

@@ -14,6 +14,10 @@
  * @version      0.1.0
  */
 
+
+// dossier d'upload
+define('UPLOAD_DIR_PATH', JELIX_APP_WWW_PATH.'admin/upload/');
+
 class subscribersCtrl extends jController {
 
     // les daos pour abonnés
@@ -79,7 +83,7 @@ class subscribersCtrl extends jController {
         $tpl->assign('list_subscribers_lists', $list_subscribers_lists); 
 
         $tpl->assign('subscriber', jDao::get($this->dao_subscriber));
-    
+
         // fil d'arianne
         $navigation = array(
             array('action' => '0', 'params' => array(), 'title' => 'Listes d\'abonnés'),
@@ -503,6 +507,11 @@ class subscribersCtrl extends jController {
             $tpl->assign('subscriber_list', $subscriber_list_infos);
         }
 
+        // tester si le dossier upload est accessible en écriture
+        if(!is_writable(UPLOAD_DIR_PATH)) {
+            $tpl->assign('no_writable', UPLOAD_DIR_PATH);
+        }
+    
         // marquer le menu
         $rep->body->assign('active_page', 'subscribers');
 
@@ -560,8 +569,6 @@ class subscribersCtrl extends jController {
 
         // enregistrer 
         $result = $form_subscriber->prepareDaoFromControls($this->dao_subscriber);
-
-        
 
         if($result['toInsert']) {
 
@@ -695,7 +702,7 @@ class subscribersCtrl extends jController {
             return $rep;
         }
 
-        $file_path = JELIX_APP_WWW_PATH.'temp/';
+        $file_path = JELIX_APP_WWW_PATH.'admin/upload/';
         $file_name = uniqid();
 
         // sauvegarde le ficher
@@ -970,6 +977,5 @@ class subscribersCtrl extends jController {
     }
 
     // }}}
-
 
 }
