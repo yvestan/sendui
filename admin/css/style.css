@@ -220,8 +220,20 @@ p.no-result {
     background: left center url(../img/interface/icones/bell.png) no-repeat;
     padding-left: 20px;
 }
-.account {
+.accounti, .vcard {
     background: left center url(../img/interface/icones/vcard.png) no-repeat;
+    padding-left: 20px;
+}
+.vcard-add {
+    background: left center url(../img/interface/icones/vcard_add.png) no-repeat;
+    padding-left: 20px;
+}
+.vcard-delete {
+    background: left center url(../img/interface/icones/vcard_delete.png) no-repeat;
+    padding-left: 20px;
+}
+.vcard-edit {
+    background: left center url(../img/interface/icones/vcard_edit.png) no-repeat;
     padding-left: 20px;
 }
 .logout {
@@ -306,6 +318,10 @@ p.no-result {
 }
 .user-add {
     background: left center url(../img/interface/icones/user_add.png) no-repeat;
+    padding-left: 20px;
+}
+.table {
+    background: left center url(../img/interface/icones/table.png) no-repeat;
     padding-left: 20px;
 }
 .application-form-add {

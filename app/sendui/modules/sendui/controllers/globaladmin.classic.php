@@ -22,7 +22,21 @@ class globaladminCtrl extends jController {
     // formulaires
     protected $form_customer_user = 'sendui~customer_user';
 
-    
+    // {{{ _dataTables()
+
+    /**
+     * Js et css pour les tables
+     *
+     * @return      mixed
+     */
+    protected function _dataTables(&$rep)
+    {
+        $rep->addJSLink($GLOBALS['gJConfig']->urlengine['basePath'].'js/datatables/js/jquery.dataTables.min.js');
+        $rep->addCSSLink($GLOBALS['gJConfig']->urlengine['basePath'].'js/datatables/css/demo_table_jui.css');
+    }
+
+    // }}}
+
     // {{{ index()
 
     /**
@@ -42,8 +56,6 @@ class globaladminCtrl extends jController {
 
         // liste des utilisateurs
         $customer = jDao::get($this->dao_customer);
-
-        
 
         // le client
         $session = jAuth::getUserSession();
@@ -77,11 +89,15 @@ class globaladminCtrl extends jController {
         $rep = $this->getResponse('redirect');
 
         // formulaire
-        $form_customer = jForms::create($this->form_customer_user, $this->param('idcustomer'));
+        if($this->param('idcustomer')!='') {
+            $form_customer_user = jForms::create($this->form_customer_user, $this->param('idcustomer'));
+        } else {
+            $form_customer_user = jForms::create($this->form_customer_user);
+        }
 
         // initialiser un message
         if($this->param('idcustomer')!='') {
-            $form_customer->initFromDao($this->dao_customer_user);
+            $form_customer_user->initFromDao($this->dao_customer);
             $rep->params = array('idcustomer' => $this->param('idcustomer'));
         }
 
@@ -244,5 +260,57 @@ class globaladminCtrl extends jController {
         }
 
     }
+
+    // }}}
+
+    // {{{ userlist()
+
+    /**
+     * Liste des utilisateurs
+     *
+     * @template    userlist
+     * @return      html
+     */
+    public function userlist()
+    {
+            
+        $rep = $this->getResponse('html');
+
+        $this->_dataTables($rep);
+
+        $rep->title = 'Administration - liste des utilisateurs';
+
+        $tpl = new jTpl();
+
+        // le client
+        $session = jAuth::getUserSession();
+        $tpl->assign('session', $session);
+
+        if($session->is_admin==0) {
+            $tpl->assign('forbiden', true); 
+        } else {
+
+            // liste des utilisateurs
+            $customer = jDao::get($this->dao_customer);
+            $customers_list = $customer->findAll();
+            $tpl->assign('customers_list', $customers_list); 
+
+        }
+
+        // fil d'arianne
+        $navigation = array(
+            array('action' => 'sendui~globaladmin:index', 'params' => array(), 'title' => 'Administration'),
+            array('action' => '0', 'params' => array(), 'title' => 'Liste des utilisateurs'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
+        $rep->body->assign('MAIN', $tpl->fetch('globaladmin_userlist')); 
+
+        return $rep;
+
+        
+    }
+
+    // }}}
 
 }
