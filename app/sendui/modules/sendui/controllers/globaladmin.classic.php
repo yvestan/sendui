@@ -129,13 +129,13 @@ class globaladminCtrl extends jController {
 
         // récuperer l'instance de formulaire
         if($this->param('idcustomer')!='') {
-            $form_customer = jForms::get($this->form_customer_user, $this->param('idcustomer'));
+            $form_customer_user = jForms::get($this->form_customer_user, $this->param('idcustomer'));
         } else {
-            $form_customer = jForms::get($this->form_customer_user);
+            $form_customer_user = jForms::get($this->form_customer_user);
         }
 
         // le créer si il n'existe pas
-        if ($form_customer === null) {
+        if ($form_customer_user === null) {
             $rep = $this->getResponse('redirect');
             $rep->params = array(
                 'idcustomer' => $this->param('idcustomer'),
@@ -151,7 +151,7 @@ class globaladminCtrl extends jController {
             $tpl->assign('customer', $customer_infos);
         }
 
-        $tpl->assign('form_customer', $form_customer);
+        $tpl->assign('form_customer', $form_customer_user);
         $tpl->assign('idcustomer', $this->param('idcustomer'));
         $tpl->assign('from_page', $this->param('from_page'));
 
@@ -193,12 +193,16 @@ class globaladminCtrl extends jController {
         $rep = $this->getResponse('redirect');
 
         // récupere le form
-        $customer_user = jForms::fill($this->form_customer_user);
+        if($this->param('idcustomer')!='') {
+            $form_customer_user = jForms::fill($this->form_customer_user, $this->param('idcustomer'));
+        } else {
+            $form_customer_user = jForms::fill($this->form_customer_user);
+        }
 
         // on doit checker si l'email existe ou si l'utilisateur existe
         
         // redirection si erreur
-        if (!$customer_user->check()) {
+        if (!$form_customer_user->check()) {
             $rep->action = 'sendui~globaladmin:user';
             $rep->params = array(
                 'idcustomer' => $this->param('idcustomer'),
@@ -212,17 +216,21 @@ class globaladminCtrl extends jController {
         $session = jAuth::getUserSession();
 
         // enregistrer la nouvelle configuration
-        $result = $customer_user->prepareDaoFromControls($this->dao_customer);
+        $result = $form_customer_user->prepareDaoFromControls($this->dao_customer);
 
         // crypter le mot de passe TODO : meilleur sécurité !
-        if(!empty($_POST['password'])) {
-            $record->password = md5($form_infos->getData('password'));
+        if($form_customer_user->getData('password')!='') {
+            $result['daorec']->password = md5($form_customer_user->getData('password'));
         }
 
+        // nouvel utilisateur
         if($result['toInsert']) {
 
             // insertion
             $result['dao']->insert($result['daorec']);
+
+            // ajouter la public_token
+            $record->public_token = md5(uniqid(rand(), true));
 
             // identifiant nouvel admin
             $idcustomer = $result['daorec']->idcustomer;
@@ -252,7 +260,7 @@ class globaladminCtrl extends jController {
             if($this->param('from_page')!='') {
                 $rep->action = $this->param('from_page');
             } else {
-                $rep->action = 'sendui~globaladmin:index';
+                $rep->action = 'sendui~globaladmin:user';
             }
 
             return $rep;

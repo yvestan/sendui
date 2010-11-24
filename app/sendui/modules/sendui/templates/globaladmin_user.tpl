@@ -8,7 +8,7 @@
 <div class="sendui-standard-content">
 
     <div class="settings">
-    {form $form_customer, 'sendui~globaladmin:saveuser'}
+    {form $form_customer, 'sendui~globaladmin:saveuser', array('idcustomer' => $idcustomer, 'from_page' => $from_page)}
 
     <div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
         <h3>Informations générales</h3>

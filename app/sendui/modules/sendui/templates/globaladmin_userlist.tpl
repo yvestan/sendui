@@ -1,7 +1,7 @@
 <h2 class="mainpage vcard float-left">Listes des utilisateurs</h2>
 
 <div class="sendui-padding-mainpage float-right">
-    <a href="{jurl 'sendui~globaladmin:user', array('from_page' => 'sendui~globaladmin:userlist')}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
+    <a href="{jurl 'sendui~globaladmin:prepareuser', array('from_page' => 'sendui~globaladmin:userlist')}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
         <span class="ui-icon ui-icon-circle-plus"></span>Ajouter un utilisateur</a>
 </div>
 
@@ -50,14 +50,14 @@
                         <span class="cross">&nbsp;</span>
                     {/if}
                 </td>
-                <td><a href="{jurl 'sendui~globaladmin:user', array('idcustomer' => $customer->idcustomer)}">{$customer->login}</a></td>
+                <td><a href="{jurl 'sendui~globaladmin:prepareuser', array('idcustomer' => $customer->idcustomer)}">{$customer->login}</a></td>
                 <td>
                     <a href="mailto:{$customer->email}">{$customer->email}</a>
                 </td>
                 <td>Lot : {$customer->batch_quota} mails / Pause : {$customer->pause_quota} sec.</td>
                 <td>{$customer->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
                 <td>
-                    <a href="{jurl 'sendui~globaladmin:user', array('idcustomer' => $customer->idcustomer, 'from_page' => 'sendui~globaladmin:userlist')}" class="vcard-edit">modifier</a>
+                    <a href="{jurl 'sendui~globaladmin:prepareuser', array('idcustomer' => $customer->idcustomer, 'from_page' => 'sendui~globaladmin:userlist')}" class="vcard-edit">modifier</a>
                     <a href="{jurl 'sendui~globaladmin:userdelete', array('idcustomer' => $customer->idcustomer, 'from_page' => 'sendui~globaladmin:userlist')}" class="vcard-delete">supprimer</a>
                 </td>
             </tr>
