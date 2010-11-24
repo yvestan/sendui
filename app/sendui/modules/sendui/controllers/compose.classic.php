@@ -174,8 +174,10 @@ class composeCtrl extends jController {
         $tpl = new jTpl();
 
         // on veut afficher quoi ?
-        if($this->param('type_msg')=='text_message' || $this->param('type_msg')=='html_message') {
+        if($this->param('type_msg')=='html_message') {
             $tpl->assign('preview_message', $message_infos->{$this->param('type_msg')});
+        } elseif($this->param('type_msg')=='text_message') {
+            $tpl->assign('preview_message', nl2br($message_infos->{$this->param('type_msg')}));
         } else {
             $tpl->assign('preview_message', $message_infos->html_message);
         }

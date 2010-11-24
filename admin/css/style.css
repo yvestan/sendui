@@ -220,7 +220,7 @@ p.no-result {
     background: left center url(../img/interface/icones/bell.png) no-repeat;
     padding-left: 20px;
 }
-.accounti, .vcard {
+.account, .vcard {
     background: left center url(../img/interface/icones/vcard.png) no-repeat;
     padding-left: 20px;
 }
