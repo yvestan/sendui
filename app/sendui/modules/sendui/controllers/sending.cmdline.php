@@ -195,7 +195,7 @@ class sendingCtrl extends jControllerCmdLine {
             $batch->resetSent();
 
             // change le status de message à 1 et resetn le compteur
-            $message->setStatus($idmessage,1);
+            $message->setStatus($idmessage,2);
             $message->resetCount($idmessage);
 
             // vide les enregistrements process du message
