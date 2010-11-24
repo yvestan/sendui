@@ -70,7 +70,7 @@ class senduiHtmlResponse extends jResponseHtml {
         $this->body->assign('session', $session);
 
         // jquery-ui perso
-        if($session->theme!='' && is_dir(JELIX_APP_WWW_PATH.'admin/css/themes/'.$session->theme)) {
+        if(property_exists($session, 'theme') && $session->theme!='' && is_dir(JELIX_APP_WWW_PATH.'admin/css/themes/'.$session->theme)) {
             $style_ui = $session->theme;
         } else {
             $style_ui = 'hot-sneaks';
