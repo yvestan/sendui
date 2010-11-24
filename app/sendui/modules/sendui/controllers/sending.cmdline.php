@@ -158,6 +158,11 @@ class sendingCtrl extends jControllerCmdLine {
             return $rep;
         }
 
+        // vérifier le no_send
+        if($GLOBALS['gJConfig']->debug_sendui['noSend']) {
+            $this->no_send = true;    
+        }
+
         // un dao utilie
         $subscriber = jDao::get($this->dao_subscriber);
 

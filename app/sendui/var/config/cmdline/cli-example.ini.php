@@ -9,3 +9,7 @@ startAction = "sending:index"
 sSmtpUsername="smtp_username"
 sSmtpPassword="smtp_password"
 sSmtpHost="smtp.example.org"
+
+; ne pas envoyer de mail
+[debug_sendui]
+noSend=false
