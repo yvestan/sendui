@@ -717,3 +717,17 @@ p.sendui-content {
     padding-top: 3px;
     padding-bottom: 3px;
 }
+#global .jforms-error-list {
+    padding: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+#global .jforms-error-list li {
+    list-style-type: square;
+    margin-left: 22px;
+    padding: 2px;
+}
+#global label.jforms-error {
+    font-style: normal;
+}
