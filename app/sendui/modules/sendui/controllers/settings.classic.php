@@ -72,6 +72,9 @@ class settingsCtrl extends jController {
 
         $tpl = new jTpl();
 
+        // utilisateur
+        $session = jAuth::getUserSession();
+
         // récuperer l'instance de formulaire
         $message_settings = jForms::get($this->form_message_settings, $this->param('idmessage'));
 
@@ -92,6 +95,10 @@ class settingsCtrl extends jController {
 
         // marquer le menu
         $rep->body->assign('active_page', 'newmessage');
+
+        // compter les messages archivé pour afficher ou pas le bouton
+        $message = jDao::get($this->dao_message);
+        $tpl->assign('count_archive', $message->countArchive($session->idcustomer));
 
         $tpl->assign('message_settings', $message_settings);
         $tpl->assign('idmessage', $this->param('idmessage'));

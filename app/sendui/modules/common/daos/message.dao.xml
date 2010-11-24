@@ -35,6 +35,13 @@
                 <orderitem property="date_update" way="asc" />
             </order>
         </method>
+        <method name="countArchive" type="count" distinct="idmessage"> 
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer"/>
+                <eq property="status" expr="5"/>
+            </conditions>
+        </method>
         <method name="getSent" type="select" distinct="idmessage"> 
             <parameter name="idcustomer"/>
             <conditions logic="AND">
