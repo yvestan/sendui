@@ -17,7 +17,7 @@
 
                 {foreach $current_messages as $message}
                 <div class="intro-send"><span class="sendui-grey">[{$message->sent_start|jdatetime:'db_datetime','lang_date'}]</span> 
-                    <a href="{jurl 'sendui:messages:preview', array('idmessage' => $message->idmessage)}" class="sendui-italic layout-content">{$message->subject}</a>
+                    <a href="{jurl 'sendui~messages:preview', array('idmessage' => $message->idmessage)}" class="sendui-italic layout-content">{$message->subject}</a>
                 </div>	
                 <div class="progression ui-corner-all">
                 <div class="status">Envoyée à <span class="nb_send">0</span> sur <span class="total_subcriber">{$message->total_recipients}</span></div>
