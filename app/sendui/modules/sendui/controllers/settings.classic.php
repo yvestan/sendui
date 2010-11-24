@@ -162,6 +162,7 @@ class settingsCtrl extends jController {
                 $result['daorec']->sent_start = null;
                 $result['daorec']->sent_end = null;
                 $result['daorec']->count_recipients = 0;
+                $result['daorec']->total_recipients = 0;
                 $result['daorec']->status = 0;
 
             }
