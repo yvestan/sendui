@@ -37,6 +37,8 @@ $(document).ready(function() {
             } else {
                 //$('#end').after('<li>Envoi terminé</li>');
                 $("#pb1").progressBar(100);
+                // recharger la page
+                window.location = finish_url;
             }
         });
     } 
