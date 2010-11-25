@@ -340,6 +340,10 @@ p.no-result {
     background: left center url(../img/interface/icones/tick.png) no-repeat;
     padding-left: 20px;
 }
+.cog {
+    background: left center url(../img/interface/icones/cog.png) no-repeat;
+    padding-left: 20px;
+}
 .pencil {
     background: left center url(../img/interface/icones/pencil.png) no-repeat;
     padding-left: 20px;
