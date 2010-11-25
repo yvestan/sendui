@@ -299,7 +299,7 @@ if(isCli()) {
     ?>
         <div class="spacer">&nbsp;</div>
 
-        <p><a href="/admin/sendui/install/smtpmail" class="forms-submit fg-button ui-state-default ui-corner-all">Passez à l'étape suivante si vous avez bien configuré votre environnement</a></p>
+        <p><a href="/admin/sendui/install/" class="forms-submit fg-button ui-state-default ui-corner-all">Passez à l'étape suivante si vous avez bien configuré votre environnement</a></p>
 
     </div>
 
