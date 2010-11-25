@@ -208,7 +208,6 @@ class globaladminCtrl extends jController {
                 'idcustomer' => $this->param('idcustomer'),
                 'from_page' => $this->param('from_page')
             );
-            $rep->action = 'sendui~subscribers:subscriber';
             return $rep;
         }
 
@@ -226,11 +225,11 @@ class globaladminCtrl extends jController {
         // nouvel utilisateur
         if($result['toInsert']) {
 
+            // ajouter la public_token
+            $result['daorec']->public_token = md5(uniqid(rand(), true));
+
             // insertion
             $result['dao']->insert($result['daorec']);
-
-            // ajouter la public_token
-            $record->public_token = md5(uniqid(rand(), true));
 
             // identifiant nouvel admin
             $idcustomer = $result['daorec']->idcustomer;
