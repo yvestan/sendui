@@ -234,34 +234,42 @@ class installCtrl extends jController {
 
             $dao_customer = 'common~customer';
 
-            $db = jDb::getConnection();
-            
-            // dao client
-            $customer = jDao::get($dao_customer);
+            $form_customer_user = jForms::fill('sendui~install_'.$action);
 
-            // créer un record
-            $record = jDao::createRecord($dao_customer);
-
-            $values = array('login','email');
-
-            foreach($values as $v) {
-                $record->{$v} = $form_infos->getData($v);
+            // redirection si erreur
+            if (!$form_customer_user->check()) {
+                $rep->action = 'sendui~install:user';
+                return $rep;
             }
 
-            // crypter le mot de passe TODO : meilleur sécurité !
-            $record->password = md5($form_infos->getData('password'));
+            // enregistrer la nouvelle configuration
+            $result = $form_customer_user->prepareDaoFromControls($dao_customer);
 
             // token public
-            $record->public_token = md5(uniqid(rand(), true));
+            $result['daorec']->public_token = md5(uniqid(rand(), true));
 
             // est admin et actif
-            $record->is_admin = 1;
-            $record->actif = 1;
+            $result['daorec']->is_admin = 1;
+            $result['daorec']->active = 1;
 
             // theme hot-sneaks
-            $record->theme = 'hot-sneaks';
+            $result['daorec']->theme = 'hot-sneaks';
 
-            $customer->insert($record);
+            // crypter le mot de passe TODO : meilleur sécurité !
+            $result['daorec']->password = md5($form_customer_user->getData('password'));
+
+            // nouvel utilisateur
+            if($result['toInsert']) {
+
+                // insertion
+                $result['dao']->insert($result['daorec']);
+
+                // identifiant nouvel admin
+                $idcustomer = $result['daorec']->idcustomer;
+
+            } else {
+                $update = $result['dao']->update($result['daorec']);
+            }
 
         }
 
