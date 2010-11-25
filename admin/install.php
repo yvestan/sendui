@@ -45,6 +45,9 @@ $recommended = array(
     'short_open_tag' => 0,
 );
 
+// si 1 alors on ne continue pas
+$fatal_conf = false;
+
  
 if(isCli()) {
 
@@ -159,8 +162,9 @@ if(isCli()) {
     $html[] = titleUi('Version de PHP et de PHP-CLI');
     $html[] = '<div class="sendui-simple-content">';
 
-    if (version_compare(PHP_VERSION, '5.2.0', '<')) {
+    if (defined('PHP_VERSION') && version_compare(PHP_VERSION, '5.2.0', '<')) {
         $html[] = '<p class="cross">Vous devez disposer de PHP 5.2 minimum, votre version détectée est <strong>'.phpversion().'</strong><p>';
+        $fatal = true;
     } else {
         $html[] = '<p class="tick">Vous utilisez '.PHP_VERSION.' (5.2 est le minimum requis)</p>';
     }
@@ -178,7 +182,7 @@ if(isCli()) {
     if (in_array("mod_rewrite", apache_get_modules())) {
         $html[] = '<p class="tick">Le module mod_rewrite est correctement chargé</p>';
     } else {
-        $html[] = '<p class="tick">Le module mod_rewrite ne semble pas chargé</p>';
+        $html[] = '<p class="error-warn">Le module mod_rewrite ne semble pas chargé</p>';
     }
 
     $html[] = '</div>';
@@ -200,6 +204,7 @@ if(isCli()) {
     foreach($required_extensions as $ex) {
         if(!extension_loaded($ex)) {
             $html[] = '<li class="cross">L\'extension '.$ex.' ne semble pas chargée</li>';
+            $fatal = true;
         } else {
             $html[] = '<li class="tick">L\'extension '.$ex.' est correctement chargée</li>';
         }
@@ -212,7 +217,7 @@ if(isCli()) {
     // test pcntl
     $ex = 'PCNTL';
     if(!function_exists('pcntl_signal')) {
-        $html[] = '<p class="cross">L\'extension '.$ex.' ne semble pas chargée <strong>MAIS</strong> elle est peut-être chargée sur la version de PHP en ligne de commande (c\'est le cas sur Debian et Ubuntu) et c\'est suffisant ! <strong>Vous pouvez tester en lancant ce script en ligne de commande <code>php install.php</code></strong>.</p>';
+        $html[] = '<p class="error-warn">L\'extension '.$ex.' ne semble pas chargée <strong>MAIS</strong> elle est peut-être chargée sur la version de PHP en ligne de commande (c\'est le cas sur Debian et Ubuntu) et c\'est suffisant ! <strong>Vous pouvez tester en lancant ce script en ligne de commande <code>php install.php</code></strong>.</p>';
     } else {
         $html[] = '<p class="tick">L\'extension '.$ex.' est correctement chargée</p>';
     }
@@ -235,6 +240,7 @@ if(isCli()) {
         'app/temp/sendui',
         'app/temp/sendui-cli',
         'app/sendui/var/config',
+        'app/sendui/var/log',
         'app/sendui/var/config/cmdline',
         'app/sendui/var/config/sendui',
     ); 
@@ -243,6 +249,7 @@ if(isCli()) {
     foreach($directory_write as $k=>$v) {
         if(!is_writable('../'.$v)) {
             $html[] = '<li class="cross">'.$v.' doit être accessible en écriture</span>';
+            $fatal = true;
         } else {
             $html[] = '<li class="tick">'.$v.' est bien accessible en écriture</span>';
         }
@@ -259,7 +266,13 @@ if(isCli()) {
     $html[] = '<ul>';
     foreach($requirements as $k=>$v) {
         if($v!=ini_get($k)) { 
-            $html[] = '<li class="cross">'.$k.' doit être à '.$v.'</span>';
+            // il y a un hack
+            if($v!='magic_quotes_gpc' && $v!='magic_quotes_runtime') {
+                $html[] = '<li class="cross">'.$k.' doit être à '.$v.'</span>';
+                $fatal = true;
+            } else {
+                $html[] = '<li class="error-warn">'.$k.' doit être à '.$v.'</span>';
+            }
         } else {
             $html[] = '<li class="tick">'.$k.' est bien à '.$v.'</span>';
         }
@@ -286,7 +299,7 @@ if(isCli()) {
     $html[] = '<ul>';
     foreach($recommended as $k=>$v) {
         if($v!=ini_get($k)) { 
-            $html[] = '<li class="cross">'.$k.' pourrait être à '.$v.'</span>';
+            $html[] = '<li class="lightbulb_off">'.$k.' pourrait être à '.$v.'</span>';
         } else {
             $html[] = '<li class="tick">'.$k.' est bien à '.$v.'</span>';
         }
@@ -296,10 +309,17 @@ if(isCli()) {
     $html[] = '</div>';
 
     echo join("\n", $html);
-    ?>
-        <div class="spacer">&nbsp;</div>
+    
+    echo '<div class="spacer">&nbsp;</div>';
 
-        <p><a href="/admin/sendui/install/" class="forms-submit fg-button ui-state-default ui-corner-all">Passez à l'étape suivante si vous avez bien configuré votre environnement</a></p>
+    if($fatal) {
+        echo '<p class="cross"><strong>Vous devez corriger les problèmes signalés par l\'icone rouge avant de continuer !</p>';
+        echo '<div class="spacer">&nbsp;</div>';
+        echo '<p><a href="/admin/sendui/install/" class="forms-submit fg-button ui-state-default ui-corner-all">Continuer malgré tout !</a></p>';
+    } else {
+        echo '<p><a href="/admin/sendui/install/" class="forms-submit fg-button ui-state-default ui-corner-all">Passez à l\'étape suivante si vous avez bien configuré votre environnement</a></p>';
+    }
+?>
 
     </div>
 
