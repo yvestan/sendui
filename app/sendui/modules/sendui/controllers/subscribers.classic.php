@@ -145,8 +145,15 @@ class subscribersCtrl extends jController {
 
         // envoyer l'url du site publique hack crado / supprimer le basePath
         $url_sendui = jUrl::get('public~default:subscribe');
-        $url_public = str_replace('sendui/', '', $url_sendui);
-        $tpl->assign('url_public', $GLOBALS['gJConfig']->url_app['public'].$url_public);
+        $url_public = str_replace('admin/', '', $url_sendui);
+
+        // si on a le host
+        if(!empty($_SERVER['HTTP_HOST'])) {
+            $url_public = 'http://'.$_SERVER['HTTP_HOST'].$url_public;
+        }
+
+        // au template
+        $tpl->assign('url_public', $url_public);
 
         // fil d'arianne
         if($this->param('idsubscriber_list')!='') {
