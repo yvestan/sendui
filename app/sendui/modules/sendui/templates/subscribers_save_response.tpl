@@ -15,7 +15,7 @@
             {if $nb_success==1}
                 {$nb_success} abonné a été ajouté à la liste
             {/if}
-            {if $nb_success>1}
+            {if $nb_success<1}
                 Aucun abonné n'a été ajouté à la liste
             {/if}
         </p>

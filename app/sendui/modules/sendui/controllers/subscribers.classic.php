@@ -868,44 +868,23 @@ class subscribersCtrl extends jController {
         // on a une liste
         if(!empty($subscribers_tabs_list)) {
         
-            $subscriber = jDao::get($this->dao_subscriber);
+            $subscriber = jClasses::getService('sendui~subscriber');
 
             // on parcours et on ajoute
             foreach($subscribers_tabs_list as $k=>$s) {
 
-                // on ajoute l'utilisateur
-                $record_subscriber = jDao::createRecord($this->dao_subscriber);
+                // ajouter des infos
+                $s['idcustomer'] = $session->idcustomer;
+                $s['subscribe_from'] = 'internal';
 
-                foreach($s as $field=>$val) {
-                    if(!empty($field)) {
-                        if(property_exists($record_subscriber, $field)) {
-                            $record_subscriber->$field = $val;
-                        }
-                    }
+                // TODO : checker la liste !
+                if($subscriber->subscribe($s,$this->param('idsubscriber_list'))) {
+                    $subscribers_tabs_list_success[] = $s;
+                } else  {
+                    $s['error'] = $subscriber->getSubscriberError('debug');
+                    $s[0] = $s['email'];
+                    $subscribers_tabs_list_error[] = $s;
                 }
-
-                // statique
-                $record_subscriber->html_format = 1;
-                $record_subscriber->text_format = 1;
-                $record_subscriber->subscribe_from = 'internal';
-                $record_subscriber->status = 1; // actif
-                $record_subscriber->idcustomer = $session->idcustomer;
-
-                // le token 
-                $token = md5(uniqid(rand(), true));
-                $record_subscriber->token = $token;
-
-                // ajout dans la bonne liste
-                $record_subscriber->idsubscriber_list = $this->param('idsubscriber_list');
-
-                // insertion
-                $subscriber->insert($record_subscriber);
-
-                // récup du nouvel ID
-                $idsubscriber = $record_subscriber->idsubscriber;
-
-                // ajoute dans la table
-                $subscribers_tabs_list_success[] = $s;
 
             }
 

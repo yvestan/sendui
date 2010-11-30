@@ -55,5 +55,19 @@
                 <eq property="status" value="1" />
             </conditions>
         </method>
+        <method name="getByToken" type="selectfirst">  
+            <parameter name="token"/>
+            <conditions logic="AND">
+                <eq property="token" expr="$token"/>
+                <eq property="status" value="1" />
+            </conditions>
+        </method>
+        <method name="isSubscriberList" type="count" distinct="idsubscriber_list">  
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="OR">
+                <eq property="token" expr="$idsubscriber_list"/>
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+        </method>
     </factory>
 </dao>

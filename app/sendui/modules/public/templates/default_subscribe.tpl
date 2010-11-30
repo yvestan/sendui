@@ -21,6 +21,13 @@
     </div>
 {/if}
 
+{if !empty($error_message_subscribe)} 
+    <div class="sendui_error">
+        {$error_message_subscribe}
+        <a href="javascript:history.back()">retour à la page précédente</a>
+    </div>
+{/if}
+
 {if !empty($response_subscribe)} 
     <div class="sendui_success">
         Votre inscription a bien été prise en compte.<br />
