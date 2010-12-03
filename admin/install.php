@@ -131,15 +131,15 @@ if(isCli()) {
     <head>
     <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
     <title>Test de votre installation</title>
-    <link type="text/css" href="/admin/css/reset.css" rel="stylesheet" />
-    <link type="text/css" href="/admin/css/style.css" rel="stylesheet" />
-    <link type="text/css" href="/admin/css/themes/hot-sneaks/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
-    <script type="text/javascript" src="/admin/js/jquery-1.3.2.min.js" ></script>
-    <script type="text/javascript" src="/admin/js/jquery-ui-1.7.2.custom.min.js" ></script>
-    <script type="text/javascript" src="/admin/js/button.js" ></script>
-    <script type="text/javascript" src="/admin/js/function.js" ></script>
+    <link type="text/css" href="./css/reset.css" rel="stylesheet" />
+    <link type="text/css" href="./css/style.css" rel="stylesheet" />
+    <link type="text/css" href="./css/themes/hot-sneaks/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+    <script type="text/javascript" src="./js/jquery-1.3.2.min.js" ></script>
+    <script type="text/javascript" src="./js/jquery-ui-1.7.2.custom.min.js" ></script>
+    <script type="text/javascript" src="./js/button.js" ></script>
+    <script type="text/javascript" src="./js/function.js" ></script>
 
-    <link rel="icon" type="image/png" href="/admin/favicon.ico" /></head><body >
+    <link rel="icon" type="image/png" href="./favicon.ico" /></head><body >
     <div id="global">
 
         <div id="header" class="ui-widget ui-widget-content ui-corner-all">
