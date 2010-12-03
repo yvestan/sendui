@@ -118,8 +118,9 @@ class subscribeCtrl extends jController implements jIRestController {
         // réponse au format json
         $rep = $this->getResponse('json');
 
-        $rep->data['success'] = 'true'; 
-        $rep->data['message'] = 'Données chargées';
+        $rep->data['success'] = 'false'; 
+        $rep->data['message'] = $this->getStatusCodeMessage(501);
+        $rep->setHttpStatus('501', $this->getStatusCodeMessage(501));
 
         return $rep;
 
@@ -156,7 +157,7 @@ class subscribeCtrl extends jController implements jIRestController {
             $rep->data['success'] = true;
             $rep->data['message'] = array(
                 'debug' => 'Email ajouté à la liste',
-                'user' => 'Email ajouté à la liste',
+                'user' => 'Votre inscription a bien été prise en compte',
             );
             $rep->setHttpStatus('200', $this->getStatusCodeMessage(200));
         } else {
@@ -181,6 +182,15 @@ class subscribeCtrl extends jController implements jIRestController {
     public function put()
     {
 
+        // réponse au format json
+        $rep = $this->getResponse('json');
+
+        $rep->data['success'] = 'false'; 
+        $rep->data['message'] = $this->getStatusCodeMessage(501);
+        $rep->setHttpStatus('501', $this->getStatusCodeMessage(501));
+
+        return $rep;
+
     }
 
     // }}}
@@ -194,6 +204,54 @@ class subscribeCtrl extends jController implements jIRestController {
      */
     public function delete()
     {
+
+        // réponse au format json
+        $rep = $this->getResponse('json');
+
+        // la classe subscribers
+        $subscriber = jClasses::getService('sendui~subscriber');
+
+        // récupérer les paramètres
+        if(!empty($_GET['list']) && !empty($_GET['email'])) {
+
+            $infos = array(
+                'list' => $_GET['list'],
+                'email' => $_GET['email'],
+            );
+
+            // retrouver le token de l'utilisateur
+            $subscriber_infos = $subscriber->getSubscriber($infos['email'],$infos['list']);
+
+            if(isset($subscriber_infos->token)) {
+                $subscriber_token = $subscriber_infos->token;
+            } else {
+                $subscriber_token = 'nonexistant';
+            }
+
+            // si c'est OK, on répond 200 sinon, on répond
+            if($subscriber->unsubscribe($subscriber_token)) {
+                $rep->data['success'] = true;
+                $rep->data['message'] = array(
+                    'debug' => 'Email supprimé de la liste',
+                    'user' => 'Votre désinscription a bien été prise en compte',
+                );
+                $rep->setHttpStatus('200', $this->getStatusCodeMessage(200));
+            } else {
+                $rep->data['success'] = false;
+                $rep->data['message'] = $subscriber->getSubscriberError();
+                $rep->setHttpStatus('400', $this->getStatusCodeMessage(400));
+            }
+
+        } else {
+            $rep->data['success'] = false;
+            $rep->data['message'] = array(
+                'debug' => 'Mauvais paramètres',
+                'user' => 'Les paramètres ne sont pas correct',
+            );
+            $rep->setHttpStatus('400', $this->getStatusCodeMessage(400));
+        }
+
+        return $rep;
 
     }
     

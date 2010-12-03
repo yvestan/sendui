@@ -228,9 +228,9 @@ class subscriber {
                 $this->setErrorCode(1005);
                 return false;
             } else {
+                $this->setErrorCode(1001);
                 return true;
             }
-
         }  else {
             $this->setErrorCode(1006);
             return false;
@@ -241,6 +241,27 @@ class subscriber {
     }
 
     // }}}
+
+    // {{{ getSubscriber()
+
+    /**
+     * infos sur un utilisateur
+     *
+     * @return      html
+     */
+    public function getSubscriber($email,$list) 
+    {
+
+        // dao abonnés et list
+        $subscriber = jDao::get($this->dao_subscriber);
+
+        // retrouver l'abonné
+        return $subscriber->getSubscriberByEmailList($email,$list);
+
+    }
+
+    // }}}
+
 
     // {{{ isEmailValid()
 
