@@ -318,9 +318,9 @@ if(isCli()) {
     if($fatal_conf) {
         echo '<p class="cross"><strong>Vous devez corriger les problèmes signalés par l\'icone rouge avant de continuer !</p>';
         echo '<div class="spacer">&nbsp;</div>';
-        echo '<p><a href="/admin/sendui/install/" class="forms-submit fg-button ui-state-default ui-corner-all">Continuer malgré tout !</a></p>';
+        echo '<p><a href="./sendui/install/" class="forms-submit fg-button ui-state-default ui-corner-all">Continuer malgré tout !</a></p>';
     } else {
-        echo '<p><a href="/admin/sendui/install/" class="forms-submit fg-button ui-state-default ui-corner-all">Passez à l\'étape suivante si vous avez bien configuré votre environnement</a></p>';
+        echo '<p><a href="./sendui/install/" class="forms-submit fg-button ui-state-default ui-corner-all">Passez à l\'étape suivante si vous avez bien configuré votre environnement</a></p>';
     }
 ?>
 
