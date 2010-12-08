@@ -228,6 +228,14 @@ class subscribeCtrl extends jController implements jIRestController {
                 $subscriber_token = 'nonexistant';
             }
 
+        } elseif(!empty($_GET['token'])) {
+            $subscriber_token = $_GET['token'];
+        } else {
+            $subscriber_token = 'nonexistant';
+        }
+
+        if(!empty($subscriber_token)) {
+
             // si c'est OK, on répond 200 sinon, on répond
             if($subscriber->unsubscribe($subscriber_token)) {
                 $rep->data['success'] = true;

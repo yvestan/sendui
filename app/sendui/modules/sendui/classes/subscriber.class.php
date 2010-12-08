@@ -247,7 +247,9 @@ class subscriber {
     /**
      * infos sur un utilisateur
      *
-     * @return      html
+     * @param string $email Email de l'abonné
+     * @param string $list Liste
+     * @return object
      */
     public function getSubscriber($email,$list) 
     {
@@ -261,7 +263,6 @@ class subscriber {
     }
 
     // }}}
-
 
     // {{{ isEmailValid()
 
