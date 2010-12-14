@@ -11,7 +11,7 @@
  * @author    Yves Tannier [grafactory.net]
  * @copyright 2009 Yves Tannier
  * @link      http://www.grafactory.net/sendui
- * @license   http://www.grafactory.net/sendui/licence GPL Gnu Public Licence
+ * @license   http://www.grafactory.net/sendui/licence MIT Licence
 */
 
 define ('JELIX_APP_PATH',   dirname (__FILE__).DIRECTORY_SEPARATOR); // don't change

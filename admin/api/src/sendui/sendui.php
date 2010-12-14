@@ -11,7 +11,7 @@
  * @author       Diogo Souza da Silva <manifesto@manifesto.blog.br> RESTClient Class
  * @copyright    2009 Yves Tannier
  * @link         http://www.grafactory.net/sendui
- * @license      http://www.grafactory.net/sendui/licence GPL Gnu Public Licence
+ * @license      http://www.grafactory.net/sendui/licence MIT Licence
  * @version      0.1.0
  */
 

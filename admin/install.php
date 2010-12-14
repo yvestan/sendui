@@ -11,7 +11,7 @@
  * @author    Yves Tannier [grafactory.net]
  * @copyright 2009 Yves Tannier
  * @link      http://www.grafactory.net/sendui
- * @license   http://www.grafactory.net/sendui/licence GPL Gnu Public Licence
+ * @license   http://www.grafactory.net/sendui/licence MIT Licence
 */
 
 // si lancé en cli, on teste la version de PHP et la présence de pctnl_signal

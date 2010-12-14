@@ -31,4 +31,5 @@ CKEDITOR.editorConfig = function( config )
         ['Link','Unlink'],
         ['Image','Table','HorizontalRule'],
     ];
+    //config.disableObjectResizing = true;
 };
