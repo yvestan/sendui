@@ -4,4 +4,8 @@
 
 <div class="sendui-standard-content">
 
+{foreach $bounces as $bounce}
+{$bounce['email']}
+{/foreach}
+
 </div>

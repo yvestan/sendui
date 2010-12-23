@@ -22,11 +22,6 @@ class bouncescheckCtrl extends jController {
     // formulaire bounce config
     protected $form_bounce_config = 'sendui~bounce_config';
 
-    function microtime_float() {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
-    }
-
     // {{{ _dataTables()
 
     /**
@@ -108,13 +103,10 @@ class bouncescheckCtrl extends jController {
             $infos_bounce_config = $bounce_config->get($this->param('idbounce_config'));
             $tpl->assign('bounce_config', $infos_bounce_config); 
 
-            $time_start = $this->microtime_float();
-
             // Use ONE of the following -- all echo back to the screen
             //require_once('callback samples/callback_echo.php');
             //require_once('callback samples/callback_database.php'); // NOTE: Requires modification to insert your database settings
             //require_once('callback samples/callback_csv.php'); // NOTE: Requires creation of a 'logs' directory and making writable
-
 
             // class de gestion des bounces
             define('_PATH_BMH', JELIX_APP_PATH.'/lib/bmh/');
@@ -155,10 +147,7 @@ class bouncescheckCtrl extends jController {
             $bmh->openMailbox();
             $bmh->processMailbox();
 
-            echo '<hr style="width:200px;" />';
-            $time_end = microtime_float();
-            $time     = $time_end - $time_start;
-            echo "Seconds to process: " . $time . "<br />";
+            $tpl->assign('bounces', $GLOBALS['bounces']);
 
         } else {
             $tpl->assign('invalid_config', true);    
@@ -374,56 +363,16 @@ class bouncescheckCtrl extends jController {
  * @return boolean
  */
 function callbackAction ($msgnum, $bounce_type, $email, $subject, $xheader, $remove, $rule_no=false, $rule_cat=false, $totalFetched=0) {
-  $displayData = prepData($email, $bounce_type, $remove);
-  $bounce_type = $displayData[bounce_type];
-  $emailName   = $displayData[emailName];
-  $emailAddy   = $displayData[emailAddy];
-  $remove      = $displayData[remove];
-  echo $msgnum . ': '  . $rule_no . ' | '  . $rule_cat . ' | '  . $bounce_type . ' | '  . $remove . ' | ' . $email . ' | '  . $subject . "<br />\n";
-  return true;
+    $GLOBALS['bounces'][] = array(
+        'msgnum' => $msgnum,
+        'bounce_type' => $bounce_type,
+        'email' => $email,
+        'subject' => $subject,
+        'xheader' => $xheader,
+        'remove' => $remove,
+        'rule_no' => $rule_no,
+        'rule_cat' => $rule_cat,
+    );
+    return true;
 }
 
-/* Function to clean the data from the Callback Function for optimized display */
-function prepData($email, $bounce_type, $remove) {
-  $data[bounce_type] = trim($bounce_type);
-  $data[email]       = '';
-  $data[emailName]   = '';
-  $data[emailAddy]   = '';
-  $data[remove]      = '';
-  if ( strstr($email,'<') ) {
-    $pos_start = strpos($email,'<');
-    $data[emailName] = trim(substr($email,0,$pos_start));
-    $data[emailAddy] = substr($email,$pos_start + 1);
-    $pos_end   = strpos($data[emailAddy],'>');
-    if ( $pos_end ) {
-      $data[emailAddy] = substr($data[emailAddy],0,$pos_end);
-    }
-  }
-
-  // replace the < and > able so they display on screen
-  $email = str_replace('<','&lt;',$email);
-  $email = str_replace('>','&gt;',$email);
-  $data[email]     = $email;
-
-  // account for legitimate emails that have no bounce type
-  if ( trim($bounce_type) == '' ) {
-    $data[bounce_type] = 'none';
-  }
-
-  // change the remove flag from true or 1 to textual representation
-  if ( stristr($remove,'moved') && stristr($remove,'hard') ) {
-    $data[removestat] = 'moved (hard)';
-    $data[remove] = '<span style="color:red;">' . 'moved (hard)' . '</span>';
-  } elseif ( stristr($remove,'moved') && stristr($remove,'soft') ) {
-    $data[removestat] = 'moved (soft)';
-    $data[remove] = '<span style="color:gray;">' . 'moved (soft)' . '</span>';
-  } elseif ( $remove == true || $remove == '1' ) {
-    $data[removestat] = 'deleted';
-    $data[remove] = '<span style="color:red;">' . 'deleted' . '</span>';
-  } else {
-    $data[removestat] = 'not deleted';
-    $data[remove] = '<span style="color:gray;">' . 'not deleted' . '</span>';
-  }
-
-  return $data;
-}
