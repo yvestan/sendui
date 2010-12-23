@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="bounce_config" realname="bounce_config" primarykey="idbounce_config" />
+    </datasources>
+    <record>
+        <property name="idbounce_config" fieldname="idbounce_config" datatype="autoincrement"/>
+        <property name="idcustomer" fieldname="idcustomer" datatype="int"/>
+        <property name="name" fieldname="name" datatype="string" required="true" maxlength="150"/>
+        <property name="mail_host" fieldname="mail_host" datatype="string" required="true" maxlength="150"/>
+        <property name="mail_username" fieldname="mail_username" datatype="string" required="true" maxlength="150"/>
+        <property name="mail_password" fieldname="mail_password" datatype="string" required="true" maxlength="150"/>
+        <property name="mail_port" fieldname="mail_port" datatype="string" required="true" maxlength="5"/>
+        <property name="mail_service" fieldname="mail_service" datatype="string" required="true" maxlength="10"/>
+        <property name="mail_service_option" fieldname="mail_service_option" datatype="string" maxlength="150"/>
+        <property name="status" fieldname="status" datatype="int" required="true" default="1"/>
+        <property name="last_use" fieldname="last_use" datatype="datetime"/>
+        <property name="date_insert" fieldname="date_insert" datatype="datetime" insertpattern="NOW()"/>
+        <property name="date_update" fieldname="date_update" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()"/>
+    </record>
+    <factory>
+        <method name="getBounceConfig" type="selectfirst">                                                                                                                              
+            <parameter name="idcustomer" />
+            <conditions logic="AND">
+                <eq property="idbounce_config" expr="$idbounce_config" />
+            </conditions>
+        </method>
+        <method name="getByCustomer" type="select" distinct="idbounce_config"> 
+            <parameter name="idcustomer" />
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer" />
+            </conditions>
+        </method>
+    </factory>
+</dao>

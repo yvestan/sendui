@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+    <input ref="name" required="true" maxlength="150">
+        <label>Nom</label>
+    </input>
+
+    <input ref="mail_host" maxlength="150" required="true">
+        <label>Hôte</label>
+    </input>
+
+    <input ref="mail_username" maxlength="150" required="true">
+        <label>Nom d'utilisateur</label>
+    </input>
+
+    <input ref="mail_password" maxlength="150" required="true">
+       <label>Mot de passe</label>
+    </input>
+
+    <menulist ref="mail_port" required="true">
+        <label>Port de connexion</label>
+        <item value="143">143 - IMAP</item>
+        <item value="110">110 - POP</item>
+        <item value="993">993 - IMAPS</item>
+        <item value="995">995 - POPS</item>
+    </menulist>
+
+    <menulist ref="mail_service" required="true">
+        <label>Protocole</label>
+        <item value="imap">IMAP</item>
+        <item value="pop">POP</item>
+    </menulist>
+
+    <menulist ref="mail_service_option" required="true">
+        <label>Option de connexion</label>
+        <item value="notls">Standard (notls)</item>
+        <item value="tls">TLS</item>
+        <item value="ssl">SSL</item>
+    </menulist>
+
+</form>

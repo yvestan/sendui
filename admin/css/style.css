@@ -184,6 +184,10 @@ p.no-result {
     background: left center url(../img/interface/icones/email_go.png) no-repeat;
     padding-left: 20px;
 }
+.folder-bug {
+    background: left center url(../img/interface/icones/folder_bug.png) no-repeat;
+    padding-left: 20px;
+}
 .database_gear {
     background: left center url(../img/interface/icones/database_gear.png) no-repeat;
     padding-left: 20px;
