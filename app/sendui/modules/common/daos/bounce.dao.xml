@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="bounce" realname="bounce" primarykey="idbounce" />
+    </datasources>
+    <record>
+        <property name="idbounce" fieldname="idbounce" datatype="autoincrement"/>
+        <property name="idcustomer" fieldname="idcustomer" datatype="int" required="true"/>
+        <property name="idbounce_config" fieldname="idbounce_config" datatype="int" required="true"/>
+        <property name="email" fieldname="email" datatype="string" default="" maxlength="255"/>
+        <property name="rule_cat" fieldname="rule_cat" datatype="string" default="" maxlength="100"/>
+        <property name="rule_no" fieldname="rule_no" datatype="string" default="" maxlength="10"/>
+        <property name="rule_type" fieldname="rule_type" datatype="string" default="" maxlength="10"/>
+        <property name="from" fieldname="from" datatype="string" default="" maxlength="255"/>
+        <property name="date" fieldname="date" datatype="string" default="" maxlength="255"/>
+        <property name="charset" fieldname="charset" datatype="string" default="" maxlength="100"/>
+        <property name="action" fieldname="action" datatype="string" default="" maxlength="100"/>
+        <property name="status_code" fieldname="status_code" datatype="string" default="" maxlength="100"/>
+        <property name="bounce_type" fieldname="bounce_type" datatype="string" default="" maxlength="20"/>
+        <property name="remove" fieldname="remove" datatype="int" default=""/>
+        <property name="dsn_original_rcpt" fieldname="dsn_original_rcpt" datatype="string" default="" maxlength="255"/>
+        <property name="dsn_final_rcpt" fieldname="dsn_final_rcpt" datatype="string" default="" maxlength="255"/>
+        <property name="md5header" fieldname="md5header" datatype="string" default=""/>
+        <property name="date_insert" fieldname="date_insert" datatype="datetime" default="CURRENT_TIMESTAMP"/>
+    </record>
+    <factory>
+        <method name="getByCustomer" type="select" distinct="idbounce"> 
+            <parameter name="idcustomer" />
+            <conditions logic="AND">
+                <eq property="idcustomer" expr="$idcustomer" />
+            </conditions>
+        </method>
+    </factory>
+</dao>

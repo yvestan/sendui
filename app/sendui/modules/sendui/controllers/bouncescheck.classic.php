@@ -18,6 +18,7 @@ class bouncescheckCtrl extends jController {
 
     // les daos
     protected $dao_bounce_config = 'common~bounce_config';
+    protected $dao_bounce = 'common~bounce';
 
     // formulaire bounce config
     protected $form_bounce_config = 'sendui~bounce_config';
@@ -87,6 +88,51 @@ class bouncescheckCtrl extends jController {
 
     // }}}
 
+    // {{{ bounceslist()
+
+    /**
+     * Les configurations de bounces
+     *
+     * @template    bouncescheck_index
+     * @return      html
+     */
+    public function bounceslist()
+    {
+
+        $rep = $this->getResponse('html');
+
+        $this->_dataTables($rep);
+
+        $rep->title = 'Liste des retours';
+
+        $session = jAuth::getUserSession();
+
+        $tpl = new jTpl();
+
+        // récupérer les configurations
+        $bounce = jDao::get($this->dao_bounce);
+        $list_bounce = $bounce->getByCustomer($session->idcustomer);
+        $tpl->assign('list_bounce', $list_bounce); 
+
+        // fil d'arianne
+        $navigation = array(
+            array('action' => '0', 'params' => array(), 'title' => 'Listes des retours'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
+        // marquer le menu
+        $rep->body->assign('active_page', 'subscribers');
+
+        // response en ajax
+        $rep->body->assign('MAIN', $tpl->fetch('bouncescheck_bounceslist')); 
+
+        return $rep;
+
+    }
+
+    // }}}
+
+
     public function check()
     {
 
@@ -117,11 +163,11 @@ class bouncescheckCtrl extends jController {
             //$bmh->action_function    = 'callbackAction'; // default is 'callbackAction'
             //$bmh->verbose            = VERBOSE_SIMPLE; //VERBOSE_REPORT; //VERBOSE_DEBUG; //VERBOSE_QUIET; // default is VERBOSE_SIMPLE
             //$bmh->use_fetchstructure = true; // true is default, no need to speficy
-            //$bmh->testmode           = false; // false is default, no need to specify
-            //$bmh->debug_body_rule    = false; // false is default, no need to specify
-            //$bmh->debug_dsn_rule     = false; // false is default, no need to specify
-            //$bmh->purge_unprocessed  = false; // false is default, no need to specify
-            //$bmh->disable_delete     = false; // false is default, no need to specify
+            //$bmh->testmode           = false; // ne supprime pas de message
+            //$bmh->debug_body_rule    = false; // control the failed BODY rules output
+            //$bmh->debug_dsn_rule     = false; // control the failed DSN rules output
+            //$bmh->purge_unprocessed  = false; // supprimer également les mails non traité comme retour
+            //$bmh->disable_delete     = false; // ne supprime pas les message
 
             /*
              * for remote mailbox
