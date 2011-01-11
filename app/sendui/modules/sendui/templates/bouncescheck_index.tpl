@@ -1,8 +1,8 @@
-<h2 class="mainpage folder-bug float-left">Listes des boîtes de retour (bounces)</h2>
+<h2 class="mainpage folder-bug float-left">Listes des boîtes de rebonds (bounces)</h2>
 
 <div class="sendui-padding-mainpage float-right">
     <a href="{jurl 'sendui~bouncescheck:edit', array('from_page' => 'sendui~bouncescheck:index')}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
-        <span class="ui-icon ui-icon-circle-plus"></span>Ajouter une boîte de retour</a>
+        <span class="ui-icon ui-icon-circle-plus"></span>Ajouter une boîte de rebonds</a>
 </div>
 
 <div class="spacer"></div>

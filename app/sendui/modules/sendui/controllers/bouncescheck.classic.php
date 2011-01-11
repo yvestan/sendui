@@ -16,9 +16,10 @@
 
 class bouncescheckCtrl extends jController {
 
-    // les daos
+    // les daos bounce config et bounces
     protected $dao_bounce_config = 'common~bounce_config';
     protected $dao_bounce = 'common~bounce';
+    protected $dao_subscriber = 'common~subscriber';
 
     // formulaire bounce config
     protected $form_bounce_config = 'sendui~bounce_config';
@@ -53,7 +54,7 @@ class bouncescheckCtrl extends jController {
 
         $this->_dataTables($rep);
 
-        $rep->title = 'Vos boites de retour';
+        $rep->title = 'Vos boîtes de rebonds';
 
         $session = jAuth::getUserSession();
 
@@ -66,7 +67,7 @@ class bouncescheckCtrl extends jController {
 
         // fil d'arianne
         $navigation = array(
-            array('action' => '0', 'params' => array(), 'title' => 'Listes des boîtes de retour'),
+            array('action' => '0', 'params' => array(), 'title' => 'Listes des boîtes de rebonds'),
         );
 		$rep->body->assign('navigation', $navigation);
 
@@ -103,7 +104,7 @@ class bouncescheckCtrl extends jController {
 
         $this->_dataTables($rep);
 
-        $rep->title = 'Liste des retours';
+        $rep->title = 'Liste des rebonds';
 
         $session = jAuth::getUserSession();
 
@@ -116,7 +117,7 @@ class bouncescheckCtrl extends jController {
 
         // fil d'arianne
         $navigation = array(
-            array('action' => '0', 'params' => array(), 'title' => 'Listes des retours'),
+            array('action' => '0', 'params' => array(), 'title' => 'Listes des rebonds'),
         );
 		$rep->body->assign('navigation', $navigation);
 
@@ -132,13 +133,120 @@ class bouncescheckCtrl extends jController {
 
     // }}}
 
+    // {{{ bounceslist_list()
 
+    /**
+     * lister les bounces avec datables
+     * 
+     * @return      json
+     */
+    public function bounceslist_list()
+    {
+
+        // reponse format json
+        $rep = $this->getResponse('json');
+
+        // on instancie datatables
+        $datas = jClasses::getService('sendui~datatables');
+
+        // les colonnes affichées
+        $datas->setColumns(array('status','email','sent_date','date_insert'));
+
+        // l'index de recherche
+        $datas->setIndex('idbounce');
+
+        // définir le DAO de recherche
+        $datas->setDao($this->dao_bounce);
+
+        // boucle sur les résultats
+        foreach($datas->getResults() as $bounce) {
+            $row = array(
+                '<span class="cross">&nbsp;</span>',
+                $bounce->rule_cat,
+                $bounce->rule_no,
+                $bounce->email,
+                $bounce->bounce_type,
+                $bounce->diag_code,
+                $bounce->date_insert,
+                '<a href="'.jUrl::get('sendui~bouncescheck:check', array('idbounce' => $bounce->idbounce, 'from_page' => 'sendui~bouncescheck:index')).'" class="table-go">détails</a>',
+            );
+            $results[] = $row;
+        } 
+
+        $rep->data = $datas->getOutputInfos($results);
+
+        return $rep;
+
+    }
+
+    // }}}
+
+    // {{{ syncbounce()
+
+    /**
+     * Relancer la comparaison avec les abonnés
+     *
+     * @template    bouncescheck_syncbounces
+     * @return      redirect
+     */
+    public function syncbounce()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        $session = jAuth::getUserSession();
+
+        $tpl = new jTpl();
+
+        // TODO : faire ça en une requête
+
+        // récupérer les configurations
+        $bounce = jDao::get($this->dao_bounce);
+        $list_bounce = $bounce->getByCustomer($session->idcustomer);
+
+        // abonné
+        $subscriber = jDao::get($this->dao_subscriber);
+
+        /* si le bounce est présent dans la table subscriber avec le jeu idcustomer/email
+            alors on marque le status de l'abonné à 3 */
+        $nb_syncbounce = 0;
+        foreach($list_bounce as $bounce) {
+            if($subscriber->isSubscriberEmail($bounce->email,$session->idcustomer)>0) {
+                $subscriber->changeStatus($bounce->email,2,$session->idcustomer);
+                $nb_syncbounce++;
+            }
+        }
+
+        // retour sur la liste des bounces
+        $rep->action = 'sendui~bouncescheck:bounceslist';
+
+        // nombre de bounce synchronisé
+        $this->params = array('nb_syncbounce' => $nb_syncbounce);
+
+        return $rep;
+
+    }
+
+    // }}}
+
+    // {{{ check()
+
+    /**
+     * Traiter les bounces et renvoyer sur bounceslist
+     *
+     * @return      redirect
+     */
     public function check()
     {
 
-        $rep = $this->getResponse('html');
-
-        $rep->title = 'Traitement des adresses invalides et des retours (bounces)';
+        // si on veut voir le process
+        if($this->param('view_process')) {
+            $rep = $this->getResponse('html');
+            $rep->title = 'Traitement des rebonds (bounces)';
+        } else {
+            $rep = $this->getResponse('redirect');
+            $rep->action = 'sendui~bouncescheck:bouncelist';
+        }
 
         $tpl = new jTpl();
 
@@ -149,29 +257,44 @@ class bouncescheckCtrl extends jController {
             $infos_bounce_config = $bounce_config->get($this->param('idbounce_config'));
             $tpl->assign('bounce_config', $infos_bounce_config); 
 
-            // Use ONE of the following -- all echo back to the screen
-            //require_once('callback samples/callback_echo.php');
-            //require_once('callback samples/callback_database.php'); // NOTE: Requires modification to insert your database settings
-            //require_once('callback samples/callback_csv.php'); // NOTE: Requires creation of a 'logs' directory and making writable
+            // fonction pour logguer tous les bounces
+            function logAction($params) {
+
+                $GLOBALS['bounces'][] = $params;
+
+                $session = jAuth::getUserSession();
+                $cnx = jDb::getConnection();
+
+                if(!empty($params['email'])) {
+
+                    foreach($params as $k=>$v) {
+                        $expr[] = '`'.$k.'`='.$cnx->quote($v);
+                    }
+
+                    // idcustomer et idbounce config
+                    $expr[] = '`idcustomer`='.$session->idcustomer;
+                    $expr[] = '`idbounce_config`='.(int)$_GET['idbounce_config'];
+
+                    $sql = 'INSERT INTO bounce SET '.join(',', $expr).' ON DUPLICATE KEY UPDATE date_insert=NOW(),'.join(',', $expr);
+                    $cnx->exec($sql);
+
+                }
+            }
+
 
             // class de gestion des bounces
-            define('_PATH_BMH', JELIX_APP_PATH.'/lib/bmh/');
-            include_once _PATH_BMH.'class.phpmailer-bmh.php';
+            define('_PATH_BMH', JELIX_APP_PATH.'/lib/bounces/');
+            include_once _PATH_BMH.'bmh.php';
 
-            // testing examples
+            // objet 
             $bmh = new BounceMailHandler();
-            //$bmh->action_function    = 'callbackAction'; // default is 'callbackAction'
-            //$bmh->verbose            = VERBOSE_SIMPLE; //VERBOSE_REPORT; //VERBOSE_DEBUG; //VERBOSE_QUIET; // default is VERBOSE_SIMPLE
-            //$bmh->use_fetchstructure = true; // true is default, no need to speficy
-            //$bmh->testmode           = false; // ne supprime pas de message
-            //$bmh->debug_body_rule    = false; // control the failed BODY rules output
-            //$bmh->debug_dsn_rule     = false; // control the failed DSN rules output
-            //$bmh->purge_unprocessed  = false; // supprimer également les mails non traité comme retour
-            //$bmh->disable_delete     = false; // ne supprime pas les message
 
-            /*
-             * for remote mailbox
-             */
+            // config de base
+            $bmh->testmode = false; // ne supprime pas de message
+            $bmh->purge_unprocessed = false; // control the failed BODY rules output
+            $bmh->purge_processed  = false; // supprimer également les mails non traité comme retour
+
+            // boite a analyser
             $bmh->mailhost = $infos_bounce_config->mail_host;
             $bmh->mailbox_username = $infos_bounce_config->mail_username;
             $bmh->mailbox_password = $infos_bounce_config->mail_password;
@@ -179,38 +302,51 @@ class bouncescheckCtrl extends jController {
             $bmh->service = $infos_bounce_config->mail_service;
             $bmh->service_option = $infos_bounce_config->mail_service_option;
 
-            // autres options
-            //$bmh->boxname            = 'INBOX'; // the mailbox to access, default is 'INBOX'
-            //$bmh->moveHard           = true; // default is false
-            //$bmh->hardMailbox        = 'INBOX.hardtest'; // default is 'INBOX.hard' - NOTE: must start with 'INBOX.'
-            //$bmh->moveSoft           = true; // default is false
-            //$bmh->softMailbox        = 'INBOX.softtest'; // default is 'INBOX.soft' - NOTE: must start with 'INBOX.'
-            //$bmh->deleteMsgDate      = '2009-01-05'; // format must be as 'yyyy-mm-dd'
+            // silencieux
+            $bmh->verbose = VERBOSE_QUIET;
 
-            /*
-             * rest used regardless what type of connection it is
-             */
-            $bmh->openMailbox();
-            $bmh->processMailbox();
+            // callback
+            $bmh->log_function='logAction';
+            $bmh->action_function='bounceAction';
+            $bmh->unmatched_function='unmatchedAction';
+
+            // ouvrir la connexion avec la boite mail
+            $bmh->openPop3(
+                $infos_bounce_config->mail_host,
+                $infos_bounce_config->mail_username,
+                $infos_bounce_config->mail_password,
+                $infos_bounce_config->mail_port,
+                $infos_bounce_config->mail_service,
+                $infos_bounce_config->mail_service_option
+            );
+
+            // lancer la n'alyse
+            $bmh->processMailbox(6000);
 
             $tpl->assign('bounces', $GLOBALS['bounces']);
 
         } else {
             $tpl->assign('invalid_config', true);    
-            
         }
         
-        // fil d'arianne
-        $navigation = array(
-            array('action' => '0', 'params' => array(), 'title' => 'Gestion des retours'),
-        );
-		$rep->body->assign('navigation', $navigation);
+        // si on veut voir le process
+        if($this->param('view_process')) {
 
-        $rep->body->assign('MAIN', $tpl->fetch('bouncescheck_check')); 
+            // fil d'arianne
+            $navigation = array(
+                array('action' => '0', 'params' => array(), 'title' => 'Gestion des rebonds'),
+            );
+            $rep->body->assign('navigation', $navigation);
+
+            $rep->body->assign('MAIN', $tpl->fetch('bouncescheck_check')); 
+
+        }
 
         return $rep;
 
     }
+
+    // }}}
 
     // {{{ prepare()
 
@@ -388,37 +524,4 @@ class bouncescheckCtrl extends jController {
 
     // }}}
 
-
 }
-
-    
-/* This is a sample callback function for PHPMailer-BMH (Bounce Mail Handler).
- * This callback function will echo the results of the BMH processing.
- */
-
-/* Callback (action) function
- * @param int     $msgnum        the message number returned by Bounce Mail Handler
- * @param string  $bounce_type   the bounce type: 'antispam','autoreply','concurrent','content_reject','command_reject','internal_error','defer','delayed'        => array('remove'=>0,'bounce_type'=>'temporary'),'dns_loop','dns_unknown','full','inactive','latin_only','other','oversize','outofoffice','unknown','unrecognized','user_reject','warning'
- * @param string  $email         the target email address
- * @param string  $subject       the subject, ignore now
- * @param string  $xheader       the XBounceHeader from the mail
- * @param boolean $remove        remove status, 1 means removed, 0 means not removed
- * @param string  $rule_no       Bounce Mail Handler detect rule no.
- * @param string  $rule_cat      Bounce Mail Handler detect rule category.
- * @param int     $totalFetched  total number of messages in the mailbox
- * @return boolean
- */
-function callbackAction ($msgnum, $bounce_type, $email, $subject, $xheader, $remove, $rule_no=false, $rule_cat=false, $totalFetched=0) {
-    $GLOBALS['bounces'][] = array(
-        'msgnum' => $msgnum,
-        'bounce_type' => $bounce_type,
-        'email' => $email,
-        'subject' => $subject,
-        'xheader' => $xheader,
-        'remove' => $remove,
-        'rule_no' => $rule_no,
-        'rule_cat' => $rule_cat,
-    );
-    return true;
-}
-

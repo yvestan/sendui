@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     // confirmer avant de supprimer
-    $(".confirm_action").click(function() {
+    $(".confirm_action").live('click', function() {
         ok = confirm($(this).attr('title'));
         if(ok) {
             document.location.replace($(this).attr("href"));

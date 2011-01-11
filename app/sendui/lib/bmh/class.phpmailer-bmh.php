@@ -189,7 +189,7 @@ class BounceMailHandler {
    * Mailbox type, default is 'INBOX', other choices are (Tasks, Spam, Replies, etc.)
    * @var string
    */
-  public $boxname = INBOX;
+  public $boxname = 'INBOX';
 
   /*
    * Determines if soft bounces will be moved to another mailbox folder
@@ -532,6 +532,10 @@ class BounceMailHandler {
       call_user_func_array($this->action_function,$params);
     } else { // match rule, do bounce action
       if ($this->testmode) {
+          echo $dsn_msg;
+          echo $dsn_msg_structure;
+          echo $dsn_report;
+          print_r($result);
         $this->output('Match: ' . $rule_no . ':' . $rule_cat . '; ' . $bounce_type . '; ' . $email);
         return true;
       } else {

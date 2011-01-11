@@ -1,20 +1,24 @@
-<h2 class="mainpage folder-bug float-left">Listes des boîtes de retour (bounces)</h2>
+<h2 class="mainpage folder-bug float-left">Listes des rebonds (bounces)</h2>
 
 <div class="sendui-padding-mainpage float-right">
-    <a href="{jurl 'sendui~bouncescheck:edit', array('from_page' => 'sendui~bouncescheck:index')}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
-        <span class="ui-icon ui-icon-circle-plus"></span>Ajouter une boîte de retour</a>
+    <a href="{jurl 'sendui~bouncescheck:syncbounce', array('from_page' => 'sendui~bouncescheck:bounceslist')}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
+        <span class="ui-icon ui-icon-circle-plus"></span>Synchroniser avec les abonnés</a>
 </div>
 
 <div class="spacer"></div>
 
 <script type="text/javascript">
     var url_datatables_lng = '{$j_basepath}js/datatables/i18n/fr_FR.txt';
+    //var url_ajax_source = '{jurl 'sendui~bouncescheck:bounceslist_list'}';
 </script>
 
 {literal} 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $('#tab_bounce_list').dataTable({
+            /*"bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": url_ajax_source,*/
             "bJQueryUI": true,
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
@@ -27,42 +31,52 @@
 
 <div class="sendui-standard-content">
 
-    <table class="tabl display" id="tab_bounce_list">
-        <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th>Catégorie</th>
-                <th>N&deg; règle</th>
-                <th>Email</th>
-                <th>Diagnostic code</th>
-                <th>Dernier retour</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {foreach $list_bounce as $bounce}
-            <tr class="highlight">
-                <td>
-                    <span class="cross">&nbsp;</span>
-                </td>
-                <td>{$bounce->rule_cat}</td>
-                <td>{$bounce->rule_no}</td>
-                <td>{$bounce->email}</td>
-                <td>{$bounce->diag_code}</td>
-                <td>{$bounce->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
-                <td>
-                    <a href="{jurl 'sendui~bouncescheck:check', array('idbounce' => $bounce->idbounce, 'from_page' => 'sendui~bouncescheck:index')}" class="table-go">lancer l'analyse</a>
-                    <a href="{jurl 'sendui~bouncescheck:edit', array('idbounce' => $bounce->idbounce, 'from_page' => 'sendui~bouncescheck:index')}" class="table-edit">modifier</a>
-                    <a href="{jurl 'sendui~bouncescheck:delete', array('idbounce' => $bounce->idbounce, 'from_page' => 'sendui~bouncescheck:index')}" class="table-delete">supprimer</a>
-                </td>
-            </tr>
-            {/foreach}
-        </tbody>
-    </table>
+    <form method="post" action="{jurl 'sendui~bouncescheck:deletesubscribers', array('from_page' => 'bouncescheck~bounceslist')}" id="bouncedelete">
+
+        <table class="tabl display" id="tab_bounce_list">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Catégorie</th>
+                    <th>N&deg; règle</th>
+                    <th>Email</th>
+                    <th>Sévérité</th>
+                    <th style="width:200px;">Diagnostic code</th>
+                    <th>Dernier rebond</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $list_bounce as $bounce}
+                <tr class="highlight">
+                    <td>
+                        <input type="checkbox" name="email[]" value="{$bounce->email}" />
+                    </td>
+                    <td>{$bounce->rule_cat}</td>
+                    <td class="sendui-small">{$bounce->rule_no}</td>
+                    <td>{$bounce->email}</td>
+                    <td>{$bounce->bounce_type}</td>
+                    <td class="sendui-small">{$bounce->diag_code|truncate:30}</td>
+                    <td class="sendui-small">{$bounce->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
+                    <td>
+                        <a href="{jurl 'sendui~bouncescheck:check', array('idbounce' => $bounce->idbounce, 'from_page' => 'sendui~bouncescheck:index')}" class="table-go">détails</a>
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+
+        <div class="sendui-margin-top">Pour la sélection :
+            <select name="action_bounces" id="action_bounces">
+                <option value="delete_subscribers">supprimer les abonnés</option>
+                <option value="delete_bounces">supprimer les rebonds</option>
+            </select>
+            <input name="_submit" id="jforms_sendui_bounceslist_submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Éxecuter" type="submit"></div>
+
+    </form>
 
     <ul class="legende">
-        <li class="tick">active</li>
-        <li class="cross">inactive</li>
+        <li class="flag-yellow">rebond</li>
     </ul>
     <div class="spacer"></div>
 

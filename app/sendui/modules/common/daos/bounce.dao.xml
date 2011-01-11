@@ -16,6 +16,9 @@
         <property name="charset" fieldname="charset" datatype="string" default="" maxlength="100"/>
         <property name="action" fieldname="action" datatype="string" default="" maxlength="100"/>
         <property name="status_code" fieldname="status_code" datatype="string" default="" maxlength="100"/>
+        <property name="diag_code" fieldname="diag_code" datatype="string" default="" maxlength="255"/>
+        <property name="dsn_msg" fieldname="dsn_msg" datatype="string" default="" maxlength="255"/>
+        <property name="dsn_report" fieldname="dsn_report" datatype="string" default="" maxlength="255"/>
         <property name="bounce_type" fieldname="bounce_type" datatype="string" default="" maxlength="20"/>
         <property name="remove" fieldname="remove" datatype="int" default=""/>
         <property name="dsn_original_rcpt" fieldname="dsn_original_rcpt" datatype="string" default="" maxlength="255"/>

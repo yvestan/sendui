@@ -44,12 +44,33 @@
                 <orderitem property="date_insert" way="asc" />
             </order>
         </method>
+        <method name="changeStatus" type="update">  
+            <parameter name="email"/>
+            <parameter name="status"/>
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="email" expr="$email"/>
+                <eq property="idcustomer" expr="$idcustomer"/>
+            </conditions>
+            <values>
+                <value property="status" expr="$status" />
+            </values>
+        </method>
+
         <method name="isSubscriber" type="count" distinct="idsubscriber">  
             <parameter name="email"/>
             <parameter name="idsubscriber_list"/>
             <conditions logic="AND">
                 <eq property="email" expr="$email"/>
                 <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+            </conditions>
+        </method>
+        <method name="isSubscriberEmail" type="count" distinct="idsubscriber">  
+            <parameter name="email"/>
+            <parameter name="idcustomer"/>
+            <conditions logic="AND">
+                <eq property="email" expr="$email"/>
+                <eq property="idcustomer" expr="$idcustomer"/>
             </conditions>
         </method>
         <method name="isSubscriberToken" type="count" distinct="idsubscriber">  

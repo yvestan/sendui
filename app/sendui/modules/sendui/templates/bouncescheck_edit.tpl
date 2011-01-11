@@ -1,7 +1,7 @@
 {if empty($idbounce_config)}
-    <h2 class="mainpage folder-bug">Ajouter une boîte de retour</h2>
+    <h2 class="mainpage folder-bug">Ajouter une boîte de rebonds</h2>
 {else}
-    <h2 class="mainpage folder-bug">Gérer la boîte de retour</h2>
+<h2 class="mainpage folder-bug">Gérer la boîte de rebonds</h2>
     <h3 class="sendui-mainpage-h3">{$bounce_config->name}</h3>
 {/if}
 

@@ -34,6 +34,25 @@ CREATE TABLE IF NOT EXISTS `customer` (
   KEY `active` (`active`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE IF NOT EXISTS `bounce_config` (
+  `idbounce_config` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idcustomer` int(10) unsigned NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `mail_host` varchar(150) NOT NULL,
+  `mail_username` varchar(150) NOT NULL,
+  `mail_password` varchar(150) NOT NULL,
+  `mail_port` varchar(5) NOT NULL,
+  `mail_service` varchar(10) NOT NULL,
+  `mail_service_option` varchar(150) NOT NULL,
+  `last_use` timestamp NULL DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `date_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `date_insert` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idbounce_config`),
+  KEY `idcustomer` (`idcustomer`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
 CREATE TABLE IF NOT EXISTS `message` (
   `idmessage` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idcustomer` int(10) unsigned NOT NULL,
@@ -131,6 +150,8 @@ CREATE TABLE IF NOT EXISTS `subscriber_list` (
   KEY `idcustomer` (`idcustomer`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+ALTER TABLE `bounce_config`
+  ADD CONSTRAINT `bounce_config_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`) ON DELETE CASCADE;
 
 ALTER TABLE `message`
   ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`);
