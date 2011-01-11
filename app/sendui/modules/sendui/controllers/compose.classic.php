@@ -104,6 +104,55 @@ class composeCtrl extends jController {
 
     // }}}
 
+    // {{{ saveurl()
+
+    /**
+     * Sauvegarder le message depuis une URL
+     * 
+     * @return      redirect
+     */
+    public function saveurl()
+    {
+
+        $rep = $this->getResponse('redirect');
+        $rep->params = array('idmessage' => $this->param('idmessage'));
+
+        // récupere le form
+        $message_compose = jForms::fill($this->form_message_compose, $this->param('idmessage'));
+        
+        if (!$message_compose->check()) {
+            $rep->action = 'sendui~compose:index';
+            return $rep;
+        }
+        if($this->param('url_file')!='') {
+            $html_message = stripslashes($this->param('html_message'));
+            $message_compose->setData('html_message',$html_message);
+        }
+
+        // enregistrer le message
+        if($message_compose->saveToDao($this->dao_message)) {
+
+            // si ok, on redirige sur la page compose
+            jForms::destroy($this->form_message_compose);
+
+            if($this->param('from_page')!='') {
+                $rep->action = $this->param('from_page');
+            } else {
+                $rep->action = 'sendui~compose:index';
+            }
+
+            return $rep;
+            
+        }
+
+        // si rien
+        $rep->action = 'sendui~compose:index';
+        return $rep;
+       
+    }
+
+    // }}}
+
     // {{{ save()
 
     /**
@@ -124,9 +173,18 @@ class composeCtrl extends jController {
             $rep->action = 'sendui~compose:index';
             return $rep;
         }
-        if($this->param('html_message')!='') {
-            $html_message = stripslashes($this->param('html_message'));
+
+        // récupérer depuis une URL
+        if($this->param('url_file')!='') {
+            $utils = jClasses::getService('sendui~utils');
+            $html_message = $utils->getExternalContent($this->param('url_file'));
             $message_compose->setData('html_message',$html_message);
+        } else {
+            // stripslahes sur le message en html
+            if($this->param('html_message')!='') {
+                $html_message = stripslashes($this->param('html_message'));
+                $message_compose->setData('html_message',$html_message);
+            }
         }
 
         // enregistrer le message

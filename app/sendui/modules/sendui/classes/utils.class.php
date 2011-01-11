@@ -70,5 +70,31 @@ class Utils {
 
     // }}}
 
+    // {{{ getExternalContent()
+
+    /** Récupérer depuis un fichier distant
+     * 
+     * @param string $URL URL du fichier
+     * 
+     * @return string
+     */
+    public function getExternalContent($URL)
+    {
+
+        // init de CURL
+        $ch = curl_init($URL);    
+
+        curl_setopt($ch, CURLOPT_URL, $URL);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // le contenu
+        $return = curl_exec($ch);
+
+        return $return;
+    }
+
+    // }}}
+
 }
 ?>

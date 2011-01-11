@@ -25,7 +25,7 @@
 
         <ul class="tabs-padding">
             <li><a href="#message-html" class="page-white-edit">Rédiger le message</a></li>
-            <!--<li><a href="#file_upload" class="page-white-get">Charger depuis un fichier</a></li>-->
+            <li><a href="#file_upload" class="page-white-get">Charger depuis un fichier</a></li>
             <!--<li><a href="#templates" class="layout-edit">Utiliser un modèle</a></li>-->
         </ul>
 
@@ -66,23 +66,31 @@
             {/form}
         </div>
 
-        <!--<div id="file_upload">
+        <div id="file_upload">
         
             <h3 class="page-white-code">Charger depuis un fichier HTML</h3>
             <div class="spacer">&nbsp;</div>
 
-            {form $message_compose, 'sendui~compose:save'}
+            <div class="ui-tabs ui-widget-content ui-corner-all">
+                <div class="sendui-standard-content sendui-simple-content ">
 
-                <div>{ctrl_label 'file_message'}</div>
-                <p>{ctrl_control 'file_message'}</p>
+                <p>Vous pouvez créer votre newsletter en utilisant le contenu d'un fichier hébergé sur un autre site. Cette fonctionnalité
+                    vous permet par exemple, de créer un message à partir d'un fichier généré par un système de gestion de contenu</p>
 
-                <div class="spacer">&nbsp;</div>
+                </div>
+            </div>
+            <div class="spacer">&nbsp;</div>
 
-                <p><input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Charger" type="submit"></p>
+            {form $message_compose, 'sendui~compose:save', array('idmessage' => $idmessage,'from_page' => 'sendui~compose:index')}
+
+                <div>{ctrl_label 'url_file'}</div>
+                <p>{ctrl_control 'url_file'} 
+
+                <input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Charger le fichier" type="submit"></p>
 
             {/form}
 
-        </div>-->
+        </div>
 
         <!--<div id="templates">
 

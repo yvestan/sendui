@@ -19,17 +19,23 @@
 
 <script type="text/javascript">
     var url_datatables_lng = '{$j_basepath}js/datatables/i18n/fr_FR.txt';
+    var url_ajax_source = '{jurl 'sendui~subscribers:view_list', array('idsubscriber_list' => $idsubscriber_list)}';
 </script>
 
 {literal} 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $('#tab_subscribers_lists').dataTable({
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": url_ajax_source,
             "bJQueryUI": true,
             "bAutoWidth": false,
             "sPaginationType": "full_numbers",
             "oLanguage": { "sUrl": url_datatables_lng },
-            "aaSorting": [[3, 'desc']]
+            "aaSorting": [[3, 'desc']],
+            // 5eme colonne non triable
+            "aoColumnDefs": [{"bSortable": false, "aTargets": [4]}]
         });
     });
 </script>
@@ -49,44 +55,16 @@
 
         </thead>
         <tbody>
-            {foreach $list_subscribers as $subscriber}
             <tr class="highlight">
-                <td>
-                    {if $subscriber->status==1}<span class="flag-green">&nbsp;</span>{/if}
-                    {if $subscriber->status==0}<span class="flag-blue">&nbsp;</span>{/if}
-                    {if $subscriber->status==2}<span class="flag-yellow">&nbsp;</span>{/if}
-                    {if $subscriber->status==3}<span class="flag-red">&nbsp;</span>{/if}
-                </td>
-                <td>
-                    {if $subscriber->status==3}
-                        <del><a href="{jurl 'sendui~subscriber:index', array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:view', 'idsubscriber_list' => $idsubscriber_list)}">{$subscriber->email}</a></del>
-                    {else}
-                        <a href="{jurl 'sendui~subscriber:index', array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:index', 'idsubscriber_list' => $idsubscriber_list)}">{$subscriber->email}</a>
-                    {/if}
-                </td>
-                <td>{if !empty($subscriber->sent_date)}
-                        {$subscriber->sent_date|jdatetime:'db_datetime','lang_datetime'}
-                    {else}
-                        Aucun envoi
-                    {/if}
-                </td>
-                <td>{$subscriber->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
-                <td>
-                    <a href="{jurl 'sendui~subscriber:prepare', 
-                        array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:view', 'idsubscriber_list' => $idsubscriber_list)}" class="table-edit">modifier</a>
-                    <a href="{jurl 'sendui~subscribers:deletesubscriber', array('idsubscriber' => $subscriber->idsubscriber, 'idsubscriber_list' => $idsubscriber_list)}" 
-                        class="confirm_action table-delete" title="Êtes-vous sur de vouloir supprimer cet abonné ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !">supprimer</a>
-                </td>
+                <td colspan="5" class="dataTables_empty">Chargement de la liste...</td>
             </tr>
-            {/foreach}
         </tbody>
     </table>
 
-    
     <ul class="legende">
         <li class="flag-green">actif</li>
         <li class="flag-blue">inactif (suspendu)</li>
-        <li class="flag-yellow">à supprimer/vérifier (rebond)</li>
+        <li class="flag-yellow">rebond : à supprimer/vérifier</li>
         <li class="flag-red">supprimé (à confirmer)</li>
     </ul>
     <div class="spacer">&nbsp;</div>

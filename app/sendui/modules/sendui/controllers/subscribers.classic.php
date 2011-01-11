@@ -403,6 +403,73 @@ class subscribersCtrl extends jController {
 
     // }}}
 
+    // {{{ view_list()
+
+    /**
+     * lister les abonnés d'une liste
+     * 
+     * @return      json
+     */
+    public function view_list()
+    {
+
+        // reponse format json
+        $rep = $this->getResponse('json');
+
+        // on instancie datatables
+        $datas = jClasses::getService('sendui~datatables');
+
+        // les colonnes affichées
+        $datas->setColumns(array('status','email','sent_date','date_insert'));
+
+        // l'index de recherche
+        $datas->setIndex('idsubscriber');
+
+        // définir le DAO de recherche
+        $datas->setDao($this->dao_subscriber);
+
+        // flag de status
+        $status_flags = array('blue','green','yellow','red');
+
+        $idsubscriber_list = 1;
+
+        // boucle sur les résultats
+        foreach($datas->getResults() as $subscriber) {
+            // le status
+            $row[0] = '<span class="flag-'.$status_flags[$subscriber->status].'">&nbsp;</span>';
+            // l'email
+            $email = '<a href="'.jUrl::get('sendui~subscriber:index', array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:view', 'idsubscriber_list' => $idsubscriber_list)).'">'.$subscriber->email.'</a>';
+            if($subscriber->status==3) {
+                $row[1] = '<del>'.$email.'</del>';
+            } else {
+                $row[1] = $email;
+            }
+            // date du dernier envoi
+            if(!empty($subscriber->sent_date)) {
+                //$row['sent_date'] = $subscriber->sent_date|jdatetime:'db_datetime','lang_datetime';
+                $row[2] = $subscriber->sent_date;
+            } else {
+                $row[2] = 'Aucun envoi';
+            }
+            //$row['date_insert'] = $subscriber->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
+            $row[3] = $subscriber->date_insert;
+            // actions
+            $row[4] = '
+                    <a href="'.jUrl::get('sendui~subscriber:prepare', 
+                        array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:view', 'idsubscriber_list' => $idsubscriber_list)).'" class="table-edit">modifier</a>
+                    <a href="'.jUrl::get('sendui~subscribers:deletesubscriber', array('idsubscriber' => $subscriber->idsubscriber, 'idsubscriber_list' => $idsubscriber_list)).'" 
+                        class="confirm_action table-delete" title="Êtes-vous sur de vouloir supprimer cet abonné ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !">supprimer</a>';
+            $results[] = $row;
+        } 
+
+        $rep->data = $datas->getOutputInfos($results);
+
+        return $rep;
+
+    }
+
+    // }}}
+
     // {{{ preparesubscriber()
 
     /**

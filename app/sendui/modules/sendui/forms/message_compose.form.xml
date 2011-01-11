@@ -9,9 +9,9 @@
         <label>Message au format texte</label>
     </textarea>
 
-    <upload ref="file_message" mimetype="text/html" maxsize="20000">
-        <label>Fichier au format HTML</label>
-    </upload>
+    <input ref="url_file" maxlength="250">
+        <label>URL du fichier distant au format HTML</label>
+    </input>
 
     <submit ref="_submit">
         <label>Enregistrer</label>

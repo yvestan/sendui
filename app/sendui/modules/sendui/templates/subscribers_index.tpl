@@ -27,7 +27,6 @@
 
 <div class="sendui-standard-content">
 
-
     <table class="tabl display" id="tab_subscribers_lists">
         <thead>
             <tr>
@@ -71,5 +70,8 @@
         <li class="cross">inactive</li>
     </ul>
     <div class="spacer"></div>
+
+    <h3 class="sendui-margin-top"><a href="{jurl 'sendui~bouncescheck:index', array('from_page' => 'subscribers~index')}" class="flag-yellow">
+        Gérer les rebonds</a> (adresses invalides ou bloqués)</h3>
 
 </div>
