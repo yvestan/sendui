@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS `customer` (
   KEY `active` (`active`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-
 CREATE TABLE IF NOT EXISTS `bounce_config` (
   `idbounce_config` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idcustomer` int(10) unsigned NOT NULL,
@@ -52,6 +51,40 @@ CREATE TABLE IF NOT EXISTS `bounce_config` (
   PRIMARY KEY (`idbounce_config`),
   KEY `idcustomer` (`idcustomer`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+CREATE TABLE IF NOT EXISTS `bounce` (
+  `idbounce` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idcustomer` int(10) unsigned NOT NULL,
+  `idbounce_config` int(10) unsigned NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `rule_cat` varchar(100) DEFAULT NULL,
+  `rule_no` varchar(10) DEFAULT NULL,
+  `rule_type` varchar(10) DEFAULT NULL,
+  `from` varchar(255) DEFAULT NULL,
+  `date` varchar(255) DEFAULT NULL,
+  `subject` tinyblob,
+  `body` blob,
+  `charset` varchar(100) DEFAULT NULL,
+  `action` varchar(100) DEFAULT NULL,
+  `status_code` varchar(100) DEFAULT NULL,
+  `diag_code` blob,
+  `dsn_msg` blob,
+  `dsn_report` blob,
+  `bounce_type` varchar(20) DEFAULT NULL,
+  `remove` tinyint(1) DEFAULT NULL,
+  `dsn_original_rcpt` varchar(255) DEFAULT NULL,
+  `dsn_final_rcpt` varchar(255) DEFAULT NULL,
+  `md5header` char(32) DEFAULT NULL,
+  `date_insert` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idbounce`),
+  UNIQUE KEY `md5header` (`md5header`),
+  KEY `rule_cat` (`rule_cat`),
+  KEY `email` (`email`),
+  KEY `idcustomer` (`idcustomer`),
+  KEY `idbounce_config` (`idbounce_config`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
 
 CREATE TABLE IF NOT EXISTS `message` (
   `idmessage` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -152,6 +185,10 @@ CREATE TABLE IF NOT EXISTS `subscriber_list` (
 
 ALTER TABLE `bounce_config`
   ADD CONSTRAINT `bounce_config_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`) ON DELETE CASCADE;
+
+ALTER TABLE `bounce`
+  ADD CONSTRAINT `bounce_ibfk_2` FOREIGN KEY (`idbounce_config`) REFERENCES `bounce_config` (`idbounce_config`),
+  ADD CONSTRAINT `bounce_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`) ON DELETE CASCADE;
 
 ALTER TABLE `message`
   ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`);
