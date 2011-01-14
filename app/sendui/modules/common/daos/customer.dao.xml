@@ -17,6 +17,7 @@
         <property name="city" fieldname="city" datatype="string" default="" maxlength="150"/>
         <property name="country" fieldname="country" datatype="string" default=""/>
         <property name="theme" fieldname="theme" datatype="string" default=""/>
+        <property name="return_path" fieldname="return_path" datatype="string" default="" maxlength="150"/>
         <property name="batch_quota" fieldname="batch_quota" datatype="int" default="1"/>
         <property name="pause_quota" fieldname="pause_quota" datatype="int" default="1"/>
         <property name="is_admin" fieldname="is_admin" datatype="int" required="true" default="0"/>

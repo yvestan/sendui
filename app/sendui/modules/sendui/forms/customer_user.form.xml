@@ -41,6 +41,10 @@
         <label>Pays</label>
     </input>
 
+    <input ref="return_path" required="true" maxlength="150">
+        <label>Email de rebonds</label>
+    </input>
+
     <input ref="batch_quota" required="true">
         <label>Nombre de mail par lot</label>
     </input>

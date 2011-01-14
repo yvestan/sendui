@@ -158,6 +158,11 @@ class settingsCtrl extends jController {
             $result['daorec']->pause = $session->pause_quota;
         }
 
+        // on insert le return_path pour cet utilisateur
+        if(isset($session->return_path)) {
+            $result['daorec']->return_path = $session->return_path;
+        }
+
         if($result['toInsert'] || $this->param('reuse')!='') {
 
             // réutilisation

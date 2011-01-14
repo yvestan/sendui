@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `zip` varchar(20) DEFAULT NULL,
   `city` varchar(150) DEFAULT NULL,
   `country` char(2) DEFAULT NULL,
+  `return_path` varchar(150) DEFAULT NULL,
   `batch_quota` tinyint(5) NOT NULL DEFAULT '1',
   `pause_quota` tinyint(5) NOT NULL DEFAULT '1',
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
