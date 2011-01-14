@@ -1,7 +1,7 @@
 allow from all                                                                                                                                                                              
 RewriteEngine On
 
-RewriteBase /admin/
+#RewriteBase /admin/
 
 RewriteCond %{REQUEST_FILENAME} !-f 
 RewriteCond %{REQUEST_FILENAME} !-d 

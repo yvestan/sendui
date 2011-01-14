@@ -13,7 +13,7 @@ simple=simpleHtmlResponse
 install=installHtmlResponse
 
 [urlengine]
-;basePath="/devel/sendui/admin/"
+basePath=""
 
 notfoundAct="sendui~error:notfound"
 
