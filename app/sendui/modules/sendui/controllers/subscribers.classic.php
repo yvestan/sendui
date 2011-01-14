@@ -433,6 +433,8 @@ class subscribersCtrl extends jController {
 
         $idsubscriber_list = 1;
 
+        $results = array();
+
         // boucle sur les résultats
         foreach($datas->getResults() as $subscriber) {
             // le status

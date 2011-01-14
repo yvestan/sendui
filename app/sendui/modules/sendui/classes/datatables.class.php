@@ -149,7 +149,7 @@ class Datatables {
         );
 
         if(empty($datas)) {
-            foreach($resultSet as $aRow) {
+            foreach($this->result_set as $aRow) {
                 $row = array();
                 for ($i=0 ; $i<count($this->columns) ;$i++) {
                     if ($this->columns[$i]=='version') {
