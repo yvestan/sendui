@@ -106,6 +106,10 @@ class Datatables {
             }
         }
 
+        if(!empty($_GET['idsubscriber_list'])) {
+            $conditions->addCondition('idsubscriber_list','=',(int)$_GET['idsubscriber_list']);
+        }
+
         // ordering
         if(isset($_GET['iSortCol_0'] )) {
             for($i=0 ; $i<intval($_GET['iSortingCols']); $i++) {
