@@ -431,7 +431,7 @@ class subscribersCtrl extends jController {
         // flag de status
         $status_flags = array('blue','green','yellow','red');
 
-        $idsubscriber_list = 1;
+        $idsubscriber_list = $this->param('idsubscriber_list');
 
         $results = array();
 
