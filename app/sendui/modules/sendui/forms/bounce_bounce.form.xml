@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://jelix.org/ns/forms/1.1">
+
+    <input ref="email" required="true" maxlength="255">
+        <label>Email</label>
+    </input>
+
+    <input ref="rule_cat" maxlength="100">
+        <label>Catégorie d'erreur</label>
+    </input>
+
+    <input ref="rule_no" maxlength="10">
+        <label>Numéro d'erreur</label>
+    </input>
+
+    <input ref="rule_no" maxlength="10">
+        <label>Numéro d'erreur</label>
+    </input>
+
+</form>

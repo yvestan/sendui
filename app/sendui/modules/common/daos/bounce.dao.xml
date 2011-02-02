@@ -33,5 +33,13 @@
                 <eq property="idcustomer" expr="$idcustomer" />
             </conditions>
         </method>
+        <method name="getBounceByCustomer" type="selectfirst"> 
+            <parameter name="idbounce" />
+            <parameter name="idcustomer" />
+            <conditions logic="AND">
+                <eq property="idbounce" expr="$idbounce" />
+                <eq property="idcustomer" expr="$idcustomer" />
+            </conditions>
+        </method>
     </factory>
 </dao>

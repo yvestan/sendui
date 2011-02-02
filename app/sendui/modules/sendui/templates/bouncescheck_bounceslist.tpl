@@ -41,7 +41,7 @@
                     <th>N&deg; règle</th>
                     <th>Email</th>
                     <th>Sévérité</th>
-                    <th style="width:200px;">Diagnostic code</th>
+                    <!--<th style="width:200px;">Diagnostic code</th>-->
                     <th>Dernier rebond</th>
                     <th>Actions</th>
                 </tr>
@@ -52,14 +52,14 @@
                     <td>
                         <input type="checkbox" name="email[]" value="{$bounce->email}" />
                     </td>
-                    <td>{$bounce->rule_cat}</td>
-                    <td class="sendui-small">{$bounce->rule_no}</td>
-                    <td>{$bounce->email}</td>
-                    <td>{$bounce->bounce_type}</td>
-                    <td class="sendui-small">{$bounce->diag_code|truncate:30}</td>
+                    <td><a href="{jurl 'sendui~bouncescheck:bounceslist', array('rule_cat' => $bounce->rule_cat)}">{$bounce->rule_cat}</a></td>
+                    <td class="sendui-small"><a href="{jurl 'sendui~bouncescheck:bounceslist', array('rule_no' => $bounce->rule_no)}">{$bounce->rule_no}</a></td>
+                    <td>{$bounce->email}<br />
+                        <span class="sendui-small">{$bounce->diag_code|truncate:30}</span>
+                    <td><a href="{jurl 'sendui~bouncescheck:bounceslist', array('bounce_type' => $bounce->bounce_type)}">{$bounce->bounce_type}</a></td>
                     <td class="sendui-small">{$bounce->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
                     <td>
-                        <a href="{jurl 'sendui~bouncescheck:check', array('idbounce' => $bounce->idbounce, 'from_page' => 'sendui~bouncescheck:index')}" class="table-go">détails</a>
+                        <a href="{jurl 'sendui~bouncescheck:bounce', array('idbounce' => $bounce->idbounce, 'from_page' => 'sendui~bouncescheck:bounceslist')}" class="table-go">détails</a>
                     </td>
                 </tr>
                 {/foreach}

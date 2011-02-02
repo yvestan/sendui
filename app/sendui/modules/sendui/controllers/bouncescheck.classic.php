@@ -208,11 +208,12 @@ class bouncescheckCtrl extends jController {
         $subscriber = jDao::get($this->dao_subscriber);
 
         /* si le bounce est présent dans la table subscriber avec le jeu idcustomer/email
-            alors on marque le status de l'abonné à 3 */
+            alors on marque le status de l'abonné à 3 ET on ajoute l'idbounce */
         $nb_syncbounce = 0;
         foreach($list_bounce as $bounce) {
             if($subscriber->isSubscriberEmail($bounce->email,$session->idcustomer)>0) {
                 $subscriber->changeStatus($bounce->email,2,$session->idcustomer);
+                //$subscriber->setBounce($bounce->email,$bounce->idbounce,2,$session->idcustomer);
                 $nb_syncbounce++;
             }
         }
@@ -245,7 +246,7 @@ class bouncescheckCtrl extends jController {
             $rep->title = 'Traitement des rebonds (bounces)';
         } else {
             $rep = $this->getResponse('redirect');
-            $rep->action = 'sendui~bouncescheck:bouncelist';
+            $rep->action = 'sendui~bouncescheck:bounceslist';
         }
 
         $tpl = new jTpl();
@@ -523,5 +524,57 @@ class bouncescheckCtrl extends jController {
     }
 
     // }}}
+
+    // {{{ bounce()
+
+    /**
+     * Détail d'un rebond
+     *
+     * @template    bouncescheck_bounce
+     * @return      html
+     */
+    public function bounce()
+    {
+
+        $rep = $this->getResponse('html');
+
+        $rep->title = 'Détail du rebond';
+
+        // si pas d'idbounce
+        if($this->param('idbounce')=='') {
+            $rep = $this->getResponse('redirect');
+            $rep->actions = 'sendui~bouncescheck:bounceslist';
+            return $rep;
+        }
+
+        $session = jAuth::getUserSession();
+
+        $tpl = new jTpl();
+
+        // récupérer le rebond
+        $bounce = jDao::get($this->dao_bounce);
+        $infos_bounce = $bounce->getBounceByCustomer($this->param('idbounce'),$session->idcustomer);
+        $tpl->assign('bounce', $infos_bounce); 
+
+        // fil d'arianne
+        $navigation = array(
+            array('action' => 'sendui~bouncescheck:index', 'params' => array(), 'title' => 'Liste des boîtes de rebonds'),
+            array('action' => 'sendui~bouncescheck:bounceslist', 'params' => array(), 'title' => 'Liste des rebonds'),
+            array('action' => '0', 'params' => array(), 'title' => 'Détails du rebond'),
+        );
+		$rep->body->assign('navigation', $navigation);
+
+        // marquer le menu
+        $rep->body->assign('active_page', 'subscribers');
+
+        // template
+        $rep->body->assign('MAIN', $tpl->fetch('bouncescheck_bounce')); 
+
+        return $rep;
+
+    }
+
+    // }}}
+
 
 }
