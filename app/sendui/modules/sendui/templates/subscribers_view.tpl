@@ -72,5 +72,8 @@
     <h3 class="sendui-margin-top"><a href="{jurl 'sendui~subscribers:generateform', array('idsubscriber_list' => $idsubscriber_list)}" class="application-form-add">
         Créer un formulaire d'abonnement</a> pour votre site</h3>
 
+    <h3 class="sendui-margin-top"><a href="{jurl 'sendui~subscribers:listpurge', array('idsubscriber_list' => $idsubscriber_list, 'from_page' => 'sendui~subscribers:view')}" 
+    title="Êtes-vous sur de vouloir supprimer cet abonné ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !" class="confirm_action user-delete">
+        Supprimer définitivement les abonnés marqués comme &laquo; supprimé &raquo;</a> (action irréversible)</h3>
 
 </div>

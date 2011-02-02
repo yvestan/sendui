@@ -46,7 +46,7 @@
                         <input type="radio" name="idsubscriber_list" value="{$subscriber_list->idsubscriber_list}" />
                     {/if}
                 {$subscriber_list->name}</td>
-                <td>{$subscriber->countByList($subscriber_list->idsubscriber_list)} abonnés</td>
+                <td><span class="flag-green">{$subscriber->countActiveByList($subscriber_list->idsubscriber_list)} abonnés</span> <span class="sendui-grey">(actifs uniquement)</span></td>
                 <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
             </tr>
             {/if}

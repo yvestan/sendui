@@ -56,7 +56,16 @@
                 <value property="status" expr="$status" />
             </values>
         </method>
-
+        <method name="changeStatusByIdsubscriber" type="update">  
+            <parameter name="idsubscriber"/>
+            <parameter name="status"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber" expr="$idsubscriber"/>
+            </conditions>
+            <values>
+                <value property="status" expr="$status" />
+            </values>
+        </method>
         <method name="isSubscriber" type="count" distinct="idsubscriber">  
             <parameter name="email"/>
             <parameter name="idsubscriber_list"/>
@@ -99,6 +108,13 @@
                 <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
             </conditions>
         </method>
+        <method name="countActiveByList" type="count" distinct="idsubscriber">  
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+                <eq property="status" expr="1"/>
+            </conditions>
+        </method>
         <method type="php" name="countMessageSubscribers">
             <parameter name="idmessage" />
             <parameter name="status" />
@@ -122,6 +138,13 @@
             </values>
             <conditions>
                 <eq property="idsubscriber" expr="$idsubscriber" />
+            </conditions>
+        </method>
+        <method name="purgeSubscriberByList" type="delete">  
+            <parameter name="idsubscriber_list"/>
+            <conditions logic="AND">
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
+                <eq property="status" expr="3"/>
             </conditions>
         </method>
     </factory>

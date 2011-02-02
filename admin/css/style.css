@@ -690,6 +690,9 @@ p.sendui-content {
 .sendui-small {
     font-size: 90%;
 }
+.sendui-small2 {
+
+}
 #navigation {
     margin-top: 10px;
     margin-left: 10px;
@@ -738,4 +741,10 @@ p.sendui-content {
 }
 #global label.jforms-error {
     font-style: normal;
+}
+code {
+    font-size: 120%;
+}
+#global .dateinput input {
+    width: 100px;
 }

@@ -5,14 +5,6 @@
             class="table-go">{$subscriber_list->name}</a></h3>
 {/if}
 
-{literal}
-<script type="text/javascript">
-    $(function() {
-        $("#tabs-compose").tabs();
-    });
-    </script>
-{/literal}
-
 <div class="sendui-standard-content">
 
         <div class="settings" id="subscribers-unique">
@@ -81,7 +73,7 @@
             <p>{ctrl_control 'status'}</p>
         </div>
 
-        <div class="bloc-form ui-corner-all">
+        <div class="bloc-form ui-corner-all dateinput">
             <div>{ctrl_label 'confirmed'}</div>
             <p>{ctrl_control 'confirmed'}</p>
         </div>
@@ -111,8 +103,10 @@
 
         {if !empty($idsubscriber)}
         <p class="sendui-margin-top-double">
-            <a href="{jurl 'sendui~subscribers:listdelete', array('idsubscriber_list' => $idsubscriber_list)}" 
-                class="confirm_action user-delete" title="Êtes-vous sur de vouloir supprimer cet abonné ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !">Supprimer cet abonné</a>
+            <a href="{jurl 'sendui~subscribers:deletesubscriber', array('idsubscriber' => $idsubscriber, 'idsubscriber_list' => $idsubscriber_list, 'from_page' => 'sendui~subscriber:edit')}" 
+                class="confirm_action flag-green" title="Êtes-vous sur de vouloir marquer cet abonné comme étant à supprimer ?">Marquer cette abonné comme &laquo; supprimé &raquo;</a>
+             | <a href="{jurl 'sendui~subscribers:purgesubscriber', array('idsubscriber' => $idsubscriber, 'idsubscriber_list' => $idsubscriber_list, 'from_page' => 'sendui~subscribers:view')}" 
+                class="confirm_action user-delete" title="Êtes-vous sur de vouloir supprimer cet abonné ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !">Supprimer <strong>définitivement</strong> cet abonné</a>
         </p>
         {/if}
 

@@ -51,11 +51,11 @@
                 </td>
                 <td><a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">{$subscriber_list->name}</a></td>
                 <td>
-                    <a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}">
-                       {$subscriber->countByList($subscriber_list->idsubscriber_list)} abonnés</a>
+                   {$subscriber->countActiveByList($subscriber_list->idsubscriber_list)} abonnés actifs 
+                    <span class="sendui-grey">(sur {$subscriber->countByList($subscriber_list->idsubscriber_list)})</span>
                 </td>
-                <td>{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
-                <td>{$subscriber_list->date_update|jdatetime:'db_datetime','lang_datetime'}</td>
+                <td class="sendui-small">{$subscriber_list->date_insert|jdatetime:'db_datetime','lang_datetime'}</td>
+                <td class="sendui-small">{$subscriber_list->date_update|jdatetime:'db_datetime','lang_datetime'}</td>
                 <td>
                     <a href="{jurl 'sendui~subscribers:view', array('idsubscriber_list' => $subscriber_list->idsubscriber_list)}" class="table-go">voir les abonnés</a>
                     <a href="{jurl 'sendui~subscribers:listview', array('idsubscriber_list' => $subscriber_list->idsubscriber_list, 'from_page' => 'sendui~subscribers:index')}" class="table-edit">modifier</a>

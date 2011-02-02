@@ -147,12 +147,32 @@ class subscriber {
             $subscriber_list_infos = $subscriber_list->get($list);
         }
 
-        // on vérifie que l'email existe dans la liste
-        if($subscriber->isSubscriber($email,$subscriber_list_infos->idsubscriber_list)) {
-            $this->setErrorCode(1003);
-            return false;
+        // on tente de voir si l'utilisateur existe
+        $subscriber_infos = $this->getSubscriber($email,$list);
+
+        // on vérifie que l'email existe dans la liste ET que le status est déjà a 1 !!!
+        if(isset($subscriber_infos->status)) {
+
+            //if($subscriber->isSubscriber($email,$subscriber_list_infos->idsubscriber_list)) {
+            if($subscriber_infos->status==1) {
+                $this->setErrorCode(1003); // déjà inscrit
+                return false;
+            }
+
+            // l'utilisateur était désactivé, on le réactive simplement
+            if($subscriber_infos->email!='' && $subscriber_infos->status!=1) {
+                // change le status => 1 => actif
+                if(!$subscriber->changeStatusByIdsubscriber($subscriber_infos->idsubscriber,1)) {
+                    $this->setErrorCode(1004);
+                    return false;
+                } else {
+                    $this->setErrorCode(1004);
+                    return true;
+                }
+            }
+
         }
-       
+
         //==> on enregistre les infos dans la BDD
 
         // enregistrer l'email dans la bonne liste avec éventuellement les autres infos
@@ -223,8 +243,14 @@ class subscriber {
             // on retrouve les infos
             $subscriber_infos = $subscriber->getSubscriberByToken($subscriber_token);
 
-            // on désabonne
-            if(!$subscriber->delete($subscriber_infos->idsubscriber)) {
+            // si déjà désinscript (status == 3)
+            if(isset($subscriber_infos->status) && $subscriber_infos->status==3) {
+                $this->setErrorCode(1006);
+                return false;
+            }
+
+            // on désabonne en mettant le status à 3 !!!
+            if(!$subscriber->changeStatusByIdsubscriber($subscriber_infos->idsubscriber,3)) {
                 $this->setErrorCode(1005);
                 return false;
             } else {

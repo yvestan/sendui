@@ -362,6 +362,13 @@ class subscribersCtrl extends jController {
     public function view()
     {
 
+        // si aucune idsubscriber_list => retour aux listes
+        if($this->param('idsubscriber_list')=='') {
+            $rep = $this->getResponse('redirect');
+            $rep->action = 'sendui~subscribers:index';
+            return $rep;
+        }
+
         $rep = $this->getResponse('html');
 
         $this->_dataTables($rep);
@@ -460,7 +467,7 @@ class subscribersCtrl extends jController {
                     <a href="'.jUrl::get('sendui~subscriber:prepare', 
                         array('idsubscriber' => $subscriber->idsubscriber, 'from_page' => 'sendui~subscribers:view', 'idsubscriber_list' => $idsubscriber_list)).'" class="table-edit">modifier</a>
                     <a href="'.jUrl::get('sendui~subscribers:deletesubscriber', array('idsubscriber' => $subscriber->idsubscriber, 'idsubscriber_list' => $idsubscriber_list)).'" 
-                        class="confirm_action table-delete" title="Êtes-vous sur de vouloir supprimer cet abonné ? CETTE ACTION NE PEUT PAS ÊTRE ANNULÉE !">supprimer</a>';
+                        class="confirm_action table-delete" title="Êtes-vous sur de vouloir marquer cet abonné comme étant à supprimer ?">supprimer</a>';
             $results[] = $row;
         } 
 
@@ -969,6 +976,45 @@ class subscribersCtrl extends jController {
 
     // }}}
 
+    // {{{ listpurge()
+
+    /**
+     * Supprimer définitivement les abonnés marqués comme "supprimé"
+     * 
+     * @return      redirect
+     */
+    public function listpurge()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        // on n'a pas de idsubscriber_list ?
+        if($this->param('idsubscriber_list')=='') {
+            $rep->action = 'sendui~subscribers:index';
+            return $rep;
+        } else {
+            $rep->params['idsubscriber_list'] = $this->param('idsubscriber_list');
+        }
+
+        // supprimer les abonnés de cette liste qui sont marqué comme "supprimé"
+        $subscriber = jDao::get($this->dao_subscriber);
+        $nb_deleted_subscribers = $subscriber->purgeSubscriberByList($this->param('idsubscriber_list'));
+
+        $rep->params['nb_deleted_subscribers'] = $nb_deleted_subscribers;
+        
+        // redirection 
+        if ($this->param('from_page')) {
+            $rep->action = $this->param('from_page');
+        } else {
+            $rep->action = 'sendui~subscribers:view';
+        }
+
+        return $rep;
+        
+    }
+
+    // }}}
+
     // {{{ listdelete()
 
     /**
@@ -999,10 +1045,10 @@ class subscribersCtrl extends jController {
 
     // }}}
    
-    // {{{ subscriberdelete()
+    // {{{ deletesubscriber()
 
     /**
-     * Supprimer un utilisateur
+     * Marquer un utilisateur à supprimer
      *
      * @return      redirect
      */
@@ -1016,16 +1062,70 @@ class subscribersCtrl extends jController {
             // TODO tester aussi sur le customer pour la sécurité ET double vérification
             $subscriber = jDao::get($this->dao_subscriber);
 
-            if($subscriber->delete($this->param('idsubscriber'))) {
-                $rep->params = array(
-                    'delete_subscriber' => true,
-                    'idsubscriber_list' => $this->param('idsubscriber_list'),
-                );
+            if($subscriber->changeStatusByIdsubscriber($this->param('idsubscriber'),3)) {
+                $rep->params['delete_subscriber'] = true;
             }
+
+            // id du user
+            $rep->params['idsubscriber'] = $this->param('idsubscriber');
         
         }
 
-        $rep->action = 'sendui~subscribers:view';
+        $rep->params['idsubscriber_list'] = $this->param('idsubscriber_list');
+
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');
+        } else {
+            if($this->param('idsubscriber_list')!='') {
+                $rep->action = 'sendui~subscribers:view';
+            } else {
+                $rep->action = 'sendui~subscribers:index';
+            }
+        }
+
+        return $rep;
+
+    }
+
+    // }}}
+
+    // {{{ purgesubscriber()
+
+    /**
+     * Supprimer définitivement un utilisateur
+     *
+     * @return      redirect
+     */
+    public function purgesubscriber()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        if($this->param('idsubscriber')!='') {
+            
+            // TODO tester aussi sur le customer pour la sécurité ET double vérification
+            $subscriber = jDao::get($this->dao_subscriber);
+
+            if($subscriber->delete($this->param('idsubscriber'))) {
+                $rep->params['delete_subscriber'] = true;
+            }
+
+            // id du user
+            $rep->params['idsubscriber'] = $this->param('idsubscriber');
+        
+        }
+
+        $rep->params['idsubscriber_list'] = $this->param('idsubscriber_list');
+
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');
+        } else {
+            if($this->param('idsubscriber_list')!='') {
+                $rep->action = 'sendui~subscribers:view';
+            } else {
+                $rep->action = 'sendui~subscribers:index';
+            }
+        }
 
         return $rep;
 

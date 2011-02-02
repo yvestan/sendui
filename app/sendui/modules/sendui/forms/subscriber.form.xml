@@ -41,7 +41,7 @@
         <label>Status</label>
         <item value="1">Actif</item>
         <item value="0">Inactif (suspendu)</item>
-        <item value="2">A supprimer (rebond)</item>
+        <item value="2">A vérifier/supprimer (rebond)</item>
         <item value="3">Supprimé</item>
     </menulist>
 

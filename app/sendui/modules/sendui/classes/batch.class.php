@@ -154,7 +154,7 @@ class Batch {
     public function getSQLSubscribers()
     {
 
-        // copier uniquement les utilisateurs qui sont actifs pour la liste du message
+        // copier uniquement les utilisateurs qui sont actifs/non bouncé et non supprimé pour la liste du message
         $sql =  'SELECT s.* FROM subscriber s, message_subscriber_list msl
                     WHERE s.idsubscriber_list=msl.idsubscriber_list
                     AND s.status=1

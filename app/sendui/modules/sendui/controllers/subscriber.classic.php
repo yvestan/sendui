@@ -56,18 +56,27 @@ class subscriberCtrl extends jController {
             return $rep;
         }
 
-        $rep->title = 'Abonné';
-
         $session = jAuth::getUserSession();
 
         $tpl = new jTpl();
 
         // l'abonné TODO : checker avec le customer !
         $subscriber = jDao::get($this->dao_subscriber);
-        $tpl->assign('subscriber', $subscriber->get($this->param('idsubscriber')));
+        $infos_subscriber =  $subscriber->get($this->param('idsubscriber'));
+        $tpl->assign('subscriber', $infos_subscriber);
+
+        $rep->title = 'Abonné '.$infos_subscriber->email;
 
         // marquer le menu
         $rep->body->assign('active_page', 'subscribers');
+
+        // infos sur la liste TODO check avec le customer
+        if($this->param('idsubscriber_list')!='') {
+            $subscriber_list = jDao::get($this->dao_subscriber_list);
+            $subscriber_list_infos = $subscriber_list->get($this->param('idsubscriber_list'));
+            $tpl->assign('subscriber_list', $subscriber_list_infos);
+            $tpl->assign('idsubscriber_list', $subscriber_list_infos->idsubscriber_list);
+        }
 
         // fil d'arianne
         $navigation = array(
