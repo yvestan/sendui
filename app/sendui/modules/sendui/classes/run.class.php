@@ -69,5 +69,37 @@ class Run {
 
     // }}}
 
+    // {{{ messageStop()
+
+    /** Stopper l'envoi du message proprement 
+     * 
+     * @return  bool
+     * @param   int     $pid    le pid du process
+     *
+     */
+    public static function messageStop($idmessage)
+    {
+        // on ajout un fichier dans temp
+        if(!is_dir(JELIX_APP_LOG_PATH.'process/')) {
+            if(!mkdir(JELIX_APP_LOG_PATH.'process/', 0755)) {
+                echo 'Impossible de créer le répertoire '.JELIX_APP_LOG_PATH.'process/';
+                exit;
+            }
+        }
+        if(!is_writable(JELIX_APP_LOG_PATH.'process/')) {
+            echo 'Impossible d\'écrire dans le répertoire '.JELIX_APP_LOG_PATH.'process/';
+            exit;
+        }
+        // on écrit un fichier pour dire stop
+        if(file_put_contents(JELIX_APP_LOG_PATH.'process/stop_now_'.$idmessage, 1)) {
+            return true;
+        } else {
+            echo "Impossible de notifier l'arrêt du message";
+            exit;
+        }
+    }
+
+    // }}}
+
+
 }
-?>

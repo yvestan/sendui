@@ -90,7 +90,6 @@ class sendingCtrl extends jControllerCmdLine {
      */
     protected $allowed_parameters = array();
      
-        
     // {{{ index()
 
     /**
@@ -102,10 +101,12 @@ class sendingCtrl extends jControllerCmdLine {
     public function index() 
     {
 
-        // interceter le sigterm et le sigint
-        declare(ticks = 1);
-        pcntl_signal(SIGTERM, array($this, 'signalHandler'));
-        pcntl_signal(SIGINT, array($this,'signalHandler'));
+        // interceter le sigterm et le sigint si pctnl signal existe
+        if(!function_exists('pcntl_signal')) {
+            declare(ticks = 1);
+            pcntl_signal(SIGTERM, array($this, 'signalHandler'));
+            pcntl_signal(SIGINT, array($this,'signalHandler'));
+        }
 
         $rep = $this->getResponse(); 
 
@@ -114,7 +115,7 @@ class sendingCtrl extends jControllerCmdLine {
             $idmessage = $this->option('-i');
         }
 
-        // il faut l'identifiant du message
+        // il faut obligatoirement l'identifiant du message
         if(empty($idmessage)) {
             $rep->addContent('Vous devez préciser l\'identifiant du message'.$this->n);
             return $rep;
@@ -158,12 +159,12 @@ class sendingCtrl extends jControllerCmdLine {
             return $rep;
         }
 
-        // vérifier le no_send
+        // vérifier le no_send pour les tests
         if($GLOBALS['gJConfig']->debug_sendui['noSend']) {
             $this->no_send = true;    
         }
 
-        // un dao utilie
+        // un dao utile
         $subscriber = jDao::get($this->dao_subscriber);
 
         // la table de process
@@ -217,18 +218,27 @@ class sendingCtrl extends jControllerCmdLine {
         // on instancie swiftmailer
         require_once JELIX_APP_PATH.'/lib/swiftmailer/lib/swift_required.php';
 
-        // smtp
+        // smtp ou aws
+        /*if($message_infos->sending_transport=='aws') {
+            $transport = Swift_SmtpTransport::newInstance($GLOBALS['gJConfig']->mailerInfo['sSmtpHost'], 587)
+                ->setUsername($GLOBALS['gJConfig']->mailerInfo['sSmtpUsername'])
+                ->setPassword($GLOBALS['gJConfig']->mailerInfo['sSmtpPassword']);
+        } else {
+            $transport = Swift_SmtpTransport::newInstance($GLOBALS['gJConfig']->mailerInfo['sSmtpHost'], 587)
+                ->setUsername($GLOBALS['gJConfig']->mailerInfo['sSmtpUsername'])
+                ->setPassword($GLOBALS['gJConfig']->mailerInfo['sSmtpPassword']);
+        }*/
+
         $transport = Swift_SmtpTransport::newInstance($GLOBALS['gJConfig']->mailerInfo['sSmtpHost'], 587)
             ->setUsername($GLOBALS['gJConfig']->mailerInfo['sSmtpUsername'])
-            ->setPassword($GLOBALS['gJConfig']->mailerInfo['sSmtpPassword'])
-        ;
+            ->setPassword($GLOBALS['gJConfig']->mailerInfo['sSmtpPassword']);
 
         // objet
         $mailer = Swift_Mailer::newInstance($transport);
     
         // on précise le serveur de mail
-        /*if(!defined(SERVER_MAIL)) {
-            $mailer->setDomain(SERVER_MAIL);
+        /*if(!empty($GLOBALS['gJConfig']->mailerInfo['sMailServer'])) {
+            $mailer->setDomain($GLOBALS['gJConfig']->mailerInfo['sMailServer']);
         }*/
 
         // composition du message
@@ -482,6 +492,15 @@ class sendingCtrl extends jControllerCmdLine {
 
             $i++;
 
+            // si le fichier stop_now_idmessage existe, on stoppe l'execution en sortant de la boucle
+            if(file_exists(JELIX_APP_LOG_PATH.'process/stop_now_'.$idmessage)) {
+                $status_message = 3;
+                if(!unlink(JELIX_APP_LOG_PATH.'process/stop_now_'.$idmessage)) {
+                    $this->setLog('[FATAL] Impossible de supprimer le fichier '.JELIX_APP_LOG_PATH.'process/stop_now_'.$idmessage);
+                }
+                break;
+            }
+
         }
 
          // deconnexion
@@ -493,16 +512,28 @@ class sendingCtrl extends jControllerCmdLine {
         // temps d'execution
         $time_exec = $time_end - $time_start;
 
-        // marquer la fin et le status à 5
-        $message->setEnd($idmessage);
-        $message->setStatus($idmessage,5);
+        // stop ou fin ?
+        if(!empty($status_message)) {
+            $message->setStatus($idmessage,$status_message);
+            $this->setLog('[STOP] Envoi stoppé après '.$utils->getTimeExec($time_start,$time_end).' ('.$count_success.'/'.$i.') !');
+        } else {
+            // marquer la fin et le status à 5
+            $message->setEnd($idmessage);
+            $message->setStatus($idmessage,5);
+            $this->setLog('[END] Envoi terminé en '.$utils->getTimeExec($time_start,$time_end).' ('.$count_success.'/'.$i.') !');
+        }
         
-        // fin de l'envoi
-        $this->setLog('[END] Envoi terminé en '.$utils->getTimeExec($time_start,$time_end).' ('.$count_success.'/'.$i.') !');
-
         return $rep;
 
     }
+
+    // {{{ setLog()
+
+    /**
+     * Envoyer les logs dans le fichier ou sur la sortie standard
+     *
+     * @return      redirect
+     */
 
     protected function setLog($msg)
     {

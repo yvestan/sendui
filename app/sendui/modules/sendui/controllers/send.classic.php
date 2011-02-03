@@ -3,7 +3,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */
 
 /**
- * Envoyer le message
+ * Envoyer/stopper le message
  *
  * @package      sendui
  * @subpackage   sendui
@@ -84,27 +84,39 @@ class sendCtrl extends jController {
 
         $rep = $this->getResponse('redirect');
 
+        // arrêter proprement ou comme un bourrin en killant le process
+        $clean_stop = true;
+
+        if($this->param('idmessage')=='') {
+            echo 'Il manque l\'identifiant du message';
+            exit;
+        }
+
         // récupérer le pid dans la table process
         $process = jDao::get($this->dao_process);
         $last_process = $process->getLast($this->param('idmessage'));
 
         // stop !
-        if(!empty($last_process->pid)) {
+        if(!empty($last_process->idmessage)) {
 
             $run = jClasses::getService('sendui~run');
-            $run->stopProcess($last_process->pid);
 
-            // ici on log le pid et l'id du message
-            jLog::log('['.$last_process->pid.']['.$this->param('idmessage').'][STOP]  Arrêt demandé via GUI','process');
+            if(!$clean_stop && !empty($last_process->pid)) {
+                $run->stopProcess($last_process->pid); // bourrin
+                jLog::log('['.$last_process->pid.']['.$this->param('idmessage').'][STOP]  Arrêt demandé via GUI (stopProcess)','process');
+            } else {
+                $run->messageStop($last_process->idmessage); // mieux
+                jLog::log('['.$last_process->pid.']['.$this->param('idmessage').'][STOP]  Arrêt demandé via GUI (messageStop)','process');
+            }
 
         } else {
-            jLog::log('[0]['.$this->param('idmessage').'][FATAL] Arrêt demandé via GUI impossible : aucun PID','process');
+            jLog::log('[0]['.$this->param('idmessage').'][FATAL] Arrêt demandé via GUI impossible : aucun message correspondant au PID ou à l\'idmessage','process');
         }
-        
-        // on mets le champs status sur 3
+
+        // on mets le champs status sur 3 TODO améliorer si ça plante !
         $message = jDao::get($this->dao_message);
         $message->setStatus($this->param('idmessage'),3);
-
+        
         if($this->param('from_page')!='') {
             $rep->action = $this->param('from_page');    
         } else {
