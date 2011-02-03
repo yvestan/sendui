@@ -404,6 +404,11 @@ p.no-result {
     background: left center url(../img/interface/icones/package_go.png) no-repeat;
     padding-left: 20px;
 }
+.ajax-loader {
+    background: left center url(../img/interface/icones/ajax-loader.gif) no-repeat;
+    padding-left: 20px;
+}
+.
 .email-add {
     background: left center url(../img/interface/icones/email_add.png) no-repeat;
     padding-left: 20px;
@@ -689,9 +694,6 @@ p.sendui-content {
 }
 .sendui-small {
     font-size: 90%;
-}
-.sendui-small2 {
-
 }
 #navigation {
     margin-top: 10px;
