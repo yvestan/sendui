@@ -10,6 +10,9 @@ sSmtpUsername="smtp_username"
 sSmtpPassword="smtp_password"
 sSmtpHost="smtp.example.org"
 
-; ne pas envoyer de mail
+; outils de debug
 [debug_sendui]
+; ne pas envoyer de mail
 noSend=false
+; loguer tous les envois
+logSend=false

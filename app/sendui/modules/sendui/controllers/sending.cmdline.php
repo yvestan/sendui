@@ -20,7 +20,6 @@ class sendingCtrl extends jControllerCmdLine {
     protected $dao_message = 'common~message';
 
     // log
-    protected $log_process = true;
     protected $log_file = 'process';
 
     // silencieux ?
@@ -102,11 +101,11 @@ class sendingCtrl extends jControllerCmdLine {
     {
 
         // interceter le sigterm et le sigint si pctnl signal existe
-        if(!function_exists('pcntl_signal')) {
+        /*if(!function_exists('pcntl_signal')) {
             declare(ticks = 1);
             pcntl_signal(SIGTERM, array($this, 'signalHandler'));
             pcntl_signal(SIGINT, array($this,'signalHandler'));
-        }
+        }*/
 
         $rep = $this->getResponse(); 
 
@@ -546,7 +545,7 @@ class sendingCtrl extends jControllerCmdLine {
         }
 
         // logue dans un fichier
-        if($this->log_process) {
+        if($GLOBALS['gJConfig']->debug_sendui['logSend']) {
             jLog::log($msg, $this->log_file);
         }    
 
