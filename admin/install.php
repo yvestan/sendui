@@ -65,7 +65,7 @@ if(isCli()) {
     // test pcntl
     $ex = 'PCNTL';
     if(!function_exists('pcntl_signal')) {
-        $txt[] = '[FATAL] L\'extension '.$ex.' ne semble pas chargée';
+        $txt[] = '[NOTICE] L\'extension '.$ex.' ne semble pas chargée';
     } else {
         $txt[] = '[OK] L\'extension '.$ex.' est correctement chargée';
     }
@@ -220,7 +220,7 @@ if(isCli()) {
     // test pcntl
     $ex = 'PCNTL';
     if(!function_exists('pcntl_signal')) {
-        $html[] = '<p class="error-warn">L\'extension '.$ex.' ne semble pas chargée <strong>MAIS</strong> elle est peut-être chargée sur la version de PHP en ligne de commande (c\'est le cas sur Debian et Ubuntu) et c\'est suffisant ! <strong>Vous pouvez tester en lancant ce script en ligne de commande <code>php admin/install.php</code></strong>.</p>';
+        $html[] = '<p class="error-warn">L\'extension <strong>optionnelle</strong> '.$ex.' ne semble pas chargée <strong>MAIS</strong> elle est peut-être chargée sur la version de PHP en ligne de commande (c\'est le cas sur Debian et Ubuntu) et c\'est suffisant ! <strong>Vous pouvez tester en lancant ce script en ligne de commande <code>php admin/install.php</code></strong>.</p>';
     } else {
         $html[] = '<p class="tick">L\'extension '.$ex.' est correctement chargée</p>';
     }
