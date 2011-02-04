@@ -8,11 +8,12 @@
 </div>
 
 <div class="sendui-padding-mainpage float-right">
-    <a href="{jurl 'sendui~subscribers:preparesubscriber', array('idsubscriber_list' => $idsubscriber_list)}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
+    <div class="fg-buttonset fg-buttonset-multi">
+    <a href="{jurl 'sendui~subscribers:preparesubscriber', array('idsubscriber_list' => $idsubscriber_list)}" class="fg-button ui-state-active fg-button-icon-left ui-corner-left">
         <span class="ui-icon ui-icon-circle-plus"></span>Ajouter des abonnés</a>
-
-    <!--<a href="{jurl 'sendui~subscribers:listexport', array('idsubscriber_list' => $idsubscriber_list)}" class="fg-button ui-state-active fg-button-icon-left ui-corner-all">
-        <span class="ui-icon ui-icon-disk"></span>Télécharger la liste (format CSV / excel)</a>-->
+    <a href="{jurl 'sendui~subscribers:exportcsv', array('idsubscriber_list' => $idsubscriber_list)}" class="fg-button ui-state-active fg-button-icon-left ui-corner-right">
+        <span class="ui-icon ui-icon-disk"></span>Exporter (format CSV/Excel)</a>
+    </div>
 </div>
 
 <div class="spacer"></div>

@@ -1133,4 +1133,50 @@ class subscribersCtrl extends jController {
 
     // }}}
 
+    // {{{ exportcsv()
+
+    /**
+     * Exporter la liste des utilisateurs au format CSV
+     *
+     * @return      redirect
+     */
+    public function exportcsv()
+    {
+
+        // si pas de idsubscriber_list => retour
+        if($this->param('idsubscriber_list')=='') {
+            $rep = $this->getResponse('redirect');
+            $rep->action = 'sendui~subscribers:index';
+            return $rep;
+        }
+
+        // infos sur la liste
+        $subscriber_list = jDao::get($this->dao_subscriber_list);
+        $subscriber_list_infos = $subscriber_list->get($this->param('idsubscriber_list'));
+
+        // client
+        $session = jAuth::getUserSession();
+
+        // récupérer les abonnés à la liste
+        $subscriber = jDao::get($this->dao_subscriber);
+        $list_subscribers = $subscriber->getByList($this->param('idsubscriber_list'),$session->idcustomer);
+        
+        // on renvoit un fichier  CSV
+        $rep = $this->getResponse('binary');
+        $rep->outputFileName = 'list_'.$this->params('idsubscriber_list').'_'.date('YmdHis').'.csv';
+        $rep->mimeType = 'text/csv';
+        $rep->doDownload = true;
+
+        foreach($list_subscribers as $subscriber) {
+            $datas[] = join(';', (array)$subscriber);
+        }
+
+        $rtl = "\n";
+
+        $rep->content = join($rtl, $datas);
+
+        return $rep;
+
+    }
+
 }
