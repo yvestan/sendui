@@ -96,10 +96,10 @@
         </method>
         <method name="getSubscriberByEmailList" type="selectfirst">  
             <parameter name="email"/>
-            <parameter name="token_list"/>
+            <parameter name="idsubscriber_list"/>
             <conditions logic="AND">
                 <eq property="email" expr="$email"/>
-                <eq property="token_list" expr="$token_list"/>
+                <eq property="idsubscriber_list" expr="$idsubscriber_list"/>
             </conditions>
         </method>
         <method name="countByList" type="count" distinct="idsubscriber">  

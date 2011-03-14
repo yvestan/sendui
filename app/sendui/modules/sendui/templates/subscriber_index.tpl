@@ -96,7 +96,7 @@
                 {if $subscriber->status==0}<span class="flag-blue">inactif</span>{/if}
                 {if $subscriber->status==1}<span class="flag-green">actif</span>{/if}
                 {if $subscriber->status==2}<span class="flag-yellow">rebond (à supprimer/vérifier)</span>{/if}
-                {if $subscriber->status==3}<span class="flag-yellow">supprimé (à confirmer)</span>{/if}
+                {if $subscriber->status==3}<span class="flag-red">supprimé (à confirmer)</span>{/if}
             </div>
         </div>
 

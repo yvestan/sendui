@@ -954,7 +954,7 @@ class subscribersCtrl extends jController {
                 $s['subscribe_from'] = 'internal';
 
                 // TODO : checker la liste !
-                if($subscriber->subscribe($s,$this->param('idsubscriber_list'))) {
+                if($subscriber->subscribe($s,$this->param('idsubscriber_list'),null,true)) {
                     $subscribers_tabs_list_success[] = $s;
                 } else  {
                     $s['error'] = $subscriber->getSubscriberError('debug');

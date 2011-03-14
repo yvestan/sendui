@@ -75,6 +75,10 @@ class subscriber {
                 'debug' => 'Impossible de trouver l\'abonné correspondant au token',
                 'user' => 'Vous n\'êtes pas ou plus inscrit à cette liste.',
             ),
+            '1007' => array(
+                'debug' => 'Cette email est présent dans la liste des inactifs, des rebonds ou des adresses à supprimer',
+                'user' => 'Cet eùail est désactivé',
+            ),
         );
 
         // on retourne quelques chose : array ou string
@@ -117,7 +121,7 @@ class subscriber {
      *
      * @return      array
      */
-    public function subscribe($infos=array(),$list,$customer=null) 
+    public function subscribe($infos=array(),$list,$customer=null,$non_reactive=false) 
     {
 
         $email = $infos['email'];
@@ -153,21 +157,29 @@ class subscriber {
         // on vérifie que l'email existe dans la liste ET que le status est déjà a 1 !!!
         if(isset($subscriber_infos->status)) {
 
+             // le status est déjà a 1 !!! => déjà inscrit
             //if($subscriber->isSubscriber($email,$subscriber_list_infos->idsubscriber_list)) {
             if($subscriber_infos->status==1) {
                 $this->setErrorCode(1003); // déjà inscrit
                 return false;
             }
 
-            // l'utilisateur était désactivé, on le réactive simplement
-            if($subscriber_infos->email!='' && $subscriber_infos->status!=1) {
-                // change le status => 1 => actif
-                if(!$subscriber->changeStatusByIdsubscriber($subscriber_infos->idsubscriber,1)) {
-                    $this->setErrorCode(1004);
+            // dans le cas de l'admin, on indique que l'email est désactivé
+            if(!empty($non_reactive)) {
+                if($subscriber_infos->email!='' && $subscriber_infos->status!=1) {
+                    $this->setErrorCode(1007);
                     return false;
-                } else {
-                    $this->setErrorCode(1004);
-                    return true;
+                }
+            } else { // sinon, on test et éventuellement on réactive
+                if($subscriber_infos->email!='' && $subscriber_infos->status!=1) {
+                    // change le status => 1 => actif
+                    if(!$subscriber->changeStatusByIdsubscriber($subscriber_infos->idsubscriber,1)) {
+                        $this->setErrorCode(1004);
+                        return false;
+                    } else {
+                        $this->setErrorCode(1004);
+                        return true;
+                    }
                 }
             }
 

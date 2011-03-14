@@ -3,56 +3,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT=0;
 START TRANSACTION;
 
-CREATE TABLE IF NOT EXISTS `customer` (
-  `idcustomer` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `login` varchar(50) NOT NULL,
-  `public_token` varchar(50) DEFAULT NULL,
-  `email` varchar(150) NOT NULL,
-  `password` varchar(150) NOT NULL,
-  `lastname` varchar(100) DEFAULT NULL,
-  `firstname` varchar(100) DEFAULT NULL,
-  `company` varchar(100) DEFAULT NULL,
-  `address` varchar(150) DEFAULT NULL,
-  `zip` varchar(20) DEFAULT NULL,
-  `city` varchar(150) DEFAULT NULL,
-  `country` char(2) DEFAULT NULL,
-  `return_path` varchar(150) DEFAULT NULL,
-  `batch_quota` tinyint(5) NOT NULL DEFAULT '1',
-  `pause_quota` tinyint(5) NOT NULL DEFAULT '1',
-  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
-  `active` tinyint(1) NOT NULL DEFAULT '0',
-  `theme` varchar(20) DEFAULT NULL,
-  `credit` int(11) NOT NULL DEFAULT '0',
-  `date_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `date_insert` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`idcustomer`),
-  UNIQUE KEY `login` (`login`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `public_token` (`public_token`),
-  KEY `username` (`login`),
-  KEY `dateupdate` (`date_update`),
-  KEY `dateinsert` (`date_insert`),
-  KEY `active` (`active`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `bounce_config` (
-  `idbounce_config` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `idcustomer` int(10) unsigned NOT NULL,
-  `name` varchar(150) NOT NULL,
-  `mail_host` varchar(150) NOT NULL,
-  `mail_username` varchar(150) NOT NULL,
-  `mail_password` varchar(150) NOT NULL,
-  `mail_port` varchar(5) NOT NULL,
-  `mail_service` varchar(10) NOT NULL,
-  `mail_service_option` varchar(150) NOT NULL,
-  `last_use` timestamp NULL DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
-  `date_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `date_insert` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`idbounce_config`),
-  KEY `idcustomer` (`idcustomer`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
 CREATE TABLE IF NOT EXISTS `bounce` (
   `idbounce` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `idcustomer` int(10) unsigned NOT NULL,
@@ -85,7 +35,55 @@ CREATE TABLE IF NOT EXISTS `bounce` (
   KEY `idbounce_config` (`idbounce_config`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `bounce_config` (
+  `idbounce_config` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idcustomer` int(10) unsigned NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `mail_host` varchar(150) NOT NULL,
+  `mail_username` varchar(150) NOT NULL,
+  `mail_password` varchar(150) DEFAULT NULL,
+  `mail_port` varchar(5) NOT NULL,
+  `mail_service` varchar(10) NOT NULL,
+  `mail_service_option` varchar(150) DEFAULT NULL,
+  `last_use` timestamp NULL DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `date_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `date_insert` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idbounce_config`),
+  KEY `idcustomer` (`idcustomer`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `customer` (
+  `idcustomer` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `login` varchar(50) NOT NULL,
+  `public_token` varchar(50) DEFAULT NULL,
+  `email` varchar(150) NOT NULL,
+  `password` varchar(150) NOT NULL,
+  `lastname` varchar(100) DEFAULT NULL,
+  `firstname` varchar(100) DEFAULT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `address` varchar(150) DEFAULT NULL,
+  `zip` varchar(20) DEFAULT NULL,
+  `city` varchar(150) DEFAULT NULL,
+  `country` char(2) DEFAULT NULL,
+  `return_path` varchar(150) DEFAULT NULL,
+  `batch_quota` tinyint(5) NOT NULL DEFAULT '1',
+  `pause_quota` tinyint(5) NOT NULL DEFAULT '1',
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  `theme` varchar(20) DEFAULT NULL,
+  `credit` int(11) NOT NULL DEFAULT '0',
+  `date_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `date_insert` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idcustomer`),
+  UNIQUE KEY `login` (`login`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `public_token` (`public_token`),
+  KEY `username` (`login`),
+  KEY `dateupdate` (`date_update`),
+  KEY `dateinsert` (`date_insert`),
+  KEY `active` (`active`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `message` (
   `idmessage` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -113,16 +111,12 @@ CREATE TABLE IF NOT EXISTS `message` (
   KEY `dateupdate` (`date_update`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE IF NOT EXISTS `message_subscriber_list` (
   `idmessage` int(10) unsigned NOT NULL,
   `idsubscriber_list` int(11) unsigned NOT NULL,
   PRIMARY KEY (`idmessage`,`idsubscriber_list`),
   KEY `idsubscriber_list` (`idsubscriber_list`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE IF NOT EXISTS `process` (
   `idprocess` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -133,8 +127,6 @@ CREATE TABLE IF NOT EXISTS `process` (
   `date_log` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`idprocess`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE IF NOT EXISTS `subscriber` (
   `idsubscriber` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -160,7 +152,8 @@ CREATE TABLE IF NOT EXISTS `subscriber` (
   `sent_date` timestamp NULL DEFAULT NULL,
   `date_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `date_insert` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`idsubscriber`),
+  PRIMARY KEY (`idsubscriber`,`idsubscriber_list`,`email`),
+  UNIQUE KEY `idsubscriber_list_2` (`idsubscriber_list`,`email`),
   KEY `token` (`token`),
   KEY `email` (`email`),
   KEY `status` (`status`),
@@ -168,8 +161,6 @@ CREATE TABLE IF NOT EXISTS `subscriber` (
   KEY `idcustomer` (`idcustomer`),
   KEY `idsubscriber_list` (`idsubscriber_list`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE IF NOT EXISTS `subscriber_list` (
   `idsubscriber_list` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -184,12 +175,13 @@ CREATE TABLE IF NOT EXISTS `subscriber_list` (
   KEY `idcustomer` (`idcustomer`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-ALTER TABLE `bounce_config`
-  ADD CONSTRAINT `bounce_config_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`) ON DELETE CASCADE;
 
 ALTER TABLE `bounce`
   ADD CONSTRAINT `bounce_ibfk_2` FOREIGN KEY (`idbounce_config`) REFERENCES `bounce_config` (`idbounce_config`),
   ADD CONSTRAINT `bounce_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`) ON DELETE CASCADE;
+
+ALTER TABLE `bounce_config`
+  ADD CONSTRAINT `bounce_config_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`) ON DELETE CASCADE;
 
 ALTER TABLE `message`
   ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`);
@@ -206,3 +198,4 @@ ALTER TABLE `subscriber_list`
   ADD CONSTRAINT `subscriber_list_ibfk_1` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`);
 
 COMMIT;
+
