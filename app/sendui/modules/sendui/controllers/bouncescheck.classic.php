@@ -92,7 +92,7 @@ class bouncescheckCtrl extends jController {
     // {{{ bounceslist()
 
     /**
-     * Les configurations de bounces
+     * Liste de tous les bounces
      *
      * @template    bouncescheck_index
      * @return      html
@@ -110,9 +110,26 @@ class bouncescheckCtrl extends jController {
 
         $tpl = new jTpl();
 
-        // récupérer les configurations
+        // les bounces
         $bounce = jDao::get($this->dao_bounce);
-        $list_bounce = $bounce->getByCustomer($session->idcustomer);
+
+        // conditions
+        $conditions = jDao::createConditions();
+
+        // rechercher une catégorie de bounces
+        foreach(array('rule_cat','rule_no') as $r) {
+            if($this->param($r)!='') {
+                $rule_search[$r] = filter_var($this->param($r), FILTER_SANITIZE_STRING);
+                $conditions->addCondition($r,'=',$rule_search[$r]);
+            } 
+        }
+
+        // utilisateur
+        $conditions->addCondition('idcustomer','=',$session->idcustomer);
+
+        //$list_bounce = $bounce->getByCustomer($session->idcustomer);
+        $list_bounce = $bounce->findBy($conditions);
+
         $tpl->assign('list_bounce', $list_bounce); 
 
         // fil d'arianne
@@ -186,7 +203,6 @@ class bouncescheckCtrl extends jController {
     /**
      * Relancer la comparaison avec les abonnés
      *
-     * @template    bouncescheck_syncbounces
      * @return      redirect
      */
     public function syncbounce()
@@ -575,6 +591,68 @@ class bouncescheckCtrl extends jController {
     }
 
     // }}}
+
+    // {{{ deletesubscriber()
+
+    /**
+     * Supprimer les adresses des listes de l'utilisateur (marquer comme supprimé)
+     *
+     * @return      redirect
+     */
+    public function deletesubscriber()
+    {
+
+        $rep = $this->getResponse('redirect');
+
+        $session = jAuth::getUserSession();
+
+        $idsbounce = $this->param('idsbounce');
+
+        if($session->idcustomer!='' && !empty($idsbounce) && is_array($idsbounce)) {
+
+            foreach($idsbounce as $b) {
+                $bounces_delete_list[] = (int)$b;
+            }
+
+            if(!empty($bounces_delete_list)) {
+
+                $cnx = jDb::getConnection();
+
+                // status 3 = supprimé
+                $sql_update_subscriber = '
+                        UPDATE subscriber SET status=3
+                        WHERE email IN (
+                            SELECT email 
+                            FROM bounce 
+                            WHERE idbounce IN ('.join(',', $bounces_delete_list).')
+                        ) AND idcustomer='.$session->idcustomer;
+
+                $cnx->exec($sql_update_subscriber);
+
+                // supprimer le bounce
+                $sql_delete_bounce = '
+                    DELETE FROM bounce
+                    WHERE idbounce IN ('.join(',', $bounces_delete_list).')
+                    AND idcustomer='.$session->idcustomer;
+
+                $cnx->exec($sql_delete_bounce);
+
+            }
+
+        }
+
+        if($this->param('from_page')!='') {
+            $rep->action = $this->param('from_page');
+        } else {
+            $rep->action = 'sendui~bouncescheck:bounceslist';
+        }
+
+        return $rep;
+
+    }
+
+    // }}}
+
 
 
 }

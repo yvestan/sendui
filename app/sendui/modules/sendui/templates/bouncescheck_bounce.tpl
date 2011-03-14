@@ -68,7 +68,7 @@
         {/if}
 
         <p class="sendui-margin-top-double">
-            <a href="{jurl 'sendui~subscriber:delete', array('email' => $bounce->email)}" 
+            <a href="{jurl 'sendui~bouncescheck:deletesubscriber', array('idsbounce[]' => $bounce->idbounce, 'from_page' => 'sendui~bouncescheck:bounceslist')}" 
                 class="confirm_action user-delete" title="Êtes-vous sur de vouloir supprimer cet email ?">Supprimer cet email des listes</a>
         </p>
 
