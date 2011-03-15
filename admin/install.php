@@ -173,6 +173,32 @@ if(isCli()) {
 
     $html[] = '</div>';
 
+    // test des droits sur les répertoires
+    $html[] = titleUi('Droits sur les répertoires');
+    $html[] = '<div class="sendui-simple-content">';
+
+    $dir_test = array(
+        '../app/temp/sendui',
+        '../app/temp/sendui-cli',
+        '../app/sendui/var/config',
+        '../app/sendui/var/config/cmdline',
+        '../app/sendui/var/log',
+    );
+
+    foreach($dir_test as $d) {
+        if(!is_writable(dirname(__FILE__).'/'.$d)) {
+            $html[] = '<p class="cross">Le serveur web doit pouvoir écrire dans le répertoire <strong>'.$d.'</strong><p>';
+            $fatal_conf = true;
+        } else {
+            $html[] = '<p class="tick">Le répertoire '.$d.' est accessible en écriture</p>';
+        }
+    }
+
+    $html[] = '<p class="lightbulb_off">Vous pouvez <strong>restreindre les droits</strong> sur les répertoires /app/sendui/var/config et /app/sendui/var/config/cmdline une fois l\'installation terminée</p>';
+
+    $html[] = '</div>';
+
+
     // test de apache rewrite
     $html[] = titleUi('Test de la réécriture d\'URL de Apache');
     $html[] = '<div class="sendui-simple-content">';
