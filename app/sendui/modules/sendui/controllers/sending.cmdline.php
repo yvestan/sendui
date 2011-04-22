@@ -259,8 +259,8 @@ class sendingCtrl extends jControllerCmdLine {
         }
 
         //  entêtes antispam
-        $headers->addTextHeader('X-Mailer', 'grafactory.net');
-        $headers->addTextHeader('X-Complaints-To', 'abuse@grafactory.net');
+        /*$headers->addTextHeader('X-Mailer', 'grafactory.net');
+        $headers->addTextHeader('X-Complaints-To', 'abuse@grafactory.net');*/
 
         // replacement dans les messages
         jClasses::inc('sendui~template');
@@ -433,42 +433,38 @@ class sendingCtrl extends jControllerCmdLine {
             // on envoie effectivement le message (sauf si option nosend)
             $success = false;
 
-            if (empty($nosend)) {
+            // remplacement
+            $r = new Template(replaceArray($s,$replace_array));
 
-                // remplacement
-                $r = new Template(replaceArray($s,$replace_array));
+            //$headers->addTextHeader('List-Unsubscribe', $_SERVER['HTTP_HOST'].'/public/unsubscribe/?t='.$s->token);
 
-                //$headers->addTextHeader('List-Unsubscribe', $_SERVER['HTTP_HOST'].'/public/unsubscribe/?t='.$s->token);
-
-                // contenu HTML ou simple TEXT
-                if($message_infos->html_message!='') {
-                    $message_compose->setBody($r->parse($message_infos->html_message), 'text/html');
-                } else {
-                    $message_compose->setBody($r->parse($message_infos->text_message), 'text/plain');
-                }
-
-                // contenu TEXT en plus du HTML
-                if($message_infos->html_message!='' && $message_infos->text_message!='') {
-                    $message_compose->addPart($r->parse($message_infos->text_message), 'text/plain');
-                }
-
-                // destinataire
-                $message_compose->setTo($email);
-
-                if($this->no_send) {
-                    $success = true;
-                    $this->setLog('[NOTICE]] Pas d\'envoi, test seulement');    
-                } else {
-                    $success = $mailer->send($message_compose);
-                }
-
-                // on comptabilise les succes
-                if ($success) $count_success++;
-
+            // contenu HTML ou simple TEXT
+            if($message_infos->html_message!='') {
+                $message_compose->setBody($r->parse($message_infos->html_message), 'text/html');
+            } else {
+                $message_compose->setBody($r->parse($message_infos->text_message), 'text/plain');
             }
 
+            // contenu TEXT en plus du HTML
+            if($message_infos->html_message!='' && $message_infos->text_message!='') {
+                $message_compose->addPart($r->parse($message_infos->text_message), 'text/plain');
+            }
+
+            // destinataire
+            $message_compose->setTo($email);
+
+            if($this->no_send) {
+                $success = true; // on force le success qui mettra quand même à jour les champs
+                $this->setLog('[NOTICE]] Pas d\'envoi, test seulement');    
+            } else {
+                $success = $mailer->send($message_compose);
+            }
+
+            // on comptabilise les succes
+            if ($success) $count_success++;
+
             // on met a jour le flag "envoye" dans la table batch et dans l'enregistrement subscriber le count dans message
-            if (empty($noupdate) && ($success || $nosend)) {
+            if (empty($noupdate) && $success) {
                 $batch->updateSent($s->idsubscriber);
                 $subscriber->updateSent($s->idsubscriber);
                 $message->updateCount($idmessage);
@@ -479,7 +475,7 @@ class sendingCtrl extends jControllerCmdLine {
             }
 
             // on enregistre le process
-            if ($success || $nosend) {
+            if($success) {
                 $log = '[sendTo] '.$email.' [ID'.$s->idsubscriber.']';
                 $record_process = jDao::createRecord($this->dao_process);
                 $record_process->log = $log;
