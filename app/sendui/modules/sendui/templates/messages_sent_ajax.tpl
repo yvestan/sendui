@@ -1,4 +1,4 @@
-<div class="sendui-list-simple-content ui-corner-all"
+<div class="sendui-list-simple-content ui-corner-all">
 <table class="sendui-list-simple">
     <thead>
         <tr>
