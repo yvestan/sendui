@@ -79,7 +79,6 @@ CREATE TABLE IF NOT EXISTS `customer` (
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `public_token` (`public_token`),
-  KEY `username` (`login`),
   KEY `dateupdate` (`date_update`),
   KEY `dateinsert` (`date_insert`),
   KEY `active` (`active`)
