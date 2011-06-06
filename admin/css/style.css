@@ -33,7 +33,7 @@ a {
 }
 .sendui-float-bloc {
     width: 435px;
-    height: 100px;
+    /*height: 100px;*/
     float: left;
     margin: 10px;
 }
