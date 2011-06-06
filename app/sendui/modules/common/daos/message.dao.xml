@@ -11,7 +11,7 @@
         <property name="from_name" fieldname="from_name" datatype="string" required="true" maxlength="150"/>
         <property name="from_email" fieldname="from_email" datatype="string" required="true" maxlength="150"/>
         <property name="reply_to" fieldname="reply_to" datatype="string" required="true" maxlength="150"/>
-        <property name="return_path" fieldname="return_path" datatype="string" default="" maxlength="150"/>
+        <property name="return_path" fieldname="return_path" datatype="string" required="true" maxlength="150"/>
         <property name="html_message" fieldname="html_message" datatype="text" default=""/>
         <property name="text_message" fieldname="text_message" datatype="text" default=""/>
         <property name="pause" fieldname="pause" datatype="int" default="0"/>

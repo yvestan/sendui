@@ -42,7 +42,8 @@
     </input>
 
     <input ref="return_path" required="true" maxlength="150">
-        <label>Email de rebonds</label>
+        <label>Email des rebonds</label>
+        <help>Adresse email utilisée pour la gestion des rebonds (Bounces)</help>
     </input>
 
     <input ref="batch_quota" required="true">

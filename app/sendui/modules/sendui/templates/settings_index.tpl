@@ -64,6 +64,11 @@
     <p>{ctrl_control 'reply_to'}</p>
 </div>
 
+<div class="bloc-form ui-corner-all">
+    <div>{ctrl_label 'return_path'}</div>
+    <p>{ctrl_control 'return_path'}</p>
+</div>
+
 <p><input name="_submit" id="jforms_sendui_message_settings__submit" class="jforms-submit fg-button ui-state-default ui-corner-all" value="Continuer" type="submit" /></p>
 
 {/form}

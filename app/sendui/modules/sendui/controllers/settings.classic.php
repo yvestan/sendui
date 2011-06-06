@@ -100,6 +100,13 @@ class settingsCtrl extends jController {
         $message = jDao::get($this->dao_message);
         $tpl->assign('count_archive', $message->countArchive($session->idcustomer));
 
+        // on insert le return_path pour cet utilisateur
+        if(isset($session->return_path) 
+            && $this->param('reuse')==null 
+            && $this->param('idmessage')==null) {
+            $message_settings->setData('return_path', $session->return_path);
+        }
+
         $tpl->assign('message_settings', $message_settings);
         $tpl->assign('idmessage', $this->param('idmessage'));
         $tpl->assign('from_page', $this->param('from_page'));
@@ -156,11 +163,6 @@ class settingsCtrl extends jController {
         }
         if(isset($session->pause_quota) || $session->pause_quota==0) {
             $result['daorec']->pause = $session->pause_quota;
-        }
-
-        // on insert le return_path pour cet utilisateur
-        if(isset($session->return_path)) {
-            $result['daorec']->return_path = $session->return_path;
         }
 
         if($result['toInsert'] || $this->param('reuse')!='') {

@@ -22,13 +22,13 @@
     </input>
 
     <input ref="reply_to" required="true" maxlength="150">
-        <label>Adresse de réponse</label>
-        <help>L'adresse utilisée quand un destinataire clique sur "répondre"</help>
+        <label>Email de réponse</label>
+        <help>L'adresse utilisée quand un destinataire clique sur "répondre" (Reply To)</help>
     </input>
 
-    <input ref="return_path" maxlength="150">
-        <label>Adresse de retour</label>
-        <help>Adresse email utilisée pour la gestion des rebonds</help>
+    <input ref="return_path" required="true" maxlength="150">
+        <label>Email des rebonds</label>
+        <help>Adresse email utilisée pour la gestion des rebonds (Bounces)</help>
     </input>
 
     <submit ref="_submit">

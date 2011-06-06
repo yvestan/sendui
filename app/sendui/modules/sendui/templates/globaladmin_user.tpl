@@ -59,6 +59,15 @@
     </div>
 
     <div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
+        <h3>Paramètres d'expedition</h3>
+    </div>
+
+    <div class="bloc-form ui-corner-all">
+        <div>{ctrl_label 'return_path'}</div>
+        <p>{ctrl_control 'return_path'}</p>
+    </div>
+
+    <div class="section-form sendui-bloc-simple ui-widget-header ui-corner-all">
         <h3>Adresse</h3>
     </div>
 
