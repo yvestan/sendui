@@ -152,7 +152,7 @@ class subscriber {
         }
 
         // on tente de voir si l'utilisateur existe
-        $subscriber_infos = $this->getSubscriber($email,$list);
+        $subscriber_infos = $this->getSubscriber($email,$subscriber_list_infos->idsubscriber_list);
 
         // on vérifie que l'email existe dans la liste ET que le status est déjà a 1 !!!
         if(isset($subscriber_infos->status)) {

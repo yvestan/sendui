@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/eval PHP5_VERSION=5.3.3 php -c /home/grafactory/cgi-bin/php5-sendui.ini
 <?php
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 ff=unix fenc=utf8: */

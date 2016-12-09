@@ -21,7 +21,6 @@ class loginCtrl extends jController {
     *
     */
     function in (){
-        echo "ici";
         $conf = $GLOBALS['gJCoord']->getPlugin('auth')->config;
         $url_return = '/';
 
